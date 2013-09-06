@@ -52,7 +52,6 @@
     <Compile Include="Main\OauthLogic.cs" />
     <Compile Include="Main\HomeLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Fabric.Clients.Cs">

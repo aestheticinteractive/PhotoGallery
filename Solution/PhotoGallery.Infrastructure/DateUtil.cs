@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PhotoGallery.Logic {
+namespace PhotoGallery.Infrastructure {
 
 	/*================================================================================================*/
 	public static class WebUtil {
