@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>FabricClient</id>
+    <version>0.2.0.0</version>
+    <title>Fabric.Clients.Cs</title>
+    <authors>Zach Kinstner</authors>
+    <owners>Zach Kinstner</owners>
+    <licenseUrl>https://github.com/inthefabric/FabricSharpClient/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/inthefabric/FabricSharpClient</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The official, fluent Fabric API client.</description>
+    <releaseNotes />
+    <copyright>Zach Kinstner</copyright>
+    <language />
+    <tags>Fabric InTheFabric</tags>
+    <dependencies>
+      <dependency id="ServiceStack.Text" version="3.9.35" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

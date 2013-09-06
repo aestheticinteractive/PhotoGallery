@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Foundation3_Core</id>
+    <version>3.2.5</version>
+    <title>Foundation 3 Core files</title>
+    <authors>Ed Charbeneau</authors>
+    <owners>Ed Charbeneau</owners>
+    <licenseUrl>https://github.com/zurb/foundation/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://foundation.zurb.com/</projectUrl>
+    <iconUrl>http://www.codepalousa.com/images/ED/yeti-avatar.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Core CSS and JavaScript files for Foundation framework. For the complete package install Foundation3_MVC4</description>
+    <summary>Core CSS and JavaScript files for Foundation framework. For the complete package install Foundation3_MVC4</summary>
+    <releaseNotes>Updated to Foundation 3.2.5
+Added jQuery 1.9 support</releaseNotes>
+    <tags>HTML CSS MVC Template Boilerplate JavaScript Prototyping Framework Foundation Zurb</tags>
+  </metadata>
+</package>

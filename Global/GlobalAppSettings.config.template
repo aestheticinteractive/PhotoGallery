@@ -1,0 +1,16 @@
+<appSettings>
+	
+	<add key="webpages:Version" value="2.0.0.0" />
+	<add key="webpages:Enabled" value="false" />
+	<add key="PreserveLoginUrl" value="true" />
+	<add key="ClientValidationEnabled" value="true" />
+	<add key="UnobtrusiveJavaScriptEnabled" value="true" />
+
+	<add key="Dev_BaseUrl" value="http://localhost:33333" />
+	<add key="Prod_BaseUrl" value="http://zachkinstner.com" />
+
+	<add key="Fabric_AppId" value="55612410061389824" />
+	<add key="Fabric_AppSecret" value="xxxx" />
+	<add key="Fabric_DataProvId" value="55612396811583488" />
+
+</appSettings>
