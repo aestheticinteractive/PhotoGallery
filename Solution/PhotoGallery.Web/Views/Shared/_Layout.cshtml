@@ -7,7 +7,7 @@
 <div id="HeaderSpacer" class="hide-for-small"></div>
 
 <header id="Header" class="row">
-	@{ Html.RenderPartial("_Header"); }
+	@{ Html.RenderAction("Data", "Header", new { area="" }); }
 </header>
 
 <section id="Page">

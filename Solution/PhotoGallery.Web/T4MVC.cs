@@ -26,6 +26,7 @@ public static class MVC
 {
     static readonly MainClass s_Main = new MainClass();
     public static MainClass Main { get { return s_Main; } }
+    public static PhotoGallery.Web.Controllers.HeaderController Header = new PhotoGallery.Web.Controllers.T4MVC_HeaderController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 
@@ -36,6 +37,7 @@ namespace T4MVC
     {
         public readonly string Name = "Main";
         public PhotoGallery.Web.Areas.Main.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Main.Controllers.T4MVC_HomeController();
+        public PhotoGallery.Web.Areas.Main.Controllers.OauthController Oauth = new PhotoGallery.Web.Areas.Main.Controllers.T4MVC_OauthController();
     }
 }
 
@@ -58,6 +60,19 @@ internal partial class T4MVC_System_Web_Mvc_ActionResult : System.Web.Mvc.Action
     }
      
     public override void ExecuteResult(System.Web.Mvc.ControllerContext context) { }
+    
+    public string Controller { get; set; }
+    public string Action { get; set; }
+    public string Protocol { get; set; }
+    public RouteValueDictionary RouteValueDictionary { get; set; }
+}
+[GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+internal partial class T4MVC_System_Web_Mvc_RedirectToRouteResult : System.Web.Mvc.RedirectToRouteResult, IT4MVCActionResult
+{
+    public T4MVC_System_Web_Mvc_RedirectToRouteResult(string area, string controller, string action, string protocol = null): base(default(System.Web.Routing.RouteValueDictionary))
+    {
+        this.InitMVCT4Result(area, controller, action, protocol);
+    }
     
     public string Controller { get; set; }
     public string Action { get; set; }

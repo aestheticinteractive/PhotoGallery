@@ -49,6 +49,7 @@
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="BaseLogic.cs" />
+    <Compile Include="Main\OauthLogic.cs" />
     <Compile Include="Main\HomeLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebUtil.cs" />

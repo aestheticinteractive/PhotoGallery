@@ -71,7 +71,7 @@ namespace PhotoGallery.Web {
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
-			string redir = BaseUrl+"/Home/OauthRedir";
+			string redir = BaseUrl+"/Oauth/FabricRedirect";
 
 			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
 				FabricAppId, FabricAppSecret, FabricDataProvId, redir, FabricSessProv);

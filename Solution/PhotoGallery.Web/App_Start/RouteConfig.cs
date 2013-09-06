@@ -13,12 +13,12 @@ namespace PhotoGallery.Web {
 		public static void RegisterRoutes(RouteCollection pRoutes) {
 			pRoutes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			/*pRoutes.MapRoute(
+			pRoutes.MapRoute(
 				name: "Default",
 				url: "Default/{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				namespaces: new[] { "PhotoGallery.Web.Controllers" }
-			);*/
+			);
 
 			RegisterArea(new MainAreaRegistration()); //Must be last
 		}

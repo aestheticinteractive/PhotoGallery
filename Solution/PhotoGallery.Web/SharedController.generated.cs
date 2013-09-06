@@ -36,12 +36,10 @@ namespace T4MVC
             public class _ViewNamesClass
             {
                 public readonly string _Base = "_Base";
-                public readonly string _Header = "_Header";
                 public readonly string _Layout = "_Layout";
                 public readonly string Error = "Error";
             }
             public readonly string _Base = "~/Views/Shared/_Base.cshtml";
-            public readonly string _Header = "~/Views/Shared/_Header.cshtml";
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
             public readonly string Error = "~/Views/Shared/Error.cshtml";
         }

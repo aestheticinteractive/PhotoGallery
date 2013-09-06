@@ -138,10 +138,20 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Areas\Main\Controllers\OauthController.cs" />
+    <Compile Include="Areas\Main\Models\OauthModel.cs" />
     <Compile Include="Areas\Main\Models\HomeModel.cs" />
+    <Compile Include="Controllers\HeaderController.cs" />
+    <Compile Include="HeaderController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Main.HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Main.OauthController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HeaderModel.cs" />
     <Compile Include="Models\IMenuItem.cs" />
     <Compile Include="Models\IBaseModel.cs" />
     <Compile Include="Models\IMvcLink.cs" />
@@ -227,6 +237,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Areas\Main\Views\Oauth\FabricRedirect.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -246,7 +257,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Header\_Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
