@@ -1,7 +1,11 @@
-﻿namespace PhotoGallery.Web.Areas.Main.Models {
+﻿using System.Collections.Generic;
+
+namespace PhotoGallery.Web.Areas.Main.Models {
 
 	/*================================================================================================*/
 	public class HomeModel : MainBaseModel {
+
+		public IList<string> AlbumNames { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

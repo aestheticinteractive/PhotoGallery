@@ -236,6 +236,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Areas\Main\Views\Oauth\FabricRedirect.cshtml" />
+    <Content Include="NHibernate.config" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -166,3 +166,5 @@ VisualizeHg.bat
 _Publish/
 Solution/Fabric.Web/logs/
 Solution/Fabric.Web/Fabric.Web.Publish.xml
+Solution/PhotoGallery.Web/NHibernate.config
+Solution/PhotoGallery.Web/logs/

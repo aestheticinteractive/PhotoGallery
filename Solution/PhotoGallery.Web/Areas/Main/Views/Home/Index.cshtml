@@ -1,11 +1,17 @@
-﻿@model MainBaseModel
+﻿@model HomeModel
 <div class="row">
 	<div class="nine columns">
 		<h4>
 			Photo Gallery
 		</h4>
 		<p>
-			This is it.
+			Album List:
+			
+			<ul>
+				@foreach ( string name in Model.AlbumNames ) {
+					<li>@name</li>
+				}
+			</ul>
 		</p>
 	</div>
 	<div class="three columns">

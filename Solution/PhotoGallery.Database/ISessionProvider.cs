@@ -1,20 +1,16 @@
-﻿using Fabric.Clients.Cs;
-using PhotoGallery.Database;
+﻿using NHibernate;
 
-namespace PhotoGallery.Logic {
+namespace PhotoGallery.Database {
 
 	/*================================================================================================*/
-	public class BaseLogic {
+	public interface ISessionProvider {
 
-		protected IFabricClient Fab { get; private set; }
+		bool OutputSql { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public BaseLogic(IFabricClient pFab) {
-			Fab = pFab;
-			Connect.InitOnce();
-		}
+		ISession OpenSession();
 
 	}
 

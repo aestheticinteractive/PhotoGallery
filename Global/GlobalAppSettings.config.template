@@ -13,4 +13,6 @@
 	<add key="Fabric_AppSecret" value="xxxx" />
 	<add key="Fabric_DataProvId" value="55612396811583488" />
 
+	<add key="DbConnStr" value="Data Source={SOURCE};Initial Catalog={CAT};User ID={USER};Password={PASS};" />
+	
 </appSettings>
