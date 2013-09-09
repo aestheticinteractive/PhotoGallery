@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using PhotoGallery.Logic.Main;
+using PhotoGallery.Services.Main;
 using PhotoGallery.Web.Areas.Main.Models;
 using PhotoGallery.Web.Controllers;
 
@@ -22,7 +22,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult Index() {
 			var m = new HomeModel();
-			m.AlbumNames = vHome.GetAlbumNames();
+			m.Albums = vHome.GetAlbums();
 			return View(m);
 		}
 

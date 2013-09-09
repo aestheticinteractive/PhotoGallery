@@ -1,25 +1,22 @@
-﻿using Fabric.Clients.Cs;
-using NHibernate;
-using PhotoGallery.Database;
+﻿using PhotoGallery.Domain;
 
-namespace PhotoGallery.Services {
+namespace PhotoGallery.Services.Main.Dto {
 
 	/*================================================================================================*/
-	public class BaseLogic {
+	public class WebAlbumCore {
 
-		protected IFabricClient Fab { get; private set; }
+		public int AlbumId { get; internal set; }
+		public string Title { get; internal set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public BaseLogic(IFabricClient pFab) {
-			Fab = pFab;
-			Connect.InitOnce();
-		}
-
+		public WebAlbumCore() {}
+		
 		/*--------------------------------------------------------------------------------------------*/
-		protected ISession NewSession() {
-			return new SessionProvider().OpenSession();
+		public WebAlbumCore(Album pAlbum) {
+			AlbumId = pAlbum.Id;
+			Title = pAlbum.Title;
 		}
 
 	}

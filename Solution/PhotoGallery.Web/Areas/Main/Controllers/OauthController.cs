@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using PhotoGallery.Logic.Main;
+using PhotoGallery.Services.Main;
 using PhotoGallery.Web.Controllers;
 
 namespace PhotoGallery.Web.Areas.Main.Controllers {

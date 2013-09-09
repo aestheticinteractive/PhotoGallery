@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using PhotoGallery.Logic;
+using PhotoGallery.Services;
 using PhotoGallery.Web.Models;
 
 namespace PhotoGallery.Web.Controllers {

@@ -115,6 +115,7 @@ namespace Links
             public static readonly string XXXjquery_foundation_topbar_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/XXXjquery.foundation.topbar.min.js") ? Url("XXXjquery.foundation.topbar.min.js") : Url("XXXjquery.foundation.topbar.js");
         }
     
+        public static readonly string gallery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/gallery.min.js") ? Url("gallery.min.js") : Url("gallery.js");
         public static readonly string jquery_2_0_3_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.3-vsdoc.min.js") ? Url("jquery-2.0.3-vsdoc.min.js") : Url("jquery-2.0.3-vsdoc.js");
         public static readonly string jquery_2_0_3_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.3.min.js") ? Url("jquery-2.0.3.min.js") : Url("jquery-2.0.3.js");
         public static readonly string jquery_2_0_3_min_js = Url("jquery-2.0.3.min.js");

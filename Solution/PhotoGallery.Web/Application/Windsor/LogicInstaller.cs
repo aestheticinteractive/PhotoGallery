@@ -2,7 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Fabric.Clients.Cs;
-using PhotoGallery.Logic;
+using PhotoGallery.Services;
 
 namespace PhotoGallery.Web.Application.Windsor {
 

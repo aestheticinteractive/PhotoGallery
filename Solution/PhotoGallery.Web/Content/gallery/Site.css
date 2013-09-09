@@ -1,4 +1,12 @@
 
+.row {
+	width: 100%;
+}
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
 body {
 	background: #f8f8f8;
 	margin: 0;
@@ -83,10 +91,70 @@ ul {
 }
 
 
+/*----------------------------------------------------------------------------------------------------* /
+
+div.thumbCropLarge {
+	overflow: hidden;
+	width: 400px;
+	float: left;
+	margin: 0.5px;
+}
+
+div.thumbCropMed {
+	overflow: hidden;
+	width: 200px;
+	float: left;
+	margin: 0.5px;
+}
+
+div.thumbCrop:hover {
+}
+
+a.thumbLink {
+	display: block;
+}
+
+img.thumb {
+}
+
+
+
 /*----------------------------------------------------------------------------------------------------*/
 
-p.subtle, span.subtle {
-	color: #888;
+
+#Header {
+	background-color: #bbb;
+	padding-bottom: 3px;
+}
+
+#Header p {
+	margin-top: 0;
+}
+
+#Header .logo {
+	color: #fff;
+	letter-spacing: 2px;
+}
+
+#Header .auth {
+	text-align: right;
+}
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+#Page {
+	margin-top: 15px;
+}
+
+#Page .thumb {
+	height: 200px;
+	width: 200px;
+	background-size: cover;
+	background-position: 50% 25%;
+	float: left;
+	margin: 0 0 1px 1px;
 }
 
 

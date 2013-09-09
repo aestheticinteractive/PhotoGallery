@@ -1,20 +1,20 @@
 ﻿@model HeaderModel
-<div class="twelve columns">
-	<div class="row">
-		<div style="height: 40px; background-color: #ddd;">
-			<p>
-				Kinstner Photo Gallery | 
-				
-				@if ( Model.IsPersonAuthenticated() ) {
-					@Html.ActionLink("Logout", MVC.Header.PersonLogout());
-				}
-				else {
-					<text>
-						<a href="#" onclick="@Model.GetPersonLoginOpenScript(false)">Login</a>
-						(<a href="#" onclick="@Model.GetPersonLoginOpenScript(true)">switch user</a>)
-					</text>
-				}
-			</p>
-		</div>
-	</div>
+
+<div class="column three">
+	<p class="logo">
+		Photo Gallery
+	</p>
+</div>
+<div class="column nine">
+	<p class="auth">
+		@if ( Model.IsPersonAuthenticated() ) {
+			@Html.ActionLink("Logout", MVC.Header.PersonLogout());
+		}
+		else {
+			<text>
+				<a href="#" onclick="@Model.GetPersonLoginOpenScript(false)">Login</a>
+				(<a href="#" onclick="@Model.GetPersonLoginOpenScript(true)">switch</a>)
+			</text>
+		}
+	</p>
 </div>

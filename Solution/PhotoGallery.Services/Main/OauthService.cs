@@ -3,7 +3,7 @@ using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using PhotoGallery.Infrastructure;
 
-namespace PhotoGallery.Logic.Main {
+namespace PhotoGallery.Services.Main {
 	
 	/*================================================================================================*/
 	public class OauthService : BaseLogic {

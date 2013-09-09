@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Fabric.Clients.Cs;
 using NHibernate;
-using PhotoGallery.Database;
+using NHibernate.Criterion;
+using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using PhotoGallery.Domain;
+using PhotoGallery.Services.Main.Dto;
 
-namespace PhotoGallery.Logic.Main {
+namespace PhotoGallery.Services.Main {
 	
 	/*================================================================================================*/
 	public class HomeService : BaseLogic {
@@ -15,20 +17,41 @@ namespace PhotoGallery.Logic.Main {
 		/*--------------------------------------------------------------------------------------------*/
 		public HomeService(IFabricClient pFab) : base(pFab) {}
 
-		
+
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<string> GetAlbumNames() {
-			var prov = new SessionProvider();
-			prov.OutputSql = true;
-			
-			IList<Album> albums;
+		public IList<WebAlbum> GetAlbums() {
+			using ( ISession s = NewSession() ) {
+				Photo phoAlias = null;
 
-			using ( ISession s = prov.OpenSession() ) {
-				albums = s.QueryOver<Album>().List();
-			}
+				return GetAlbumQuery(s)
+					.OrderBy(Projections.Max(() => phoAlias.ExifDTOrig)).Desc
+					.List<WebAlbum>();
+			};
+		}
 
-			return albums.Select(a => a.Title).ToList();
+		/*--------------------------------------------------------------------------------------------*/
+		internal static IQueryOver<Album, Album> GetAlbumQuery(ISession pSession) {
+			Album albAlias = null;
+			Photo phoAlias = null;
+			WebAlbum dto = null;
+
+			return pSession.QueryOver<Album>(() => albAlias)
+				.JoinAlias(a => a.Photos, () => phoAlias, JoinType.InnerJoin)
+				.SelectList(list => list
+					.SelectGroup(a => a.Id).WithAlias(() => dto.AlbumId)
+					.SelectMin(a => a.Title).WithAlias(() => dto.Title)
+					.SelectCount(() => phoAlias.Id).WithAlias(() => dto.NumPhotos)
+					.SelectMin(() => phoAlias.Id).WithAlias(() => dto.FirstPhotoId)
+					.SelectMin(() => phoAlias.ExifDTOrig).WithAlias(() => dto.StartDate)
+					.SelectMax(() => phoAlias.ExifDTOrig).WithAlias(() => dto.EndDate)
+					.SelectSubQuery(
+						QueryOver.Of<Photo>()
+						.Where(p => p.Album.Id == albAlias.Id && p.Favorite > 0)
+						.ToRowCountQuery()
+					).WithAlias(() => dto.NumFavs)
+				)
+				.TransformUsing(Transformers.AliasToBean<WebAlbum>());
 		}
 
 	}
