@@ -1,19 +1,22 @@
-﻿using FluentNHibernate.Automapping;
-using FluentNHibernate.Automapping.Alterations;
+﻿using FluentNHibernate.Mapping;
 using PhotoGallery.Domain;
 
 namespace PhotoGallery.Database.Maps {
 	
 	/*================================================================================================*/
-	public class AlbumMap : IAutoMappingOverride<Album> {
+	public class AlbumMap : ClassMap<Album> {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public void Override(AutoMapping<Album> pMapping) {
-			pMapping.Map(x => x.Title).Length(64);
-			pMapping.Map(x => x.LocalPath).Length(128).Nullable();
-			pMapping.HasMany(x => x.Photos);
+		public AlbumMap() {
+			Id(x => x.Id)
+				.Column(typeof(Album).Name+"Id")
+				.GeneratedBy.Native();
+
+			Map(x => x.Title).Length(64);
+			Map(x => x.LocalPath).Length(128).Nullable();
+			HasMany(x => x.Photos);
 		}
 
 	}

@@ -1,18 +1,21 @@
-﻿using FluentNHibernate.Automapping;
-using FluentNHibernate.Automapping.Alterations;
+﻿using FluentNHibernate.Mapping;
 using PhotoGallery.Domain;
 
 namespace PhotoGallery.Database.Maps {
 	
 	/*================================================================================================*/
-	public class PhotoTagMap : IAutoMappingOverride<PhotoTag> {
+	public class PhotoTagMap : ClassMap<PhotoTag> {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public void Override(AutoMapping<PhotoTag> pMapping) {
-			pMapping.References(x => x.Photo).UniqueKey("pt");
-			pMapping.References(x => x.Tag).UniqueKey("pt");
+		public PhotoTagMap() {
+			Id(x => x.Id)
+				.Column(typeof(PhotoTag).Name+"Id")
+				.GeneratedBy.Native();
+
+			References(x => x.Photo).UniqueKey("pt");
+			References(x => x.Tag).UniqueKey("pt");
 		}
 
 	}
