@@ -8,12 +8,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 	/*================================================================================================*/
 	public partial class HomeController : BaseController {
 
-		private readonly HomeLogic vHome;
+		private readonly HomeService vHome;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public HomeController(HomeLogic pHome) {
+		public HomeController(HomeService pHome) {
 			vHome = pHome;
 		}
 

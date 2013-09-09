@@ -276,9 +276,9 @@
       <Project>{3B75DE81-F8E2-4BE9-ABF2-C3D83BFE2874}</Project>
       <Name>PhotoGallery.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PhotoGallery.Logic\PhotoGallery.Logic.csproj">
+    <ProjectReference Include="..\PhotoGallery.Services\PhotoGallery.Services.csproj">
       <Project>{E19B4F01-9FEA-4775-A662-DCF0FD19A617}</Project>
-      <Name>PhotoGallery.Logic</Name>
+      <Name>PhotoGallery.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

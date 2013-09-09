@@ -8,12 +8,12 @@ using PhotoGallery.Domain;
 namespace PhotoGallery.Logic.Main {
 	
 	/*================================================================================================*/
-	public class HomeLogic : BaseLogic {
+	public class HomeService : BaseLogic {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public HomeLogic(IFabricClient pFab) : base(pFab) {}
+		public HomeService(IFabricClient pFab) : base(pFab) {}
 
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////

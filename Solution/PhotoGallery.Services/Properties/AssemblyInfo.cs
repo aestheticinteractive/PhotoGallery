@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("PhotoGallery.Logic")]
+[assembly: AssemblyTitle("PhotoGallery.Services")]
 [assembly: AssemblyDescription("")]

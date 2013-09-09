@@ -6,7 +6,7 @@ using PhotoGallery.Infrastructure;
 namespace PhotoGallery.Logic.Main {
 	
 	/*================================================================================================*/
-	public class OauthLogic : BaseLogic {
+	public class OauthService : BaseLogic {
 
 		public const string CloseWindowScript = 
 			"<script type='text/javascript'>"+
@@ -17,7 +17,7 @@ namespace PhotoGallery.Logic.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public OauthLogic(IFabricClient pFab) : base(pFab) {}
+		public OauthService(IFabricClient pFab) : base(pFab) {}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

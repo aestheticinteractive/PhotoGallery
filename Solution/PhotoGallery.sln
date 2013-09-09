@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Web", "PhotoGallery.Web\PhotoGallery.Web.csproj", "{3758EB03-B4A2-43FA-957C-B5C23894A515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Logic", "PhotoGallery.Logic\PhotoGallery.Logic.csproj", "{E19B4F01-9FEA-4775-A662-DCF0FD19A617}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Services", "PhotoGallery.Services\PhotoGallery.Services.csproj", "{E19B4F01-9FEA-4775-A662-DCF0FD19A617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Infrastructure", "PhotoGallery.Infrastructure\PhotoGallery.Infrastructure.csproj", "{3B75DE81-F8E2-4BE9-ABF2-C3D83BFE2874}"
 EndProject

@@ -8,8 +8,8 @@
     <ProjectGuid>{E19B4F01-9FEA-4775-A662-DCF0FD19A617}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PhotoGallery.Logic</RootNamespace>
-    <AssemblyName>PhotoGallery.Logic</AssemblyName>
+    <RootNamespace>PhotoGallery.Services</RootNamespace>
+    <AssemblyName>PhotoGallery.Services</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -49,8 +49,8 @@
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="BaseLogic.cs" />
-    <Compile Include="Main\OauthLogic.cs" />
-    <Compile Include="Main\HomeLogic.cs" />
+    <Compile Include="Main\OauthService.cs" />
+    <Compile Include="Main\HomeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

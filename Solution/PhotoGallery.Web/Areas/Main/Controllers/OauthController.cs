@@ -7,12 +7,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 	/*================================================================================================*/
 	public partial class OauthController : BaseController {
 
-		private readonly OauthLogic vOauth;
+		private readonly OauthService vOauth;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public OauthController(OauthLogic pOauth) {
+		public OauthController(OauthService pOauth) {
 			vOauth = pOauth;
 		}
 
@@ -21,7 +21,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult FabricRedirect() {
 			if ( vOauth.PersonOauthSuccess(Request) ) {
-				Response.Write(OauthLogic.CloseWindowScript);
+				Response.Write(OauthService.CloseWindowScript);
 			}
 
 			return null;
