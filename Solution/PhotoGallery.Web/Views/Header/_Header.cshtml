@@ -7,8 +7,9 @@
 </div>
 <div class="column nine">
 	<p class="auth">
-		@if ( Model.IsPersonAuthenticated() ) {
-			@Html.ActionLink("Logout", MVC.Header.PersonLogout());
+		@if ( Model.IsPersonAuthenticated ) {
+			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index());
+			<text> (</text>@Html.ActionLink("Logout", MVC.Header.PersonLogout());<text>)</text>
 		}
 		else {
 			<text>

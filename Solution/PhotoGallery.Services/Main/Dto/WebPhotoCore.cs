@@ -26,7 +26,7 @@ namespace PhotoGallery.Services.Main.Dto {
 			AlbumId = p.Album.Id;
 			/*Favorite = p.Favorite;
 			ExifDtOrig = p.ExifDTOrig;
-			FabricArtifactId = p.FabricInstanceId;*/
+			FabricArtifactId = p.FabricArtifactId;*/
 		}
 
 

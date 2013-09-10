@@ -1,36 +1,37 @@
 ﻿using System.Web.Mvc;
 using PhotoGallery.Services.Account;
-using PhotoGallery.Web.Models;
+using PhotoGallery.Web.Application;
+using PhotoGallery.Web.Areas.Account.Models;
+using PhotoGallery.Web.Controllers;
 
-namespace PhotoGallery.Web.Controllers {
+namespace PhotoGallery.Web.Areas.Account.Controllers {
 
 	/*================================================================================================*/
-	public partial class HeaderController : Controller {
+	public partial class HomeController : BaseController {
 
-		private readonly HomeService vAcctHome;
+		private readonly HomeService vHome;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public HeaderController(HomeService pAcctHome) {
-			vAcctHome = pAcctHome;
+		public HomeController(HomeService pHome) {
+			vHome = pHome;
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual ActionResult Data() {
-			var m = new HeaderModel();
-			m.IsPersonAuthenticated = vAcctHome.IsPersonAuthenticated();
-			m.GetPersonLoginOpenScript = vAcctHome.GetPersonLoginOpenScript;
-			m.User = vAcctHome.GetFabUser();
-			return PartialView(MVC.Header.Views._Header, m);
+		[FabricAuthorize]
+		public virtual ActionResult Index() {
+			var m = new HomeModel();
+			m.User = vHome.GetWebUser();
+			return View(m);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual RedirectToRouteResult PersonLogout() {
-			vAcctHome.Logout();
-			return RedirectToAction(MVC.Main.Home.Index());
+		public virtual ActionResult Login() {
+			var m = new HomeModel();
+			return View(m);
 		}
 
 	}

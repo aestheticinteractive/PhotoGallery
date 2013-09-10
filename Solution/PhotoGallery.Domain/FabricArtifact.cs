@@ -5,6 +5,13 @@ namespace PhotoGallery.Domain {
 	/*================================================================================================*/
 	public class FabricArtifact {
 
+		public enum ArtifactType {
+			User = 1,
+			Album,
+			Photo,
+			Human
+		};
+
 		public virtual int Id { get; set; }
 		public virtual long ArtifactId { get; set; }
 		public virtual byte Type { get; set; }

@@ -1,0 +1,16 @@
+﻿@model HomeModel
+
+<div class="row">
+	<div class="six columns">
+		<h4 class="borderBot">
+			@Model.User.Name
+		</h4>
+		<p>
+			You joined the gallery on @Model.User.Created.
+		</p>
+		<p>
+			View your <a href="http://inthefabric.com/explore/users/@Model.User.ArtifactId"
+				target="_blank">Fabric profile</a>.
+		</p>
+	</div>
+</div>

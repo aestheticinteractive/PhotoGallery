@@ -17,7 +17,7 @@ namespace PhotoGallery.Services {
 
 			if ( Connect.SessionFactory == null ) {
 				Connect.InitOnce();
-				Connect.UpdateSchema();
+				//Connect.UpdateSchema();
 			}
 		}
 

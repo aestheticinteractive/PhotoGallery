@@ -1,24 +1,24 @@
 ﻿using System.Web.Mvc;
 
-namespace PhotoGallery.Web.Areas.Main {
+namespace PhotoGallery.Web.Areas.Account {
 
 	/*================================================================================================*/
-	public class MainAreaRegistration : AreaRegistration {
+	public class AccountAreaRegistration : AreaRegistration {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public override string AreaName {
-			get { return "Main"; }
+			get { return "Account"; }
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public override void RegisterArea(AreaRegistrationContext pContext) {
 			pContext.MapRoute(
-				name: "Main_default",
-				url: "{controller}/{action}/{id}",
+				name: "Account_default",
+				url: "Account/{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-				namespaces: new[] { "PhotoGallery.Web.Areas.Main.Controllers" }
+				namespaces: new[] { "PhotoGallery.Web.Areas.Account.Controllers" }
 			);
 		}
 
