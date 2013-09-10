@@ -11,13 +11,14 @@ body {
 	background: #f8f8f8;
 	margin: 0;
 	padding: 0;
-	font-family: "Tahoma" , "Helvetica Neue" , "Helvetica" , "Arial" , "Verdana" , sans-serif;
+	font-family: "Titillium Web", "Tahoma", "Helvetica", sans-serif;
+	font-weight: lighter;
 	overflow-y: scroll;
 }
 
 p, h1, h2, h3, h4, h5, h6, ul, li {
-	font-family: "Tahoma" , "Helvetica Neue" , "Helvetica" , "Arial" , "Verdana" , sans-serif;
-	font-weight: normal;
+	font-family: "Titillium Web", "Tahoma", "Helvetica", sans-serif;
+	font-weight: lighter;
 	line-height: 22px;
 	margin: 0;
 	padding: 0;
@@ -101,7 +102,7 @@ ul {
 
 
 #Header {
-	background-color: #bbb;
+	background-color: #333;
 	padding-bottom: 3px;
 }
 
@@ -111,10 +112,11 @@ ul {
 
 #Header .logo {
 	color: #fff;
-	letter-spacing: 2px;
+	font-weight: bold;
 }
 
 #Header .auth {
+	color: #aaa;
 	text-align: right;
 }
 
@@ -145,13 +147,13 @@ ul {
 	color: #fff;
 	background-color: rgba(0, 0, 0, 0.5);
 	font-size: 12px;
-	padding: 3px;
+	padding: 1px 4px 3px 4px;
 	margin: 0;
 	line-height: 1.0em;
 	display: inline-block;
 }
 
-#Page .album .title2 {
+#Page .album .title {
 	font-size: 24px;
 	margin: 4px;
 }
