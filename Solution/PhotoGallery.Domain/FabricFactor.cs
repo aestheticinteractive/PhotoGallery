@@ -6,9 +6,9 @@
 		public virtual int Id { get; set; }
 		public virtual long FactorId { get; set; }
 
-		public virtual FabricInstance PrimaryInstance { get; set; }
+		public virtual FabricArtifact Primary { get; set; }
 		public virtual long PrimaryArtifactId { get; set; }
-		public virtual FabricInstance RelatedInstance { get; set; }
+		public virtual FabricArtifact Related { get; set; }
 		public virtual long RelatedArtifactId { get; set; }
 
 		public virtual byte FactorAssertionId { get; set; }

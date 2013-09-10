@@ -39,7 +39,7 @@
     </Compile>
     <Compile Include="ISessionProvider.cs" />
     <Compile Include="Maps\AlbumMap.cs" />
-    <Compile Include="Maps\FactorInstanceMap.cs" />
+    <Compile Include="Maps\FactorArtifactMap.cs" />
     <Compile Include="Maps\FabricFactorMap.cs" />
     <Compile Include="Maps\PhotoMap.cs" />
     <Compile Include="Maps\PhotoMetaMap.cs" />

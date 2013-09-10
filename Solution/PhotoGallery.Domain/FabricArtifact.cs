@@ -3,10 +3,10 @@
 namespace PhotoGallery.Domain {
 	
 	/*================================================================================================*/
-	public class FabricInstance {
+	public class FabricArtifact {
 
 		public virtual int Id { get; set; }
-		public virtual long InstanceId { get; set; }
+		public virtual long ArtifactId { get; set; }
 		public virtual byte Type { get; set; }
 		
 		public virtual IList<Album> Albums { get; set; } //0 or 1

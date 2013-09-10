@@ -26,7 +26,7 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.ExifFNumber).Nullable();
 			Map(x => x.ExifFocalLength).Nullable();*/
 
-			References(x => x.FabricInstance).Nullable();
+			References(x => x.FabricArtifact).Nullable();
 			References(x => x.Album);
 
 			HasMany(x => x.PhotoMetas);

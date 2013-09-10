@@ -9,7 +9,7 @@ namespace PhotoGallery.Domain {
 		public virtual string Title { get; set; }
 
 		public virtual FabricUser FabricUser { get; set; }
-		public virtual FabricInstance FabricInstance { get; set; }
+		public virtual FabricArtifact FabricArtifact { get; set; }
 		
 		public virtual IList<Photo> Photos { get; set; }
 

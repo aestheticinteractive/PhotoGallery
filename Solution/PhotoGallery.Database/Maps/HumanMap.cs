@@ -19,7 +19,7 @@ namespace PhotoGallery.Database.Maps {
 
 			Map(x => x.Name).Length(128).Unique();
 
-			References(x => x.FabricInstance).Nullable();
+			References(x => x.FabricArtifact).Nullable();
 		}
 
 	}

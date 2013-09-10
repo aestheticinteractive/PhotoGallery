@@ -15,7 +15,7 @@ namespace PhotoGallery.Domain {
 		public virtual double ExifFNumber { get; set; }
 		public virtual double ExifFocalLength { get; set; }*/
 
-		public virtual FabricInstance FabricInstance { get; set; }
+		public virtual FabricArtifact FabricArtifact { get; set; }
 		public virtual Album Album { get; set; }
 		
 		public virtual IList<PhotoMeta> PhotoMetas { get; set; }

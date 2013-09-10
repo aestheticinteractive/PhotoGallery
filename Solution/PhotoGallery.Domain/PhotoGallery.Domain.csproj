@@ -39,7 +39,7 @@
     </Compile>
     <Compile Include="Album.cs" />
     <Compile Include="FabricUser.cs" />
-    <Compile Include="FabricInstance.cs" />
+    <Compile Include="FabricArtifact.cs" />
     <Compile Include="Photo.cs" />
     <Compile Include="PhotoMeta.cs" />
     <Compile Include="FabricFactor.cs" />
