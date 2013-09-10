@@ -1,11 +1,12 @@
 ﻿namespace PhotoGallery.Domain {
 	
 	/*================================================================================================*/
-	public class PhotoTag {
+	public class Human {
 
 		public virtual int Id { get; set; }
-		public virtual Photo Photo { get; set; }
-		public virtual Tag Tag { get; set; }
+		public virtual string Name { get; set; }
+
+		public virtual FabricInstance FabricInstance { get; set; }
 
     }
 

@@ -11,14 +11,17 @@ namespace PhotoGallery.Database.Maps {
 		/*--------------------------------------------------------------------------------------------*/
 		public AlbumMap() {
 			string name = typeof(Album).Name;
-			Table(name+"2");
+			Table(name);
 
 			Id(x => x.Id)
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
 			Map(x => x.Title).Length(64);
-			Map(x => x.LocalPath).Length(128).Nullable();
+
+			References(x => x.FabricUser);
+			References(x => x.FabricInstance).Nullable();
+
 			HasMany(x => x.Photos);
 		}
 

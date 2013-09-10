@@ -23,18 +23,17 @@ namespace PhotoGallery.Services.Main.Dto {
 		public WebPhotoCore(Photo p) {
 			PhotoId = p.Id;
 			ImgName = p.ImgName;
-			Favorite = p.Favorite;
 			AlbumId = p.Album.Id;
+			/*Favorite = p.Favorite;
 			ExifDtOrig = p.ExifDTOrig;
-			FabricArtifactId = p.FabricArtifactId;
+			FabricArtifactId = p.FabricInstanceId;*/
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public string FullUrl { get { return GetUrl(ImageUtil.PhotoSize.Full); } }
-		public string ImageUrl { get { return GetUrl(ImageUtil.PhotoSize.Med); } }
-		public string ThumbUrl { get { return GetUrl(ImageUtil.PhotoSize.Sm); } }
+		public string ImageUrl { get { return GetUrl(ImageUtil.PhotoSize.Large); } }
+		public string ThumbUrl { get { return GetUrl(ImageUtil.PhotoSize.Thumb); } }
 
 		/*--------------------------------------------------------------------------------------------*/
 		private string GetUrl(ImageUtil.PhotoSize pSize) {

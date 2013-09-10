@@ -25,7 +25,7 @@ namespace PhotoGallery.Database {
 
 			IPersistenceConfigurer conn = MsSqlConfiguration
 				.MsSql2008
-				.DefaultSchema("gallery")
+				.DefaultSchema("kpg")
 				.Dialect<NHibernate.Dialect.MsSql2008Dialect>()
 				.Provider<NHibernate.Connection.DriverConnectionProvider>()
 				.Driver<NHibernate.Driver.SqlClientDriver>()
@@ -37,11 +37,12 @@ namespace PhotoGallery.Database {
 				.Mappings(m => m
 					.FluentMappings
 						.AddFromAssemblyOf<AlbumMap>()
-					.Conventions
-						.Add(
-							PrimaryKey.Name.Is(x => "Id"),
-							ForeignKey.EndsWith("Id")
-						)
+					.Conventions.Add(
+						PrimaryKey.Name.Is(x => "Id"),
+						ForeignKey.EndsWith("Id"),
+						ConventionBuilder.Property.Always(i => i.Not.Nullable()),
+						ConventionBuilder.Reference.Always(i => i.Not.Nullable())
+					)
 				)
 				.ExposeConfiguration(c => { Config = c; })
 				.BuildSessionFactory();

@@ -10,9 +10,8 @@ namespace PhotoGallery.Services.Util {
 	public static class ImageUtil {
 
 		public enum PhotoSize {
-			Full = 1,
-			Med,
-			Sm
+			Large = 1,
+			Thumb
 		}
 
 
@@ -24,7 +23,13 @@ namespace PhotoGallery.Services.Util {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public static string BuildPhotoPath(int pAlbumId, int pPhotoId, PhotoSize pSize) {
-			return "/uploads/albums/"+pAlbumId+"/"+pPhotoId+pSize+".jpg";
+			string s = "";
+
+			if ( pSize == PhotoSize.Thumb ) {
+				s = "-thumb";
+			}
+
+			return "/upload/photos/"+pAlbumId+"/"+pPhotoId+s+".jpg";
 		}
 
 

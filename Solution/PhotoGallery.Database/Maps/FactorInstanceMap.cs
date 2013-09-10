@@ -4,32 +4,29 @@ using PhotoGallery.Domain;
 namespace PhotoGallery.Database.Maps {
 	
 	/*================================================================================================*/
-	public class PhotoMap : ClassMap<Photo> {
+	public class FabricInstanceMap : ClassMap<FabricInstance> {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoMap() {
-			string name = typeof(Photo).Name;
+		public FabricInstanceMap() {
+			string name = typeof(FabricInstance).Name;
 			Table(name);
 
 			Id(x => x.Id)
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
-			Map(x => x.ImgName).Length(64);
-			
-			/*Map(x => x.Favorite).Default("0");
-			Map(x => x.ExifDTOrig).Nullable();
-			Map(x => x.ExifExposureTime).Nullable();
-			Map(x => x.ExifISOSpeed).Nullable();
-			Map(x => x.ExifFNumber).Nullable();
-			Map(x => x.ExifFocalLength).Nullable();*/
+			Map(x => x.InstanceId).Unique();
+			Map(x => x.Type);
 
-			References(x => x.FabricInstance).Nullable();
-			References(x => x.Album);
+			HasMany(x => x.Albums); //0 or 1
+			HasMany(x => x.Photos); //0 or 1
+			HasMany(x => x.Humans); //0 or 1
+			HasMany(x => x.FabricUsers); //0 or 1
 
-			HasMany(x => x.PhotoMetas);
+			HasMany(x => x.PrimaryFactors).KeyColumn("PrimaryInstance");
+			HasMany(x => x.RelatedFactors).KeyColumn("RelatedInstance");
 		}
 
 	}

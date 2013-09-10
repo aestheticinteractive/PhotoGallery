@@ -21,17 +21,19 @@ namespace PhotoGallery.Services.Main {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<WebAlbum> GetAlbums(int pLimit) {
-			using ( ISession s = NewSession() ) {
+			/*using ( ISession s = NewSession() ) {
 				Photo phoAlias = null;
 
 				return GetAlbumQuery(s)
 					.OrderBy(Projections.Max(() => phoAlias.ExifDTOrig)).Desc
 					.Take(pLimit == 0 ? 9999 : pLimit)
 					.List<WebAlbum>();
-			};
+			};*/
+
+			return new List<WebAlbum>();
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		internal static IQueryOver<Album, Album> GetAlbumQuery(ISession pSession) {
 			Album albAlias = null;
 			Photo phoAlias = null;
@@ -53,7 +55,7 @@ namespace PhotoGallery.Services.Main {
 					).WithAlias(() => dto.NumFavs)
 				)
 				.TransformUsing(Transformers.AliasToBean<WebAlbum>());
-		}
+		}*/
 
 	}
 

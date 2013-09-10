@@ -11,7 +11,7 @@ namespace PhotoGallery.Database.Maps {
 		/*--------------------------------------------------------------------------------------------*/
 		public PhotoMetaMap() {
 			string name = typeof(PhotoMeta).Name;
-			Table(name+"2");
+			Table(name);
 
 			Id(x => x.Id)
 				.Column(name+"Id")
@@ -20,6 +20,7 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.Label).Length(32);
 			Map(x => x.Type).Length(10);
 			Map(x => x.Value).Length(128);
+
 			References(x => x.Photo);
 		}
 

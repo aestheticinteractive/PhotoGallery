@@ -4,21 +4,22 @@ using PhotoGallery.Domain;
 namespace PhotoGallery.Database.Maps {
 	
 	/*================================================================================================*/
-	public class PhotoTagMap : ClassMap<PhotoTag> {
+	public class HumanMap : ClassMap<Human> {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoTagMap() {
-			string name = typeof(PhotoTag).Name;
-			Table(name+"2");
+		public HumanMap() {
+			string name = typeof(Human).Name;
+			Table(name);
 
 			Id(x => x.Id)
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
-			References(x => x.Photo).UniqueKey("pt");
-			References(x => x.Tag).UniqueKey("pt");
+			Map(x => x.Name).Length(128).Unique();
+
+			References(x => x.FabricInstance).Nullable();
 		}
 
 	}

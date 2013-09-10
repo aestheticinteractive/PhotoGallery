@@ -21,10 +21,10 @@ namespace PhotoGallery.Services.Main.Dto {
 		public WebPhoto(Photo p) : base(p) {
 			AlbumName = p.Album.Title;
 
-			ExifExposureTime = p.ExifExposureTime;
+			/*ExifExposureTime = p.ExifExposureTime;
 			ExifIsoSpeed = p.ExifISOSpeed;
 			ExifFNumber = p.ExifFNumber;
-			ExifFocalLength = p.ExifFocalLength;
+			ExifFocalLength = p.ExifFocalLength;*/
 		}
 
 	}
