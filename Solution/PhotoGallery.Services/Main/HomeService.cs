@@ -20,12 +20,13 @@ namespace PhotoGallery.Services.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<WebAlbum> GetAlbums() {
+		public IList<WebAlbum> GetAlbums(int pLimit) {
 			using ( ISession s = NewSession() ) {
 				Photo phoAlias = null;
 
 				return GetAlbumQuery(s)
 					.OrderBy(Projections.Max(() => phoAlias.ExifDTOrig)).Desc
+					.Take(pLimit == 0 ? 9999 : pLimit)
 					.List<WebAlbum>();
 			};
 		}

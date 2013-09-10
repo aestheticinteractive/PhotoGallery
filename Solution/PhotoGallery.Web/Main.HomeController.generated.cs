@@ -77,8 +77,10 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string _AlbumThumb = "_AlbumThumb";
                 public readonly string Index = "Index";
             }
+            public readonly string _AlbumThumb = "~/Areas/Main/Views/Home/_AlbumThumb.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Home/Index.cshtml";
         }
     }

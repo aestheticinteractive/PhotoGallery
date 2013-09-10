@@ -1,13 +1,10 @@
-﻿using System;
-using System.Configuration;
-using FluentNHibernate;
+﻿using System.Configuration;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using PhotoGallery.Database.Maps;
-using PhotoGallery.Domain;
 
 namespace PhotoGallery.Database {
 

@@ -1,0 +1,18 @@
+﻿@model WebAlbum
+
+<div class="thumb album" style="background-image: url(@Model.FirstPhoto.ImageUrl);">
+	<p class="title2 textBox">
+		@Model.Title
+	</p>
+	<div class="details">
+		<p class="textBox">
+			@Model.DateRangeString
+		</p>
+		<p class="textBox">
+			@Model.NumPhotos photo@(Model.NumPhotos==1?"":"s")
+		</p>
+		<p class="textBox">
+			@((int)Math.Round((Model.NumFavs/(float)Model.NumPhotos)*100))% favorites
+		</p>
+	</div>
+</div>
