@@ -10,8 +10,11 @@ namespace PhotoGallery.Database.Maps {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public PhotoMetaMap() {
+			string name = typeof(PhotoMeta).Name;
+			Table(name+"2");
+
 			Id(x => x.Id)
-				.Column(typeof(PhotoMeta).Name+"Id")
+				.Column(name+"Id")
 				.GeneratedBy.Native();
 
 			Map(x => x.Label).Length(32);

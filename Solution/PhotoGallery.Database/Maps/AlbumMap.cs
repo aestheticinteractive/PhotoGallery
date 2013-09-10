@@ -10,8 +10,11 @@ namespace PhotoGallery.Database.Maps {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public AlbumMap() {
+			string name = typeof(Album).Name;
+			Table(name+"2");
+
 			Id(x => x.Id)
-				.Column(typeof(Album).Name+"Id")
+				.Column(name+"Id")
 				.GeneratedBy.Native();
 
 			Map(x => x.Title).Length(64);

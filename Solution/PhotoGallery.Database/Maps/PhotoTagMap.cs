@@ -10,8 +10,11 @@ namespace PhotoGallery.Database.Maps {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public PhotoTagMap() {
+			string name = typeof(PhotoTag).Name;
+			Table(name+"2");
+
 			Id(x => x.Id)
-				.Column(typeof(PhotoTag).Name+"Id")
+				.Column(name+"Id")
 				.GeneratedBy.Native();
 
 			References(x => x.Photo).UniqueKey("pt");

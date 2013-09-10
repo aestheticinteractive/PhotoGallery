@@ -14,7 +14,11 @@ namespace PhotoGallery.Services {
 		/*--------------------------------------------------------------------------------------------*/
 		public BaseLogic(IFabricClient pFab) {
 			Fab = pFab;
-			Connect.InitOnce();
+
+			if ( Connect.SessionFactory == null ) {
+				Connect.InitOnce();
+				Connect.UpdateSchema();
+			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

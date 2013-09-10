@@ -10,8 +10,11 @@ namespace PhotoGallery.Database.Maps {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public TagMap() {
+			string name = typeof(Tag).Name;
+			Table(name+"2");
+
 			Id(x => x.Id)
-				.Column(typeof(Tag).Name+"Id")
+				.Column(name+"Id")
 				.GeneratedBy.Native();
 
 			Map(x => x.Name).Length(24);
