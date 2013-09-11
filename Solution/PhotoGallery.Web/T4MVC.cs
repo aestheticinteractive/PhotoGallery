@@ -38,6 +38,7 @@ namespace T4MVC
     public class AccountClass
     {
         public readonly string Name = "Account";
+        public PhotoGallery.Web.Areas.Account.Controllers.AlbumsController Albums = new PhotoGallery.Web.Areas.Account.Controllers.T4MVC_AlbumsController();
         public PhotoGallery.Web.Areas.Account.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Account.Controllers.T4MVC_HomeController();
     }
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]

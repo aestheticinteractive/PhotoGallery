@@ -138,12 +138,18 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Account.AlbumsController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Account.HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="Application\FabricAuthorizeAttribute.cs" />
+    <Compile Include="Areas\Account\Controllers\AlbumsController.cs" />
     <Compile Include="Areas\Account\Controllers\HomeController.cs" />
     <Compile Include="Areas\Account\AccountAreaRegistration.cs" />
+    <Compile Include="Areas\Account\Models\AlbumsModel.cs" />
+    <Compile Include="Areas\Account\Models\AlbumCreateModel.cs" />
     <Compile Include="Areas\Account\Models\HomeModel.cs" />
     <Compile Include="Areas\Account\Models\AccountBaseModel.cs" />
     <Compile Include="Areas\Main\Controllers\OauthController.cs" />
@@ -251,6 +257,8 @@
     <Content Include="Areas\Account\Views\Home\Index.cshtml" />
     <Content Include="Areas\Account\Views\Web.config" />
     <Content Include="Areas\Account\Views\Home\Login.cshtml" />
+    <Content Include="Areas\Account\Views\Albums\Index.cshtml" />
+    <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -8,13 +8,15 @@
 <div class="column nine">
 	<p class="auth">
 		@if ( Model.IsPersonAuthenticated ) {
-			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index());
-			<text> (</text>@Html.ActionLink("Logout", MVC.Header.PersonLogout());<text>)</text>
+			<text>
+				@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index())
+				(<a href="#" onclick="@Model.GetPersonLoginOpenScript(true)">switch</a>, 
+				@Html.ActionLink("logout", MVC.Header.PersonLogout()))
+			</text>
 		}
 		else {
 			<text>
 				<a href="#" onclick="@Model.GetPersonLoginOpenScript(false)">Login</a>
-				(<a href="#" onclick="@Model.GetPersonLoginOpenScript(true)">switch</a>)
 			</text>
 		}
 	</p>

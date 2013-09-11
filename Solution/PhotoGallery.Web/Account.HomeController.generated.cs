@@ -58,12 +58,14 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string Login = "Login";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string Login = "Login";
         }
 
 
@@ -77,11 +79,11 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
-                public readonly string _AlbumThumb = "_AlbumThumb";
                 public readonly string Index = "Index";
+                public readonly string Login = "Login";
             }
-            public readonly string _AlbumThumb = "~/Areas/Account/Views/Home/_AlbumThumb.cshtml";
             public readonly string Index = "~/Areas/Account/Views/Home/Index.cshtml";
+            public readonly string Login = "~/Areas/Account/Views/Home/Login.cshtml";
         }
     }
 
@@ -96,6 +98,15 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
+            return callInfo;
+        }
+
+        partial void LoginOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        public override System.Web.Mvc.ActionResult Login()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Login);
+            LoginOverride(callInfo);
             return callInfo;
         }
 

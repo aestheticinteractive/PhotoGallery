@@ -30,6 +30,10 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult Login() {
+			if ( vHome.IsPersonAuthenticated() ) {
+				return RedirectToAction(MVC.Account.Home.Index());
+			}
+
 			var m = new HomeModel();
 			return View(m);
 		}

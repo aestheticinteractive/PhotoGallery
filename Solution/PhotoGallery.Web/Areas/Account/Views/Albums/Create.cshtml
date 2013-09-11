@@ -1,0 +1,25 @@
+﻿@model AlbumCreateModel
+
+<div class="row">
+	<div class="twelve columns">
+		<h4 class="borderBot">
+			Create New Album
+		</h4>
+		@using ( Html.BeginForm() ) {
+			<fieldset>
+				@Html.ValidationSummary(true, "Album was not created successfully.")
+				
+				@Html.LabelFor(m => m.Title)
+				@Html.TextBoxFor(m => m.Title, new { maxlength=64 })
+				@Html.ValidationMessageFor(m => m.Title)
+				
+				@Html.LabelFor(m => m.Files)
+				@Html.TextBoxFor(m => m.Files, new { type="file", multiple="true" })<br/>
+				@Html.ValidationMessageFor(m => m.Files)
+				<br/>
+				<br/>
+				<input type="submit" class="formButton" value="Create Album" />
+			</fieldset>
+		}
+	</div>
+</div>
