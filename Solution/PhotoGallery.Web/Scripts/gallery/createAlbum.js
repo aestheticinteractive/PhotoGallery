@@ -1,19 +1,9 @@
 ﻿/// <reference path="~/Scripts/jquery-2.0.3-vsdoc.js" />
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/*--------------------------------------------------------------------------------------------*/
-$(document).ready(function () {
-});
-
-/*--------------------------------------------------------------------------------------------* /
-$(window).resize(function() {
-});*/
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 var createAlbumObj;
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 function submitCreateAlbum(albumUrl, photoUrl) {
 	var form = $("#CreateAlbum");
@@ -37,7 +27,7 @@ function submitCreateAlbum(albumUrl, photoUrl) {
 
 	var prog = $("#CreateAlbumProgress").show();
 	prog.find("#Title").html('Creating album "' + createAlbumObj.title + '":');
-	updateProgress();
+	onCreateAlbumProgress();
 
 	var data = {
 		Title: createAlbumObj.title
@@ -58,22 +48,11 @@ function onAlbumTitleFail(data, textStatus) {
 	alert("onAlbumTitleFail: " + data + " // " + textStatus);
 }
 
-/*--------------------------------------------------------------------------------------------*/
-function updateProgress() {
-	var n = createAlbumObj.imageCount;
-	var u = createAlbumObj.uploadCount;
-	var f = createAlbumObj.failCount;
 
-	var s = 'Uploading ' + n + ' image(s)...<br/>' +
-		' &bull; Complete: ' + u + ' (' + Math.round(u / n * 100) + '%)<br/>' +
-		' &bull; Failures: ' + f + ' (' + Math.round(f / n * 100) + '%)<br/>';
-
-	$("#CreateAlbumProgress").find("#Info").html(s);
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 function uploadNextImage() {
-	updateProgress();
+	onCreateAlbumProgress();
 	
 	var n = createAlbumObj.imageCount;
 	var i = ++createAlbumObj.uploadIndex;
@@ -142,6 +121,21 @@ function onAlbumImageFail(data, textStatus) {
 	alert("onAlbumImageFail: "+data+" // "+textStatus);
 	createAlbumObj.failCount++;
 	uploadNextImage();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+function onCreateAlbumProgress() {
+	var n = createAlbumObj.imageCount;
+	var u = createAlbumObj.uploadCount;
+	var f = createAlbumObj.failCount;
+
+	var s = 'Uploading ' + n + ' image(s)...<br/>' +
+		' &bull; Complete: ' + u + ' (' + Math.round(u / n * 100) + '%)<br/>' +
+		' &bull; Failures: ' + f + ' (' + Math.round(f / n * 100) + '%)<br/>';
+
+	$("#CreateAlbumProgress").find("#Info").html(s);
 }
 
 /*--------------------------------------------------------------------------------------------*/

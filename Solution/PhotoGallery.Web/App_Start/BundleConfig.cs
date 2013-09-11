@@ -26,9 +26,6 @@ namespace PhotoGallery.Web {
 			pBundles.Add(new StyleBundle("~/Content/css").Include(
 						"~/Content/gallery/*.css"));
 
-			pBundles.Add(new StyleBundle("~/bundles/gallery").Include(
-						"~/Scripts/gallery.js"));
-
 			#region Foundation Bundles
 			pBundles.Add(new StyleBundle("~/Content/foundation/css").Include(
 					   "~/Content/foundation/foundation.css",
