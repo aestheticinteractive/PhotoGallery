@@ -1,11 +1,14 @@
 ﻿@model AlbumCreateModel
+@{
+	string albumUrl = Html.ActionLinkUrl(MVC.Account.Albums.UpdateAlbumTitle());
+}
 
 <div class="row">
 	<div class="twelve columns">
 		<h4 class="borderBot">
 			Create New Album
 		</h4>
-		@using ( Html.BeginForm() ) {
+		<form id="CreateAlbum" onsubmit="submitCreateAlbum('@(albumUrl)'); return false;">
 			<fieldset>
 				@Html.ValidationSummary(true, "Album was not created successfully.")
 				
@@ -18,8 +21,17 @@
 				@Html.ValidationMessageFor(m => m.Files)
 				<br/>
 				<br/>
-				<input type="submit" class="formButton" value="Create Album" />
+				<input id="SubmitButton" type="submit" class="formButton" value="Create Album" />
+				<p id="Progress" style="display: none; font-weight: bold;">
+					PROGRESS!
+				</p>
 			</fieldset>
-		}
+		</form>
+		<fieldset id="CreateAlbumProgress" style="display: none;">
+			<p id="Title" style="font-weight: bold;">
+			</p>
+			<p id="Info">
+			</p>
+		</fieldset>
 	</div>
 </div>

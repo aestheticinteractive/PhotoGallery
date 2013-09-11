@@ -12,7 +12,6 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 		[StringLength(64, ErrorMessage="Title cannot exceed 64 characters.")]
 		public string Title { get; set; }
 
-		[Required]
 		[Display(Name="Image Files")]
 		public IEnumerable<HttpPostedFileBase> Files { get; set; }
 
@@ -23,6 +22,22 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		protected override string PageTitle { get { return "Create New Album"; } }
+
+	}
+
+
+	/*================================================================================================*/
+	public class AlbumCreateTitleModel {
+
+		public string Title { get; set; }
+
+	}
+
+
+	/*================================================================================================*/
+	public class AlbumCreateImageModel {
+
+		public HttpPostedFileBase Image { get; set; }
 
 	}
 

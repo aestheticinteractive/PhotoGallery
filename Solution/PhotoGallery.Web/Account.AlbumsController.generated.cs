@@ -43,9 +43,15 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.ActionResult Edit()
+        public virtual System.Web.Mvc.PartialViewResult UpdateAlbumTitle()
         {
-            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
+            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.UpdateAlbumTitle);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.PartialViewResult UploadImage()
+        {
+            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.UploadImage);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -65,7 +71,8 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         {
             public readonly string Index = "Index";
             public readonly string Create = "Create";
-            public readonly string Edit = "Edit";
+            public readonly string UpdateAlbumTitle = "UpdateAlbumTitle";
+            public readonly string UploadImage = "UploadImage";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -73,25 +80,25 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         {
             public const string Index = "Index";
             public const string Create = "Create";
-            public const string Edit = "Edit";
+            public const string UpdateAlbumTitle = "UpdateAlbumTitle";
+            public const string UploadImage = "UploadImage";
         }
 
 
-        static readonly ActionParamsClass_Create s_params_Create = new ActionParamsClass_Create();
+        static readonly ActionParamsClass_UpdateAlbumTitle s_params_UpdateAlbumTitle = new ActionParamsClass_UpdateAlbumTitle();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Create CreateParams { get { return s_params_Create; } }
+        public ActionParamsClass_UpdateAlbumTitle UpdateAlbumTitleParams { get { return s_params_UpdateAlbumTitle; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Create
+        public class ActionParamsClass_UpdateAlbumTitle
         {
             public readonly string pModel = "pModel";
         }
-        static readonly ActionParamsClass_Edit s_params_Edit = new ActionParamsClass_Edit();
+        static readonly ActionParamsClass_UploadImage s_params_UploadImage = new ActionParamsClass_UploadImage();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Edit EditParams { get { return s_params_Edit; } }
+        public ActionParamsClass_UploadImage UploadImageParams { get { return s_params_UploadImage; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Edit
+        public class ActionParamsClass_UploadImage
         {
-            public readonly string id = "id";
             public readonly string pModel = "pModel";
         }
         static readonly ViewsClass s_views = new ViewsClass();
@@ -135,33 +142,23 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
             return callInfo;
         }
 
-        partial void CreateOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, PhotoGallery.Web.Areas.Account.Models.AlbumCreateModel pModel);
+        partial void UpdateAlbumTitleOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, PhotoGallery.Web.Areas.Account.Models.AlbumCreateTitleModel pModel);
 
-        public override System.Web.Mvc.ActionResult Create(PhotoGallery.Web.Areas.Account.Models.AlbumCreateModel pModel)
+        public override System.Web.Mvc.PartialViewResult UpdateAlbumTitle(PhotoGallery.Web.Areas.Account.Models.AlbumCreateTitleModel pModel)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Create);
+            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.UpdateAlbumTitle);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "pModel", pModel);
-            CreateOverride(callInfo, pModel);
+            UpdateAlbumTitleOverride(callInfo, pModel);
             return callInfo;
         }
 
-        partial void EditOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int id);
+        partial void UploadImageOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, PhotoGallery.Web.Areas.Account.Models.AlbumCreateImageModel pModel);
 
-        public override System.Web.Mvc.ActionResult Edit(int id)
+        public override System.Web.Mvc.PartialViewResult UploadImage(PhotoGallery.Web.Areas.Account.Models.AlbumCreateImageModel pModel)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
-            EditOverride(callInfo, id);
-            return callInfo;
-        }
-
-        partial void EditOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, PhotoGallery.Web.Areas.Account.Models.AlbumCreateModel pModel);
-
-        public override System.Web.Mvc.ActionResult Edit(PhotoGallery.Web.Areas.Account.Models.AlbumCreateModel pModel)
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
+            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.UploadImage);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "pModel", pModel);
-            EditOverride(callInfo, pModel);
+            UploadImageOverride(callInfo, pModel);
             return callInfo;
         }
 

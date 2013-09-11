@@ -52,47 +52,19 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		[FabricAuthorize]
 		[HttpPost]
-		public virtual ActionResult Create(AlbumCreateModel pModel) {
-			if ( !ModelState.IsValid ) {
-				return View(pModel);
-			}
-
-			int? albumId = null; //vAlbums.AddAlbum(pModel.Title);
-
-			if ( albumId == null ) {
-				ModelState.AddModelError("", "A new album was not created.");
-				return View(pModel);
-			}
-
-			return RedirectToAction(MVC.Account.Albums.Index());
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		[FabricAuthorize]
-		public virtual ActionResult Edit(int id) {
-			var m = new AlbumCreateModel();
-			m.EditAlbumId = id;
-			return View(MVC.Account.Albums.Views.Create, m);
+		public virtual PartialViewResult UpdateAlbumTitle(AlbumCreateTitleModel pModel) {
+			Log.Debug("TITLE: "+pModel.Title);
+			Response.Write("1");
+			return null;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		[FabricAuthorize]
 		[HttpPost]
-		public virtual ActionResult Edit(AlbumCreateModel pModel) {
-			if ( !ModelState.IsValid ) {
-				return View(MVC.Account.Albums.Views.Create, pModel);
-			}
-
-			int? albumId = null; //vAlbums.EditAlbum(pModel.Title);
-
-			if ( albumId == null ) {
-				ModelState.AddModelError("", "A new album was not created.");
-				return View(MVC.Account.Albums.Views.Create, pModel);
-			}
-
-			return RedirectToAction(MVC.Account.Albums.Index());
+		public virtual PartialViewResult UploadImage(AlbumCreateImageModel pModel) {
+			Log.Debug("IMAGE: "+pModel.Image);
+			Response.Write("1");
+			return null;
 		}
 
 	}
