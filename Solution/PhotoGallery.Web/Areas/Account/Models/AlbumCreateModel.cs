@@ -37,6 +37,7 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 	/*================================================================================================*/
 	public class AlbumCreateImageModel {
 
+		public int AlbumId { get; set; }
 		public HttpPostedFileBase Image { get; set; }
 
 	}

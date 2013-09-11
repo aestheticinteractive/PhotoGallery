@@ -28,18 +28,6 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 			return View(m);
 		}
 
-		//http://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
-		//http://stackoverflow.com/questions/16122949/submit-mvc-form-with-jquery-ajax
-		//http://www.codeforest.net/html5-image-upload-resize-and-crop
-		//http://msdn.microsoft.com/en-us/library/system.web.mvc.ajax.ajaxoptions%28v=vs.108%29.aspx
-
-		/*
-		 * general idea:
-		 * - use ajax to create/edit the album name
-		 * - obtain the album ID from that ajax call
-		 * - for each image (on the client side): resize, upload, attach to album, update progress
-		 */
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
@@ -54,7 +42,7 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		[HttpPost]
 		public virtual PartialViewResult UpdateAlbumTitle(AlbumCreateTitleModel pModel) {
 			Log.Debug("TITLE: "+pModel.Title);
-			Response.Write("1");
+			Response.Write("99");
 			return null;
 		}
 
@@ -62,7 +50,7 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		[FabricAuthorize]
 		[HttpPost]
 		public virtual PartialViewResult UploadImage(AlbumCreateImageModel pModel) {
-			Log.Debug("IMAGE: "+pModel.Image);
+			Log.Debug("IMAGE: "+pModel.AlbumId+" // "+pModel.Image);
 			Response.Write("1");
 			return null;
 		}
