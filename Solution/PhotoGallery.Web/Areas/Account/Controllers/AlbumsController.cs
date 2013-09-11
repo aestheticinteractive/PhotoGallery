@@ -58,9 +58,10 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		[FabricAuthorize]
 		[HttpPost]
 		public virtual ActionResult UploadImage(AlbumCreateImageModel pModel) {
-			Log.Debug("UploadImage A: "+pModel.AlbumId+" // "+pModel.ImageData);
-			WebUploadResult res = vAlbums.AddAlbumPhoto(pModel.AlbumId, pModel.ImageData);
-			Log.Debug("UploadImage B: "+pModel.AlbumId+" // "+pModel.ImageData+" // "+res.Status);
+			Log.Debug("UploadImage A: "+pModel.AlbumId+" // "+pModel.Filename);
+			WebUploadResult res = vAlbums.AddAlbumPhoto(
+				pModel.AlbumId, pModel.Filename, pModel.ExifData, pModel.ImageData);
+			Log.Debug("UploadImage B: "+pModel.AlbumId+" // "+res.Status);
 
 			if ( res.Status == WebUploadResult.UploadStatus.Success ) {
 				return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);

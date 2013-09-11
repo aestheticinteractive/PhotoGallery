@@ -40,7 +40,7 @@ function submitCreateAlbum(albumUrl, photoUrl) {
 /*--------------------------------------------------------------------------------------------*/
 function onAlbumTitleSuccess(data) {
 	createAlbumObj.albumId = Number(data);
-	uploadNextImage();
+	createNextImage();
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -51,7 +51,7 @@ function onAlbumTitleFail(data, textStatus) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function uploadNextImage() {
+function createNextImage() {
 	onCreateAlbumProgress();
 	
 	var n = createAlbumObj.imageCount;
@@ -66,18 +66,32 @@ function uploadNextImage() {
 
 	if ( !file.type.match(/image.*/) ) {
 		createAlbumObj.failCount++;
-		uploadNextImage();
+		createNextImage();
 		return;
 	}
 
+	var reader = new FileReader();
+	reader.onload = function(e) { captureExif(file, e.target.result); };
+	reader.readAsBinaryString(file);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+//Adapted from: http://stackoverflow.com/questions/10341685/
+//  html-javascript-acces-exif-data-before-file-upload
+function captureExif(file, binaryData) {
+	var exifData = EXIF.readFromBinaryFile(new BinaryFile(binaryData));
+	delete exifData.MakerNote;
+	delete exifData.UserComment;
+	console.log("EXIF: "+JSON.stringify(exifData));
+
 	var img = document.createElement("img");
+	img.onload = function() { resizeAndUploadImage(file, img, exifData); };
 	img.src = window.URL.createObjectURL(file);
-	img.onload = function() { uploadNextImage2(img); };
 }
 
 /*--------------------------------------------------------------------------------------------*/
 //Adapted from: http://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader
-function uploadNextImage2(img) {
+function resizeAndUploadImage(file, img, exifData) {
 	var max = 1024;
 	var w = img.width;
 	var h = img.height;
@@ -99,13 +113,17 @@ function uploadNextImage2(img) {
 
 	var data = {
 		AlbumId: createAlbumObj.albumId,
-		ImageData: canvas.toDataURL("image/jpeg", 0.9)
+		Filename: file.value,
+		ExifData: JSON.stringify(exifData),
+		ImageData: canvas.toDataURL("image/jpeg", 1.0)
 	};
 	
-	/*var img2 = document.createElement("img");
-	img2.src = data.Image;
+	var img2 = document.createElement("img");
+	img2.src = data.ImageData;
 	$("#CreateAlbumProgress").append("<hr/>");
-	$("#CreateAlbumProgress").append(img2);*/
+	$("#CreateAlbumProgress").append(img2);
+	$("#CreateAlbumProgress").append("<br/>");
+	$("#CreateAlbumProgress").append(exifData);
 	$.post(createAlbumObj.photoUrl, data, onAlbumImageSuccess);
 }
 
@@ -113,14 +131,14 @@ function uploadNextImage2(img) {
 function onAlbumImageSuccess(data) {
 	//alert("onAlbumImageSuccess: "+data+" // "+textStatus);
 	++createAlbumObj.uploadCount;
-	uploadNextImage();
+	createNextImage();
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onAlbumImageFail(data, textStatus) {
 	alert("onAlbumImageFail: "+data+" // "+textStatus);
 	createAlbumObj.failCount++;
-	uploadNextImage();
+	createNextImage();
 }
 
 

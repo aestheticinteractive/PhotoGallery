@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Web;
+using System.Text.RegularExpressions;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
@@ -16,20 +16,29 @@ namespace PhotoGallery.Services.Account.Tools {
 	/*================================================================================================*/
 	public class PhotoUploader {
 
+		private const string ImageHeaderPattern = @"data:image/(?<type>.+?),(?<data>.+)";
+
 		public WebUploadResult Result { get; private set; }
 		
 		private readonly int vAlbumId;
-		private readonly HttpPostedFileBase vFile;
+		private readonly string vExifData;
+		private readonly string vImageData;
+
+		private Image vOrig;
+		private Image vImage;
+		private Image vThumb;
+		private Photo vPhoto;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoUploader(int pAlbumId, HttpPostedFileBase pFile) {
+		public PhotoUploader(int pAlbumId, string pFilename, string pExifData, string pImageData) {
 			vAlbumId = pAlbumId;
-			vFile = pFile;
+			vExifData = pExifData;
+			vImageData = pImageData;
 
 			Result = new WebUploadResult();
-			Result.Filename = vFile.FileName;
+			Result.Filename = pFilename;
 			Result.Status = WebUploadResult.UploadStatus.NotStarted;
 		}
 		
@@ -38,13 +47,10 @@ namespace PhotoGallery.Services.Account.Tools {
 			Result.Status = WebUploadResult.UploadStatus.InProgress;
 
 			try {
-				Image orig;
-				Image image;
-				Image thumb;
-
-				ResizeFile(out orig, out image, out thumb);
-				Photo photo = AddPhotoAndMeta(pSess, orig);
-				SaveImages(photo.Id, image, thumb);
+				//ResizeFile();
+				//AddPhoto(pSess);
+				//SaveImages();
+				AddExif(pSess);
 			}
 			catch ( Exception ex ) {
 				Log.Error("SaveFile failed: "+Result.Status);
@@ -59,11 +65,17 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void ResizeFile(out Image pOrig, out Image pImage, out Image pThumb) {
+		private void ResizeFile() {
 			try {
-				pOrig = Image.FromStream(vFile.InputStream, true, true);
-				pImage = ResizeImage(pOrig, new Size(1024, 1024));
-				pThumb = ResizeImage(pOrig, new Size(100, 100));
+				string base64Data = Regex.Match(vImageData, ImageHeaderPattern).Groups["data"].Value;
+				byte[] binData = Convert.FromBase64String(base64Data);
+
+				using ( var ms = new MemoryStream(binData) ) {
+					vOrig = Image.FromStream(ms);
+				}
+
+				vImage = ResizeImage(vOrig, new Size(1024, 1024));
+				vThumb = ResizeImage(vOrig, new Size(100, 100));
 			}
 			catch ( Exception ) {
 				Result.Status = WebUploadResult.UploadStatus.ConvertResizeError;
@@ -72,18 +84,15 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private Photo AddPhotoAndMeta(ISession pSess, Image pOrig) {
+		private void AddPhoto(ISession pSess) {
 			Result.Status = WebUploadResult.UploadStatus.InProgress;
 
 			try {
-				Photo photo = new Photo();
-				photo.Album = pSess.Load<Album>(vAlbumId);
-				photo.ImgName = vFile.FileName;
-				pSess.Save(photo);
-				Result.PhotoId = photo.Id;
-
-				ProcessPhotoMetadata(pSess, photo, pOrig);
-				return photo;
+				vPhoto = new Photo();
+				vPhoto.Album = pSess.Load<Album>(vAlbumId);
+				vPhoto.ImgName = Result.Filename;
+				pSess.Save(vPhoto);
+				Result.PhotoId = vPhoto.Id;
 			}
 			catch ( Exception ) {
 				Result.Status = WebUploadResult.UploadStatus.DatabaseInsertError;
@@ -92,7 +101,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private void SaveImages(int pPhotoId, Image pImage, Image pThumb) {
+		private void SaveImages() {
 			try {
 				string dir = ImageUtil.BuildPhotoPath(vAlbumId);
 
@@ -100,15 +109,36 @@ namespace PhotoGallery.Services.Account.Tools {
 					Directory.CreateDirectory(dir);
 				}
 
-				string path = ImageUtil.BuildPhotoPath(vAlbumId, pPhotoId, ImageUtil.PhotoSize.Large);
-				SaveJpeg(path, pImage, 90);
+				string path = ImageUtil.BuildPhotoPath(vAlbumId, vPhoto.Id, ImageUtil.PhotoSize.Large);
+				SaveJpeg(path, vImage, 90);
 
-				path = ImageUtil.BuildPhotoPath(vAlbumId, pPhotoId, ImageUtil.PhotoSize.Thumb);
-				SaveJpeg(path, pThumb, 75);
+				path = ImageUtil.BuildPhotoPath(vAlbumId, vPhoto.Id, ImageUtil.PhotoSize.Thumb);
+				SaveJpeg(path, vThumb, 75);
 			}
 			catch ( Exception ) {
 				Result.Status = WebUploadResult.UploadStatus.SavePhotoError;
 				throw;
+			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void AddExif(ISession pSess) {
+			var map = new Dictionary<string, string>();
+			int i = vExifData.IndexOf("\":");
+			//Log.Debug("EXIF: "+vExifData);
+
+			while ( i != -1 ) {
+				int prevI = i;
+				int tagI = vExifData.LastIndexOf('"', prevI-1);
+				string tag = vExifData.Substring(tagI+1, prevI-tagI-1);
+
+				i = vExifData.IndexOf("\":", prevI+2);
+				int postValueI = (i == -1 ? vExifData.Length-1 : vExifData.LastIndexOf(',', i));
+				string value = vExifData.Substring(prevI+2, postValueI-prevI-2);
+				value = value.Trim(new[] { ' ', '"' });
+
+				//Log.Debug("TAG "+tag+": "+value);
+				map.Add(tag, value);
 			}
 		}
 
@@ -163,10 +193,10 @@ namespace PhotoGallery.Services.Account.Tools {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		private void ProcessPhotoMetadata(ISession pSession, Photo pPhoto, Image pImage) {
+		/*--------------------------------------------------------------------------------------------* /
+		private void ProcessPhotoMetadata(ISession pSession) {
 			Dictionary<PropertyTagId,
-				KeyValuePair<PropertyTagType, Object>> imgMeta = ImageUtil.BuildPropMap(pImage);
+				KeyValuePair<PropertyTagType, Object>> imgMeta = ImageUtil.BuildPropMap(vImage);
 
 			foreach ( KeyValuePair<PropertyTagId,
 					KeyValuePair<PropertyTagType, Object>> prop in imgMeta ) {
@@ -192,10 +222,10 @@ namespace PhotoGallery.Services.Account.Tools {
 			pPhoto.ExifFNumber = Convert.ToDouble(imgMeta[PropertyTagId.ExifFNumber].Value);
 			pPhoto.ExifFocalLength = Convert.ToDouble(imgMeta[PropertyTagId.ExifFocalLength].Value);
 
-			pSession.SaveOrUpdate(pPhoto);*/
+			pSession.SaveOrUpdate(pPhoto);* /
 			//Log.Debug("META: "+pPhoto.ExifFNumber+" / "+pPhoto.ExifFocalLength+
 			//	" / "+pPhoto.ExifExposureTime+" / "+pPhoto.ExifISOSpeed+" / "+pPhoto.ExifDTOrig);
-		}
+		}*/
 
 	}
 
