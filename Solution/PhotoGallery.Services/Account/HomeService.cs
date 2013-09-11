@@ -65,6 +65,26 @@ namespace PhotoGallery.Services.Account {
 			}
 		}
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		public static FabricUser GetCurrentUser(IFabricClient pFab, ISession pSess) {
+			if ( !pFab.PersonSession.IsAuthenticated ) {
+				return null;
+			}
+
+			FabUser fabUser = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+
+			if ( fabUser == null ) {
+				return null;
+			}
+
+			return pSess.QueryOver<FabricUser>()
+				.Where(x => x.Name == fabUser.Name)
+				.Take(1)
+				.SingleOrDefault();
+		}
+
 	}
 
 }

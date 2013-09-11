@@ -99,7 +99,7 @@ function uploadNextImage2(img) {
 
 	var data = {
 		AlbumId: createAlbumObj.albumId,
-		Image: canvas.toDataURL("image/jpeg", 0.9)
+		ImageData: canvas.toDataURL("image/jpeg", 0.9)
 	};
 	
 	/*var img2 = document.createElement("img");

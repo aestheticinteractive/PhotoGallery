@@ -88,19 +88,6 @@ internal partial class T4MVC_System_Web_Mvc_RedirectToRouteResult : System.Web.M
     public string Protocol { get; set; }
     public RouteValueDictionary RouteValueDictionary { get; set; }
 }
-[GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-internal partial class T4MVC_System_Web_Mvc_PartialViewResult : System.Web.Mvc.PartialViewResult, IT4MVCActionResult
-{
-    public T4MVC_System_Web_Mvc_PartialViewResult(string area, string controller, string action, string protocol = null): base()
-    {
-        this.InitMVCT4Result(area, controller, action, protocol);
-    }
-    
-    public string Controller { get; set; }
-    public string Action { get; set; }
-    public string Protocol { get; set; }
-    public RouteValueDictionary RouteValueDictionary { get; set; }
-}
 
 
 
@@ -137,7 +124,14 @@ namespace Links
             public static readonly string XXXjquery_foundation_topbar_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/XXXjquery.foundation.topbar.min.js") ? Url("XXXjquery.foundation.topbar.min.js") : Url("XXXjquery.foundation.topbar.js");
         }
     
-        public static readonly string gallery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/gallery.min.js") ? Url("gallery.min.js") : Url("gallery.js");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class gallery {
+            private const string URLPATH = "~/Scripts/gallery";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string createAlbum_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/createAlbum.min.js") ? Url("createAlbum.min.js") : Url("createAlbum.js");
+        }
+    
         public static readonly string jquery_2_0_3_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.3-vsdoc.min.js") ? Url("jquery-2.0.3-vsdoc.min.js") : Url("jquery-2.0.3-vsdoc.js");
         public static readonly string jquery_2_0_3_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-2.0.3.min.js") ? Url("jquery-2.0.3.min.js") : Url("jquery-2.0.3.js");
         public static readonly string jquery_2_0_3_min_js = Url("jquery-2.0.3.min.js");

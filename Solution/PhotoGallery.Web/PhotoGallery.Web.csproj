@@ -188,6 +188,9 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Areas\Main\Models\MainBaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\exif\binaryajax.js" />
+    <Content Include="Scripts\exif\exif.js" />
+    <Content Include="Scripts\exif\imageinfo.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>

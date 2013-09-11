@@ -14,7 +14,7 @@
 
 		public string Filename { get; internal set; }
 		public UploadStatus Status { get; internal set; }
-		public int NewPhotoId { get; internal set; }
+		public int PhotoId { get; internal set; }
 
 	}
 

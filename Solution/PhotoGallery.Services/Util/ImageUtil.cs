@@ -22,6 +22,11 @@ namespace PhotoGallery.Services.Util {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
+		public static string BuildPhotoPath(int pAlbumId) {
+			return "/upload/photos/"+pAlbumId;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
 		public static string BuildPhotoPath(int pAlbumId, int pPhotoId, PhotoSize pSize) {
 			string s = "";
 
@@ -29,7 +34,7 @@ namespace PhotoGallery.Services.Util {
 				s = "-thumb";
 			}
 
-			return "/upload/photos/"+pAlbumId+"/"+pPhotoId+s+".jpg";
+			return BuildPhotoPath(pAlbumId)+"/"+pPhotoId+s+".jpg";
 		}
 
 

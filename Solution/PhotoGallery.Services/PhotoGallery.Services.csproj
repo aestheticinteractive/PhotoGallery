@@ -49,17 +49,16 @@
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="Account\AlbumsService.cs" />
+    <Compile Include="Account\Tools\PhotoUploader.cs" />
     <Compile Include="Account\Dto\WebUser.cs" />
     <Compile Include="BaseLogic.cs" />
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
-    <Compile Include="GalleryUtil.cs" />
     <Compile Include="Main\Dto\WebAlbum.cs" />
     <Compile Include="Main\Dto\WebAlbumCore.cs" />
     <Compile Include="Main\Dto\WebAlbumTag.cs" />
     <Compile Include="Main\Dto\WebPhoto.cs" />
     <Compile Include="Main\Dto\WebPhotoCore.cs" />
-    <Compile Include="Main\Dto\WebUploadResult.cs" />
     <Compile Include="Main\OauthService.cs" />
     <Compile Include="Main\HomeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

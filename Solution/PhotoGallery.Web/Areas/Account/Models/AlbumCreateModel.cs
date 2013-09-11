@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
-using PhotoGallery.Services.Main.Dto;
 
 namespace PhotoGallery.Web.Areas.Account.Models {
 
@@ -16,7 +15,6 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 		public IEnumerable<HttpPostedFileBase> Files { get; set; }
 
 		public int? EditAlbumId { get; set; }
-		public IList<WebUploadResult> UploadResults { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +36,7 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 	public class AlbumCreateImageModel {
 
 		public int AlbumId { get; set; }
-		public HttpPostedFileBase Image { get; set; }
+		public string ImageData { get; set; }
 
 	}
 
