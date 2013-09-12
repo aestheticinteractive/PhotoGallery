@@ -1,6 +1,6 @@
 ﻿/// <reference path="~/Scripts/jquery-2.0.3-vsdoc.js" />
 
-var createAlbumObj;
+var caData;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,21 +16,21 @@ function submitCreateAlbum(albumUrl, photoUrl) {
 
 	form.hide();
 
-	createAlbumObj = {};
-	createAlbumObj.photoUrl = photoUrl;
-	createAlbumObj.title = $('#Title').val();
-	createAlbumObj.imagesOrig = $('#Files').get(0).files;
-	createAlbumObj.imageCount = createAlbumObj.imagesOrig.length;
-	createAlbumObj.uploadIndex = -1;
-	createAlbumObj.uploadCount = 0;
-	createAlbumObj.failCount = 0;
+	caData = {};
+	caData.photoUrl = photoUrl;
+	caData.title = $('#Title').val();
+	caData.imagesOrig = $('#Files').get(0).files;
+	caData.imageCount = caData.imagesOrig.length;
+	caData.uploadIndex = -1;
+	caData.uploadCount = 0;
+	caData.failCount = 0;
 
 	var prog = $("#CreateAlbumProgress").show();
-	prog.find("#Title").html('Creating album "' + createAlbumObj.title + '":');
+	prog.find("#Title").html('Creating album "' + caData.title + '":');
 	onCreateAlbumProgress();
 
 	var data = {
-		Title: createAlbumObj.title
+		Title: caData.title
 	};
 
 	var jqxhr = $.post(albumUrl, data, onAlbumTitleSuccess);
@@ -39,7 +39,7 @@ function submitCreateAlbum(albumUrl, photoUrl) {
 
 /*--------------------------------------------------------------------------------------------*/
 function onAlbumTitleSuccess(data) {
-	createAlbumObj.albumId = Number(data);
+	caData.albumId = Number(data);
 	createNextImage();
 }
 
@@ -54,18 +54,18 @@ function onAlbumTitleFail(data, textStatus) {
 function createNextImage() {
 	onCreateAlbumProgress();
 	
-	var n = createAlbumObj.imageCount;
-	var i = ++createAlbumObj.uploadIndex;
+	var n = caData.imageCount;
+	var i = ++caData.uploadIndex;
 
 	if ( i >= n ) {
 		onCreateAlbumComplete();
 		return;
 	}
 
-	var file = createAlbumObj.imagesOrig[i];
+	var file = caData.imagesOrig[i];
 
 	if ( !file.type.match(/image.*/) ) {
-		createAlbumObj.failCount++;
+		caData.failCount++;
 		createNextImage();
 		return;
 	}
@@ -82,7 +82,7 @@ function captureExif(file, binaryData) {
 	var exifData = EXIF.readFromBinaryFile(new BinaryFile(binaryData));
 	delete exifData.MakerNote;
 	delete exifData.UserComment;
-	console.log("EXIF: "+JSON.stringify(exifData));
+	//console.log("EXIF: "+JSON.stringify(exifData));
 
 	var img = document.createElement("img");
 	img.onload = function() { resizeAndUploadImage(file, img, exifData); };
@@ -112,32 +112,32 @@ function resizeAndUploadImage(file, img, exifData) {
 	ctx.drawImage(img, 0, 0, w, h);
 
 	var data = {
-		AlbumId: createAlbumObj.albumId,
+		AlbumId: caData.albumId,
 		Filename: file.name,
 		ExifData: JSON.stringify(exifData),
 		ImageData: canvas.toDataURL("image/jpeg", 1.0)
 	};
 	
-	var img2 = document.createElement("img");
+	/*var img2 = document.createElement("img");
 	img2.src = data.ImageData;
 	$("#CreateAlbumProgress").append("<hr/>");
 	$("#CreateAlbumProgress").append(img2);
 	$("#CreateAlbumProgress").append("<br/>");
-	$("#CreateAlbumProgress").append(exifData);
-	$.post(createAlbumObj.photoUrl, data, onAlbumImageSuccess);
+	$("#CreateAlbumProgress").append(exifData);*/
+	$.post(caData.photoUrl, data, onAlbumImageSuccess);
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onAlbumImageSuccess(data) {
 	//alert("onAlbumImageSuccess: "+data+" // "+textStatus);
-	++createAlbumObj.uploadCount;
+	++caData.uploadCount;
 	createNextImage();
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onAlbumImageFail(data, textStatus) {
 	alert("onAlbumImageFail: "+data+" // "+textStatus);
-	createAlbumObj.failCount++;
+	caData.failCount++;
 	createNextImage();
 }
 
@@ -145,9 +145,9 @@ function onAlbumImageFail(data, textStatus) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 function onCreateAlbumProgress() {
-	var n = createAlbumObj.imageCount;
-	var u = createAlbumObj.uploadCount;
-	var f = createAlbumObj.failCount;
+	var n = caData.imageCount;
+	var u = caData.uploadCount;
+	var f = caData.failCount;
 
 	var s = 'Uploading ' + n + ' image(s)...<br/>' +
 		' &bull; Complete: ' + u + ' (' + Math.round(u / n * 100) + '%)<br/>' +
@@ -158,5 +158,5 @@ function onCreateAlbumProgress() {
 
 /*--------------------------------------------------------------------------------------------*/
 function onCreateAlbumComplete() {
-	createAlbumObj = null;
+	caData = null;
 }
