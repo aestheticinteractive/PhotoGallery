@@ -26,17 +26,21 @@ namespace PhotoGallery.Services.Account {
 					return null;
 				}
 
-				var fa = new FabricArtifact();
-				fa.Type = (byte)FabricArtifact.ArtifactType.Album;
-				s.Save(fa);
+				using ( ITransaction tx = s.BeginTransaction() ) {
+					var fa = new FabricArtifact();
+					fa.Type = (byte)FabricArtifact.ArtifactType.Album;
+					s.Save(fa);
 
-				var a = new Album();
-				a.Title = pTitle;
-				a.FabricUser = u;
-				a.FabricArtifact = fa;
-				s.Save(a);
+					var a = new Album();
+					a.Title = pTitle;
+					a.FabricUser = u;
+					a.FabricArtifact = fa;
+					s.Save(a);
 
-				return a.Id;
+					tx.Commit();
+
+					return a.Id;
+				}
 			}
 		}
 

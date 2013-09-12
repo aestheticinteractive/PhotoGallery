@@ -21,7 +21,6 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.Value).Length(128);
 
 			References(x => x.Photo);
-			References(x => x.FabricFactor).Nullable();
 		}
 
 	}

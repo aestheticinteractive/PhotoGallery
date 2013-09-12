@@ -103,17 +103,21 @@ namespace PhotoGallery.Services.Account.Tools {
 			Result.Status = WebUploadResult.UploadStatus.InProgress;
 
 			try {
-				var fa = new FabricArtifact();
-				fa.Type = (byte)FabricArtifact.ArtifactType.Photo;
-				pSess.Save(fa);
+				using ( ITransaction tx = pSess.BeginTransaction() ) {
+					var fa = new FabricArtifact();
+					fa.Type = (byte)FabricArtifact.ArtifactType.Photo;
+					pSess.Save(fa);
 
-				vPhoto = new Photo();
-				vPhoto.ImgName = (Result.Filename ?? "unknown");
-				vPhoto.Album = pSess.Load<Album>(vAlbumId);
-				vPhoto.Ratio = vOrig.Width/(float)vOrig.Height;
-				vPhoto.FabricArtifact = fa;
-				pSess.Save(vPhoto);
-				Result.PhotoId = vPhoto.Id;
+					vPhoto = new Photo();
+					vPhoto.ImgName = (Result.Filename ?? "unknown");
+					vPhoto.Album = pSess.Load<Album>(vAlbumId);
+					vPhoto.Ratio = vOrig.Width/(float)vOrig.Height;
+					vPhoto.FabricArtifact = fa;
+					pSess.Save(vPhoto);
+					Result.PhotoId = vPhoto.Id;
+
+					tx.Commit();
+				}
 			}
 			catch ( Exception ) {
 				Result.Status = WebUploadResult.UploadStatus.DatabaseInsertError;

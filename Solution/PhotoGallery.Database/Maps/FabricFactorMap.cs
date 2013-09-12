@@ -54,8 +54,6 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.VecUnitPrefixId).Nullable();
 			Map(x => x.VecValue).Nullable();
 			Map(x => x.VecAxisArtifactId).Nullable();
-
-			HasMany(x => x.PhotoMetas); //0 or 1
 		}
 
 	}

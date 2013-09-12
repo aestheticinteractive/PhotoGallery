@@ -8,7 +8,6 @@
 		public virtual string Value { get; set; }
 
 		public virtual Photo Photo { get; set; }
-		public virtual FabricFactor FabricFactor { get; set; }
 
     }
 

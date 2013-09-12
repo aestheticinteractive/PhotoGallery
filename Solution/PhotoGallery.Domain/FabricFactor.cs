@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PhotoGallery.Domain {
+﻿namespace PhotoGallery.Domain {
 	
 	/*================================================================================================*/
 	public class FabricFactor {
@@ -43,8 +41,6 @@ namespace PhotoGallery.Domain {
 		public virtual byte? VecUnitPrefixId { get; set; }
 		public virtual long? VecValue { get; set; }
 		public virtual long? VecAxisArtifactId { get; set; }
-
-		public virtual IList<PhotoMeta> PhotoMetas { get; set; } //0 or 1
 
     }
 
