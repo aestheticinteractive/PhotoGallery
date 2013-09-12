@@ -4,13 +4,13 @@ using PhotoGallery.Domain;
 namespace PhotoGallery.Database.Maps {
 	
 	/*================================================================================================*/
-	public class HumanMap : ClassMap<Human> {
+	public class TagMap : ClassMap<Tag> {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public HumanMap() {
-			string name = typeof(Human).Name;
+		public TagMap() {
+			string name = typeof(Tag).Name;
 			Table(name);
 
 			Id(x => x.Id)

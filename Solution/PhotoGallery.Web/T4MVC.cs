@@ -100,6 +100,16 @@ namespace Links
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
         public static readonly string _references_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/_references.min.js") ? Url("_references.min.js") : Url("_references.js");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class exif {
+            private const string URLPATH = "~/Scripts/exif";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string binaryajax_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/binaryajax.min.js") ? Url("binaryajax.min.js") : Url("binaryajax.js");
+            public static readonly string exif_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/exif.min.js") ? Url("exif.min.js") : Url("exif.js");
+            public static readonly string imageinfo_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/imageinfo.min.js") ? Url("imageinfo.min.js") : Url("imageinfo.js");
+        }
+    
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class foundation {
             private const string URLPATH = "~/Scripts/foundation";
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }

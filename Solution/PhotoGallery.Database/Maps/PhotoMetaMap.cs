@@ -18,10 +18,10 @@ namespace PhotoGallery.Database.Maps {
 				.GeneratedBy.Native();
 
 			Map(x => x.Label).Length(32);
-			Map(x => x.Type).Length(10);
 			Map(x => x.Value).Length(128);
 
 			References(x => x.Photo);
+			References(x => x.FabricFactor).Nullable();
 		}
 
 	}

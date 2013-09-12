@@ -17,7 +17,7 @@ namespace PhotoGallery.Database.Maps {
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
-			Map(x => x.ArtifactId).Unique();
+			Map(x => x.ArtifactId).Nullable().Index(name+"_ArtifactId");
 			Map(x => x.Type);
 
 			HasMany(x => x.Albums); //0 or 1

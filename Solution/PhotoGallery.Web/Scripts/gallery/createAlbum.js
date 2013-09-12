@@ -113,7 +113,7 @@ function resizeAndUploadImage(file, img, exifData) {
 
 	var data = {
 		AlbumId: createAlbumObj.albumId,
-		Filename: file.value,
+		Filename: file.name,
 		ExifData: JSON.stringify(exifData),
 		ImageData: canvas.toDataURL("image/jpeg", 1.0)
 	};

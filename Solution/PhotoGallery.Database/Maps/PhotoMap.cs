@@ -18,6 +18,7 @@ namespace PhotoGallery.Database.Maps {
 				.GeneratedBy.Native();
 
 			Map(x => x.ImgName).Length(64);
+			Map(x => x.Ratio);
 			
 			/*Map(x => x.Favorite).Default("0");
 			Map(x => x.ExifDTOrig).Nullable();

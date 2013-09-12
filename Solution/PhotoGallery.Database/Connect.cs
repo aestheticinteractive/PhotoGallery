@@ -53,7 +53,7 @@ namespace PhotoGallery.Database {
 		/*--------------------------------------------------------------------------------------------*/
 		public static void UpdateSchema() {
 			var schema = new SchemaUpdate(Config);
-			schema.Execute(false, true);
+			schema.Execute(true, true);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

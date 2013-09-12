@@ -1,7 +1,7 @@
-﻿using Fabric.Clients.Cs;
+﻿using System.Web;
+using Fabric.Clients.Cs;
 using NHibernate;
 using PhotoGallery.Domain;
-using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Dto;
 using PhotoGallery.Services.Account.Tools;
 
@@ -26,9 +26,14 @@ namespace PhotoGallery.Services.Account {
 					return null;
 				}
 
+				var fa = new FabricArtifact();
+				fa.Type = (byte)FabricArtifact.ArtifactType.Album;
+				s.Save(fa);
+
 				var a = new Album();
 				a.Title = pTitle;
 				a.FabricUser = u;
+				a.FabricArtifact = fa;
 				s.Save(a);
 
 				return a.Id;
@@ -36,30 +41,23 @@ namespace PhotoGallery.Services.Account {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebUploadResult AddAlbumPhoto(int pAlbumId, string pFilename, 
-																string pExifData, string pImageData) {
+		public WebUploadResult AddAlbumPhoto(HttpServerUtilityBase pServer, int pAlbumId,
+												string pFilename, string pExifData, string pImageData) {
 			using ( ISession s = NewSession() ) {
 				FabricUser u = HomeService.GetCurrentUser(Fab, s);
-				Log.Debug("AddPhotoAlbum user: "+u);
 
 				if ( u == null ) {
 					return null;
 				}
 
-				/*Album a = s.Get<Album>(pAlbumId);
-				Log.Debug("AddPhotoAlbum album: "+a);
-				Log.Debug("AddPhotoAlbum owner: "+a.FabricUser.Id+" == "+u.Id);
+				Album a = s.Get<Album>(pAlbumId);
 
 				if ( a == null || a.FabricUser.Id != u.Id ) {
 					return null;
-				}*/
+				}
 
-				Log.Debug("AddPhotoAlbum preup");
-				var up = new PhotoUploader(pAlbumId, pFilename, pExifData, pImageData);
-				Log.Debug("AddPhotoAlbum up: "+up);
+				var up = new PhotoUploader(pServer, pAlbumId, pFilename, pExifData, pImageData);
 				up.SaveFile(s);
-				Log.Debug("AddPhotoAlbum save: "+up.Result);
-				Log.Debug("AddPhotoAlbum res: "+up.Result.Status+" / "+up.Result.PhotoId);
 				return up.Result;
 			}
 		}

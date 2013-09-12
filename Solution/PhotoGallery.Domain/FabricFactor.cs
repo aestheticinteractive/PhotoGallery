@@ -1,10 +1,12 @@
-﻿namespace PhotoGallery.Domain {
+﻿using System.Collections.Generic;
+
+namespace PhotoGallery.Domain {
 	
 	/*================================================================================================*/
 	public class FabricFactor {
 
 		public virtual int Id { get; set; }
-		public virtual long FactorId { get; set; }
+		public virtual long? FactorId { get; set; }
 
 		public virtual FabricArtifact Primary { get; set; }
 		public virtual long PrimaryArtifactId { get; set; }
@@ -41,6 +43,8 @@
 		public virtual byte? VecUnitPrefixId { get; set; }
 		public virtual long? VecValue { get; set; }
 		public virtual long? VecAxisArtifactId { get; set; }
+
+		public virtual IList<PhotoMeta> PhotoMetas { get; set; } //0 or 1
 
     }
 

@@ -7,13 +7,7 @@ namespace PhotoGallery.Domain {
 
 		public virtual int Id { get; set; }
 		public virtual string ImgName { get; set; }
-		
-		/*public virtual int Favorite { get; set; }
-		public virtual DateTime ExifDTOrig { get; set; }
-		public virtual double ExifExposureTime { get; set; }
-		public virtual double ExifISOSpeed { get; set; }
-		public virtual double ExifFNumber { get; set; }
-		public virtual double ExifFocalLength { get; set; }*/
+		public virtual float Ratio { get; set; }
 
 		public virtual FabricArtifact FabricArtifact { get; set; }
 		public virtual Album Album { get; set; }

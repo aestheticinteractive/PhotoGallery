@@ -168,3 +168,4 @@ Solution/Fabric.Web/logs/
 Solution/Fabric.Web/Fabric.Web.Publish.xml
 Solution/PhotoGallery.Web/NHibernate.config
 Solution/PhotoGallery.Web/logs/
+Solution/PhotoGallery.Web/upload/

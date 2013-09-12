@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Web.Mvc;
-using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Account.Dto;
 using PhotoGallery.Web.Application;
@@ -42,9 +41,8 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		[FabricAuthorize]
 		[HttpPost]
-		public virtual ActionResult UpdateAlbumTitle(AlbumCreateTitleModel pModel) {
-			int? albumId = 99; //vAlbums.AddAlbum(pModel.Title);
-			Log.Debug("UpdateAlbumTitle: "+pModel.Title+" / "+albumId);
+		public virtual ActionResult CreateAlbum(AlbumCreateTitleModel pModel) {
+			int? albumId = vAlbums.AddAlbum(pModel.Title);
 
 			if ( albumId == null ) {
 				return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
@@ -58,11 +56,9 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		[FabricAuthorize]
 		[HttpPost]
 		public virtual ActionResult UploadImage(AlbumCreateImageModel pModel) {
-			Log.Debug("UploadImage A: "+pModel.AlbumId+" // "+pModel.Filename);
-			WebUploadResult res = vAlbums.AddAlbumPhoto(
-				pModel.AlbumId, pModel.Filename, pModel.ExifData, pModel.ImageData);
-			Log.Debug("UploadImage B: "+pModel.AlbumId+" // "+res.Status);
-
+			WebUploadResult res = vAlbums.AddAlbumPhoto(Server, pModel.AlbumId,
+				pModel.Filename, pModel.ExifData, pModel.ImageData);
+			
 			if ( res.Status == WebUploadResult.UploadStatus.Success ) {
 				return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 			}

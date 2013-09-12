@@ -1,6 +1,6 @@
 ﻿@model AlbumCreateModel
 @{
-	string albumUrl = Html.ActionLinkUrl(MVC.Account.Albums.UpdateAlbumTitle());
+	string albumUrl = Html.ActionLinkUrl(MVC.Account.Albums.CreateAlbum());
 	string imageUrl = Html.ActionLinkUrl(MVC.Account.Albums.UploadImage());
 	string onSubmit = "submitCreateAlbum('"+albumUrl+"','"+imageUrl+"'); return false;";
 }

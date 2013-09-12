@@ -17,7 +17,8 @@ namespace PhotoGallery.Database.Maps {
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
-			Map(x => x.FactorId).Unique();
+			Map(x => x.FactorId).Nullable().Index(name+"_FactorId");
+
 			References(x => x.Primary).Nullable();
 			Map(x => x.PrimaryArtifactId);
 			References(x => x.Related).Nullable();
@@ -53,6 +54,8 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.VecUnitPrefixId).Nullable();
 			Map(x => x.VecValue).Nullable();
 			Map(x => x.VecAxisArtifactId).Nullable();
+
+			HasMany(x => x.PhotoMetas); //0 or 1
 		}
 
 	}

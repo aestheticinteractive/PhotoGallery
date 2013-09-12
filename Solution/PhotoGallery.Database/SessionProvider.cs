@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System.Diagnostics;
+using NHibernate;
 using NHibernate.SqlCommand;
 using PhotoGallery.Infrastructure;
 
@@ -8,6 +9,8 @@ namespace PhotoGallery.Database {
 	public class SessionProvider : EmptyInterceptor, ISessionProvider {
 
 		public bool OutputSql { get; set; }
+
+		private Stopwatch vTimer;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
