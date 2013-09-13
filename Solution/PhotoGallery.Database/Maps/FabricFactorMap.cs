@@ -27,6 +27,7 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.FactorAssertionId);
 			Map(x => x.IsDefining).Default("0");
 			Map(x => x.Note).Length(256).Nullable();
+			Map(x => x.InternalNote).Length(256).Nullable();
 
 			Map(x => x.DesTypeId);
 			Map(x => x.DesPrimaryArtifactRefineId).Nullable();

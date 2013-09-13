@@ -172,7 +172,7 @@ namespace PhotoGallery.Services.Account.Tools {
 				return pSrcImg;
 			}
 
-			Log.Info("PhotoUploader: Resizing "+srcW+"x"+srcH);
+			Log.Info("PhotoUploader: Resizing "+srcW+"x"+srcH+" --> "+(scale*100)+"%");
 
 			int destW = (int)Math.Floor(srcW*scale);
 			int destH = (int)Math.Floor(srcH*scale);

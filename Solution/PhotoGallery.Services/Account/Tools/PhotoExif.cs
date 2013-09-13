@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
+using PhotoGallery.Services.Util;
 
 namespace PhotoGallery.Services.Account.Tools {
 	
@@ -15,7 +17,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			FNumber,
 			ISOSpeedRatings,
 			DateTimeOriginal,
-			ShutterSpeedValue,
+			ExposureTime,
 			Flash, //look for "fired"
 			PixelXDimension,
 			PixelYDimension,
@@ -31,10 +33,11 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		public enum TagFabricArtifactId : long {
 			Camera = 55435679045255168,
-			CameraMake = 55434672205725697, //[make] <make name> is a camera(make) ...
-			CameraModel = 55434672209920000, //[model] <model name> is a camera(model) ...
+			CameraMake = 55434672205725697,
+			CameraModel = 55434672209920000,
+			Record = 55437863092748288,
 
-			Photograph = 55434279714291712, //<photo> is a photograph
+			Photograph = 55434279714291712,
 			FNumber = 55431237157781505, //<photo> is a photograph, vector(fnumber <num> unit)
 			ISOSpeed = 0, //<photo> is a photograph, vector(isospeed <iso> units)
 			Shutter = 55434431082528768, //<photo> is a photograph, vector(shutter <time> seconds)
@@ -53,6 +56,8 @@ namespace PhotoGallery.Services.Account.Tools {
 		private readonly Photo vPhoto;
 		private readonly string vData;
 		private readonly IDictionary<string, string> vTagMap;
+
+		private FabricArtifact vPhotoArt;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +87,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		
 		/*--------------------------------------------------------------------------------------------*/
 		public void SaveData(ISession pSess) {
+			vPhotoArt = pSess.Load<FabricArtifact>(vPhoto.FabricArtifact.Id);
 			InsertMetas(pSess);
 			InsertFactors(pSess);
 		}
@@ -109,15 +115,25 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void InsertFactors(ISession pSess) {
-			Tag makeTag = GetMakeTag(pSess);
+			Tag makeTag = TryMake(pSess);
+			TryModel(pSess, makeTag);
 
-			/*Make,
-			Model,
+			int n = 0;
+
+			var ff = new FabricFactor();
+			ff.InternalNote = "<photo> is an instance of a 'photograph'";
+			ff.Primary = vPhotoArt;
+			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
+			ff.RelatedArtifactId = (long)TagFabricArtifactId.Photograph;
+			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+			ff.IsDefining = true;
+			pSess.Save(ff);
+
+			/*
 			ExposureTime,
 			FNumber,
 			ISOSpeedRatings,
 			DateTimeOriginal,
-			ShutterSpeedValue,
 			ApertureValue,
 			BrightnessValue,
 			Flash, //look for "fired"
@@ -132,16 +148,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			GPSAltitudeRef,
 			GPSAltitude*/
 
-			/*ff.Primary = pSess.Load<FabricArtifact>(vPhoto.FabricArtifact.Id);
-			ff.Related = fa;
-			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-			ff.IsDefining = false;
-			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;*/
-
 			/*pPhoto.ExifDTOrig = ImageUtil.ParseMetaDate(
 				(string)imgMeta[PropertyTagId.ExifDTOrig].Value);
 			pPhoto.ExifISOSpeed = Convert.ToDouble(imgMeta[PropertyTagId.ExifISOSpeed].Value);
-			pPhoto.ExifExposureTime = Convert.ToDouble(imgMeta[PropertyTagId.ExifExposureTime].Value);
 			pPhoto.ExifFNumber = Convert.ToDouble(imgMeta[PropertyTagId.ExifFNumber].Value);
 			pPhoto.ExifFocalLength = Convert.ToDouble(imgMeta[PropertyTagId.ExifFocalLength].Value);
 
@@ -151,92 +160,154 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private Tag GetMakeTag(ISession pSess) {
-			string makeKey = ExifTag.Make+"";
+		private Tag TryMake(ISession pSess) {
+			string makeKey = PhotoHasTag(ExifTag.Make);
 
-			if ( !vTagMap.ContainsKey(makeKey) ) {
+			if ( makeKey == null ) {
 				return null;
 			}
 
 			string makeVal = vTagMap[makeKey];
 			const string makeDisamb = "camera make";
 
-			Tag tag = pSess.QueryOver<Tag>()
+			Tag makeTag = pSess.QueryOver<Tag>()
 				.Where(x => x.Name == makeVal && x.Disamb == makeDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
-			if ( tag != null ) {
-				return tag;
+			if ( makeTag != null ) {
+				return makeTag; //tag/artifact already created, don't do anything more
 			}
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
-				FabricArtifact fa = new FabricArtifact();
-				fa.Type = (byte)FabricArtifact.ArtifactType.Tag;
-				pSess.Save(fa);
+				FabricArtifact makeArt = new FabricArtifact();
+				makeArt.Type = (byte)FabricArtifact.ArtifactType.Tag;
+				pSess.Save(makeArt);
 
-				tag = new Tag();
-				tag.Name = makeVal;
-				tag.Disamb = makeDisamb;
-				tag.Note = "A make or brand of photographic cameras.";
-				tag.FabricArtifact = fa;
-				pSess.Save(fa);
+				makeTag = new Tag();
+				makeTag.Name = makeVal;
+				makeTag.Disamb = makeDisamb;
+				makeTag.Note = "A make or brand of photographic cameras.";
+				makeTag.FabricArtifact = makeArt;
+				pSess.Save(makeTag);
+				
+				var ff = new FabricFactor();
+				ff.InternalNote = "<make> is an instance of 'make' ('camera')";
+				ff.Primary = makeArt;
+				ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
+				ff.RelatedArtifactId = (long)TagFabricArtifactId.CameraMake;
+				ff.DesRelatedArtifactRefineId = (long)TagFabricArtifactId.Camera;
+				ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+				ff.IsDefining = true;
+				pSess.Save(ff);
 
 				tx.Commit();
 			}
 
-			return tag;
+			return makeTag;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private Tag GetModelTag(ISession pSess, Tag pMakeTag) {
-			string modelKey = ExifTag.Model+"";
+		private void TryModel(ISession pSess, Tag pMakeTag) {
+			string modelKey = PhotoHasTag(ExifTag.Model);
 
-			if ( !vTagMap.ContainsKey(modelKey) ) {
-				return null;
+			if ( modelKey == null ) {
+				return;
 			}
 
 			string modelVal = vTagMap[modelKey];
 			const string modelDisamb = "camera model";
-			FabricArtifact fa;
 
-			Tag tag = pSess.QueryOver<Tag>()
+			Tag modelTag = pSess.QueryOver<Tag>()
 				.Where(x => x.Name == modelVal && x.Disamb == modelDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
-			if ( tag != null ) {
-				return tag;
-			}
-
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
-				fa = new FabricArtifact();
-				fa.Type = (byte)FabricArtifact.ArtifactType.Tag;
-				pSess.Save(fa);
+				FabricArtifact modelArt;
 
-				tag = new Tag();
-				tag.Name = modelVal;
-				tag.Disamb = modelDisamb;
-				tag.Note = "A model of photographic camera.";
-				tag.FabricArtifact = fa;
-				pSess.Save(fa);
-
-				if ( pMakeTag != null ) {
-					var ff = new FabricFactor(); //<model> is created by <make>
-					ff.Primary = fa;
-					ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;
-					ff.Related = pSess.Load<FabricArtifact>(pMakeTag.FabricArtifact.Id);
-					ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-					ff.IsDefining = true;
-					pSess.Save(ff);
+				if ( modelTag == null ) {
+					modelArt = BuildModel(pSess, modelVal, modelDisamb, pMakeTag);
 				}
+				else {
+					modelArt = pSess.Load<FabricArtifact>(modelTag.FabricArtifact.Id);
+				}
+
+				var ff = new FabricFactor();
+				ff.InternalNote = "<photo> is created by ('record') <model>";
+				ff.Primary = vPhotoArt;
+				ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;
+				ff.DesTypeRefineId = (long)TagFabricArtifactId.Record;
+				ff.Related = modelArt;
+				ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+				ff.IsDefining = true;
+				pSess.Save(ff);
 
 				tx.Commit();
 			}
+		}
 
-			//<photo> is created by (record) <model>
+		/*--------------------------------------------------------------------------------------------*/
+		private FabricArtifact BuildModel(ISession pSess, string pName, string pDisamb, Tag pMakeTag) {
+			FabricArtifact modelArt = new FabricArtifact();
+			modelArt.Type = (byte)FabricArtifact.ArtifactType.Tag;
+			pSess.Save(modelArt);
 
-			return tag;
+			var modelTag = new Tag();
+			modelTag.Name = pName;
+			modelTag.Disamb = pDisamb;
+			modelTag.Note = "A model of photographic camera.";
+			modelTag.FabricArtifact = modelArt;
+			pSess.Save(modelTag);
+
+			if ( pMakeTag == null ) {
+				return modelArt;
+			}
+
+			var ff = new FabricFactor();
+			ff.InternalNote = "<model> is created by <make>";
+			ff.Primary = modelArt;
+			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;
+			ff.Related = pSess.Load<FabricArtifact>(pMakeTag.FabricArtifact.Id);
+			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+			ff.IsDefining = true;
+			pSess.Save(ff);
+
+			return modelArt;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryExposureTime(ISession pSess) {
+			//;
+			string expKey = PhotoHasTag(ExifTag.ExposureTime);
+
+			if ( expKey == null ) {
+				return;
+			}
+
+			string expVal = vTagMap[expKey];
+
+			var ff = new FabricFactor();
+			ff.InternalNote = "<photo> is an instance of 'photograph' [vec: 'shutter' <time> microsec]";
+			ff.Primary = vPhotoArt;
+			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
+			ff.RelatedArtifactId = (long)TagFabricArtifactId.Photograph;
+			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+			ff.IsDefining = true;
+			ff.VecAxisArtifactId = (long)TagFabricArtifactId.Shutter;
+			ff.VecTypeId = (byte)FabEnumsData.VectorTypeId.PosLong;
+			ff.VecValue = (long)Convert.ToDouble(expVal)*1000000;
+			ff.VecUnitPrefixId = (byte)FabEnumsData.VectorUnitPrefixId.Micro;
+			ff.VecUnitId = (byte)FabEnumsData.VectorUnitId.Second;
+			pSess.Save(ff);
+		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		private string PhotoHasTag(ExifTag pTag) {
+			string key = pTag+"";
+			return (vTagMap.ContainsKey(key) ? key : null);
 		}
 
 	}

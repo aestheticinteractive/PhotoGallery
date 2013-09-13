@@ -14,6 +14,7 @@
 		public virtual byte FactorAssertionId { get; set; }
 		public virtual bool IsDefining { get; set; }
 		public virtual string Note { get; set; }
+		public virtual string InternalNote { get; set; }
 
 		public virtual byte DesTypeId { get; set; }
 		public virtual long? DesPrimaryArtifactRefineId { get; set; }
