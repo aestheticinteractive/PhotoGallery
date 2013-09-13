@@ -49,6 +49,7 @@
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="Account\AlbumsService.cs" />
+    <Compile Include="Account\Tools\FabricFactorBuilder.cs" />
     <Compile Include="Account\Tools\PhotoExif.cs" />
     <Compile Include="Account\Tools\PhotoUploader.cs" />
     <Compile Include="Account\Dto\WebUser.cs" />

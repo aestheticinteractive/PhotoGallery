@@ -4,7 +4,6 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
-using PhotoGallery.Services.Util;
 
 namespace PhotoGallery.Services.Account.Tools {
 	
@@ -29,26 +28,6 @@ namespace PhotoGallery.Services.Account.Tools {
 			GPSLongitude,
 			GPSAltitudeRef,
 			GPSAltitude
-		};
-
-		public enum TagFabricArtifactId : long {
-			Camera = 55435679045255168,
-			CameraMake = 55434672205725697,
-			CameraModel = 55434672209920000,
-			Record = 55437863092748288,
-
-			Photograph = 55434279714291712,
-			FNumber = 55431237157781505, //<photo> is a photograph, vector(fnumber <num> unit)
-			ISOSpeed = 0, //<photo> is a photograph, vector(isospeed <iso> units)
-			Shutter = 55434431082528768, //<photo> is a photograph, vector(shutter <time> seconds)
-			Flash = 55435679049449472, //<photo> uses a flash (if true)
-			Width = 55433968328114177, //<photo> is a photograph, vector(width <w> pixels)
-			Height = 55433968330211328, //<photo> is a photograph, vector(height <h> pixels)
-			FocalLength = 55435397586485248, //<photo> is a photograph, vector(focallen <f> millimeters)
-
-			//TODO: create a "ISOSpeed" Fabric Class
-			//Film = 55434464925319168, //
-			//FilmSpeed = 55433969909366785, //[speed]: <photo> uses film(speed), vector(speed <iso> unit)
 		};
 
 		public WebUploadResult Result { get; private set; }
@@ -120,17 +99,21 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			int n = 0;
 
-			var ff = new FabricFactor();
-			ff.InternalNote = "<photo> is an instance of a 'photograph'";
-			ff.Primary = vPhotoArt;
-			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
-			ff.RelatedArtifactId = (long)TagFabricArtifactId.Photograph;
-			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-			ff.IsDefining = true;
-			pSess.Save(ff);
+			n += TryExposureTime(pSess);
+
+			if ( n == 0 ) { //if no others were created
+				var fb = new FabricFactorBuilder("<photo> is an instance of a 'photograph'");
+				fb.Init(
+					vPhotoArt,
+					FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+					LiveArtifactId.Photograph,
+					FabEnumsData.FactorAssertionId.Fact,
+					true
+				);
+				pSess.Save(fb.ToFactor());
+			}
 
 			/*
-			ExposureTime,
 			FNumber,
 			ISOSpeedRatings,
 			DateTimeOriginal,
@@ -159,6 +142,8 @@ namespace PhotoGallery.Services.Account.Tools {
 			//	" / "+pPhoto.ExifExposureTime+" / "+pPhoto.ExifISOSpeed+" / "+pPhoto.ExifDTOrig);*/
 		}
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private Tag TryMake(ISession pSess) {
 			string makeKey = PhotoHasTag(ExifTag.Make);
@@ -190,16 +175,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				makeTag.Note = "A make or brand of photographic cameras.";
 				makeTag.FabricArtifact = makeArt;
 				pSess.Save(makeTag);
-				
-				var ff = new FabricFactor();
-				ff.InternalNote = "<make> is an instance of 'make' ('camera')";
-				ff.Primary = makeArt;
-				ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
-				ff.RelatedArtifactId = (long)TagFabricArtifactId.CameraMake;
-				ff.DesRelatedArtifactRefineId = (long)TagFabricArtifactId.Camera;
-				ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-				ff.IsDefining = true;
-				pSess.Save(ff);
+
+				var fb = new FabricFactorBuilder("<make> is an instance of 'make' ('camera')");
+				fb.Init(
+					makeArt,
+					FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+					LiveArtifactId.CameraMake,
+					FabEnumsData.FactorAssertionId.Fact,
+					true
+				);
+				fb.DesRelatedArtifactRefineId = LiveArtifactId.Camera;
+				pSess.Save(fb.ToFactor());
 
 				tx.Commit();
 			}
@@ -233,15 +219,16 @@ namespace PhotoGallery.Services.Account.Tools {
 					modelArt = pSess.Load<FabricArtifact>(modelTag.FabricArtifact.Id);
 				}
 
-				var ff = new FabricFactor();
-				ff.InternalNote = "<photo> is created by ('record') <model>";
-				ff.Primary = vPhotoArt;
-				ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;
-				ff.DesTypeRefineId = (long)TagFabricArtifactId.Record;
-				ff.Related = modelArt;
-				ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-				ff.IsDefining = true;
-				pSess.Save(ff);
+				var fb = new FabricFactorBuilder("<photo> is created by ('record') <model>");
+				fb.Init(
+					vPhotoArt,
+					FabEnumsData.DescriptorTypeId.IsCreatedBy,
+					modelArt,
+					FabEnumsData.FactorAssertionId.Fact,
+					true
+				);
+				fb.DesTypeRefineId = LiveArtifactId.Record;
+				pSess.Save(fb.ToFactor());
 
 				tx.Commit();
 			}
@@ -264,42 +251,50 @@ namespace PhotoGallery.Services.Account.Tools {
 				return modelArt;
 			}
 
-			var ff = new FabricFactor();
-			ff.InternalNote = "<model> is created by <make>";
-			ff.Primary = modelArt;
-			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsCreatedBy;
-			ff.Related = pSess.Load<FabricArtifact>(pMakeTag.FabricArtifact.Id);
-			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-			ff.IsDefining = true;
-			pSess.Save(ff);
+			var fb = new FabricFactorBuilder("<model> is created by <make>");
+			fb.Init(
+				modelArt,
+				FabEnumsData.DescriptorTypeId.IsCreatedBy,
+				pSess.Load<FabricArtifact>(pMakeTag.FabricArtifact.Id),
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			pSess.Save(fb.ToFactor());
 
 			return modelArt;
 		}
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void TryExposureTime(ISession pSess) {
-			//;
+		private int TryExposureTime(ISession pSess) {
 			string expKey = PhotoHasTag(ExifTag.ExposureTime);
 
 			if ( expKey == null ) {
-				return;
+				return 0;
 			}
 
 			string expVal = vTagMap[expKey];
 
-			var ff = new FabricFactor();
-			ff.InternalNote = "<photo> is an instance of 'photograph' [vec: 'shutter' <time> microsec]";
-			ff.Primary = vPhotoArt;
-			ff.DesTypeId = (byte)FabEnumsData.DescriptorTypeId.IsAnInstanceOf;
-			ff.RelatedArtifactId = (long)TagFabricArtifactId.Photograph;
-			ff.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
-			ff.IsDefining = true;
-			ff.VecAxisArtifactId = (long)TagFabricArtifactId.Shutter;
-			ff.VecTypeId = (byte)FabEnumsData.VectorTypeId.PosLong;
-			ff.VecValue = (long)Convert.ToDouble(expVal)*1000000;
-			ff.VecUnitPrefixId = (byte)FabEnumsData.VectorUnitPrefixId.Micro;
-			ff.VecUnitId = (byte)FabEnumsData.VectorUnitId.Second;
-			pSess.Save(ff);
+			var fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'shutter' <time> microsec]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddVector(
+				LiveArtifactId.Shutter,
+				FabEnumsData.VectorTypeId.PosLong,
+				(long)Convert.ToDouble(expVal)*1000000,
+				FabEnumsData.VectorUnitPrefixId.Micro,
+				FabEnumsData.VectorUnitId.Second
+			);
+			pSess.Save(fb.ToFactor());
+
+			return 1;
 		}
 
 
