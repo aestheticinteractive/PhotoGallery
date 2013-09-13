@@ -12,11 +12,11 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		Photograph = 55434279714291712,
 		FNumber = 55431237157781505,
-		ISOSpeed = 0, //<photo> is a photograph, vector(isospeed <iso> units) //TODO: create "ISOSpeed"
+		ISOSpeed = 56242555254210560,
 		Shutter = 55434431082528768,
 		Flash = 55435679049449472, //<photo> uses a flash (if true)
-		Width = 55433968328114177, //<photo> is a photograph, vector(width <w> pixels)
-		Height = 55433968330211328, //<photo> is a photograph, vector(height <h> pixels)
+		Width = 55433968328114177,
+		Height = 55433968330211328,
 		FocalLength = 55435397586485248
 	};
 

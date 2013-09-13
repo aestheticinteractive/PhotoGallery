@@ -103,6 +103,9 @@ namespace PhotoGallery.Services.Account.Tools {
 				n += TryExposureTime(pSess);
 				n += TryFNumber(pSess);
 				n += TryFocalLength(pSess);
+				n += TryIsoSpeed(pSess);
+				n += TryPixelXDimension(pSess);
+				n += TryPixelYDimension(pSess);
 
 				TryGenericPhoto(pSess, n);
 
@@ -110,11 +113,8 @@ namespace PhotoGallery.Services.Account.Tools {
 			}
 
 			/*
-			ISOSpeedRatings,
 			DateTimeOriginal,
 			Flash, //look for "fired"
-			PixelXDimension,
-			PixelYDimension,
 
 			GPSLatitudeRef,
 			GPSLatitude,
@@ -124,10 +124,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			GPSAltitude
 			*/
 
-			/*pPhoto.ExifDTOrig = ImageUtil.ParseMetaDate(
-				(string)imgMeta[PropertyTagId.ExifDTOrig].Value);
-			pPhoto.ExifISOSpeed = Convert.ToDouble(imgMeta[PropertyTagId.ExifISOSpeed].Value);
-			*/
+			//pPhoto.ExifDTOrig = ImageUtil.ParseMetaDate((string)imgMeta[PropertyTagId.ExifDTOrig].Value);
 		}
 
 
@@ -248,7 +245,6 @@ namespace PhotoGallery.Services.Account.Tools {
 				true
 			);
 			pSess.Save(fb.ToFactor());
-
 			return modelArt;
 		}
 
@@ -281,7 +277,6 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.VectorUnitId.Second
 			);
 			pSess.Save(fb.ToFactor());
-
 			return 1;
 		}
 
@@ -312,9 +307,9 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.VectorUnitId.Unit
 			);
 			pSess.Save(fb.ToFactor());
-
 			return 1;
 		}
+
 		/*--------------------------------------------------------------------------------------------*/
 		private int TryFocalLength(ISession pSess) {
 			string key = PhotoHasTag(ExifTag.FocalLength);
@@ -342,10 +337,98 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.VectorUnitId.Metre
 			);
 			pSess.Save(fb.ToFactor());
-
 			return 1;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		private int TryIsoSpeed(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.ISOSpeedRatings);
+
+			if ( key == null ) {
+				return 0;
+			}
+
+			long val = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'iso speed' "+val+" base units]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddVector(
+				LiveArtifactId.ISOSpeed,
+				FabEnumsData.VectorTypeId.PosLong,
+				val,
+				FabEnumsData.VectorUnitPrefixId.Base,
+				FabEnumsData.VectorUnitId.Unit
+			);
+			pSess.Save(fb.ToFactor());
+			return 1;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private int TryPixelXDimension(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.PixelXDimension);
+
+			if ( key == null ) {
+				return 0;
+			}
+
+			long val = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'width' "+val+" base pixels]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddVector(
+				LiveArtifactId.Width,
+				FabEnumsData.VectorTypeId.PosLong,
+				val,
+				FabEnumsData.VectorUnitPrefixId.Base,
+				FabEnumsData.VectorUnitId.Pixel
+			);
+			pSess.Save(fb.ToFactor());
+			return 1;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private int TryPixelYDimension(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.PixelYDimension);
+
+			if ( key == null ) {
+				return 0;
+			}
+
+			long val = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'height' "+val+" base pixels]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddVector(
+				LiveArtifactId.Height,
+				FabEnumsData.VectorTypeId.PosLong,
+				val,
+				FabEnumsData.VectorUnitPrefixId.Base,
+				FabEnumsData.VectorUnitId.Pixel
+			);
+			pSess.Save(fb.ToFactor());
+			return 1;
+		}
 		
 		/*--------------------------------------------------------------------------------------------*/
 		private void TryGenericPhoto(ISession pSess, int pPhotoFactorCount) {
