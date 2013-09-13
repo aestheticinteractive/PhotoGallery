@@ -60,7 +60,7 @@ namespace PhotoGallery.Services.Account {
 					return null;
 				}
 
-				var up = new PhotoUploader(pServer, pAlbumId, pFilename, pExifData, pImageData);
+				var up = new PhotoUploader(pServer, a, pFilename, pExifData, pImageData);
 				up.SaveFile(s);
 				return up.Result;
 			}

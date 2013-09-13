@@ -1,4 +1,5 @@
-﻿using Fabric.Clients.Cs.Api;
+﻿using System;
+using Fabric.Clients.Cs.Api;
 using PhotoGallery.Domain;
 
 namespace PhotoGallery.Services.Account.Tools {
@@ -6,6 +7,7 @@ namespace PhotoGallery.Services.Account.Tools {
 	/*================================================================================================*/
 	public enum LiveArtifactId : long {
 		KinstnerPhotoGallery = 55612410061389824,
+		PhotographAlbum = 55434350943010816,
 
 		Camera = 55435679045255168,
 		CameraMake = 55434672205725697,
@@ -45,9 +47,9 @@ namespace PhotoGallery.Services.Account.Tools {
 		//public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
 		//public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
 
-		//public FabEnumsData.EventorTypeId? EveType { get; private set; }
-		//public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
-		//public DateTime EveDateTime { get; private set; }
+		public FabEnumsData.EventorTypeId? EveType { get; private set; }
+		public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
+		public DateTime EveDateTime { get; private set; }
 
 		public FabEnumsData.IdentorTypeId? IdenType { get; private set; }
 		public string IdenValue { get; private set; }
@@ -112,6 +114,14 @@ namespace PhotoGallery.Services.Account.Tools {
 			IdenValue = pValue;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public void AddEventor(FabEnumsData.EventorTypeId pEveType, 
+										FabEnumsData.EventorPrecisionId pEvePrec, DateTime pDateTime) {
+			EveType = pEveType;
+			EvePrecision = pEvePrec;
+			EveDateTime = pDateTime;
+		}
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
@@ -137,9 +147,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			//ff.DirPrimaryActionId = (byte?)DirPrimaryAction;
 			//ff.DirRelatedActionId = (byte?)DirRelatedAction;
 
-			//ff.EveTypeId = (byte?)EveType;
-			//ff.EvePrecisionId = (byte?)EvePrecision;
-			//ff.EveDateTime = EveDateTime.ToUniversalTime().Ticks;
+			ff.EveTypeId = (byte?)EveType;
+			ff.EvePrecisionId = (byte?)EvePrecision;
+			ff.EveDateTime = EveDateTime.ToUniversalTime().Ticks;
 
 			ff.IdenTypeId = (byte?)IdenType;
 			ff.IdenValue = IdenValue;
@@ -157,6 +167,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			return ff;
 		}
+
 	}
 
 }

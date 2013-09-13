@@ -4,6 +4,7 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
+using PhotoGallery.Services.Util;
 
 namespace PhotoGallery.Services.Account.Tools {
 	
@@ -33,6 +34,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public WebUploadResult Result { get; private set; }
 
 		private readonly Photo vPhoto;
+		private readonly Album vAlbum;
 		private readonly string vData;
 		private readonly IDictionary<string, string> vTagMap;
 
@@ -41,8 +43,9 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoExif(Photo pPhoto, string pData) {
+		public PhotoExif(Photo pPhoto, Album pAlbum, string pData) {
 			vPhoto = pPhoto;
+			vAlbum = pAlbum;
 			vData = pData;
 			vTagMap = new Dictionary<string, string>();
 
@@ -99,6 +102,14 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
 				AddBasicData(pSess);
+				TryDateTimeOriginal(pSess);
+				TryPixelXDimension(pSess);
+				TryPixelYDimension(pSess);
+				pSess.SaveOrUpdate(vPhoto);
+				tx.Commit();
+			}
+
+			using ( ITransaction tx = pSess.BeginTransaction() ) {
 				TryExposureTime(pSess);
 				TryFNumber(pSess);
 				TryFocalLength(pSess);
@@ -108,20 +119,14 @@ namespace PhotoGallery.Services.Account.Tools {
 			}
 
 			/*
-			DateTimeOriginal,
 			Flash, //look for "fired"
-
 			GPSLatitudeRef,
 			GPSLatitude,
 			GPSLongitudeRef,
 			GPSLongitude,
 			GPSAltitudeRef,
 			GPSAltitude,
-			 
-			CONNECT TO ALBUM
 			*/
-
-			//pPhoto.ExifDTOrig = ImageUtil.ParseMetaDate((string)imgMeta[PropertyTagId.ExifDTOrig].Value);
 		}
 
 
@@ -245,8 +250,6 @@ namespace PhotoGallery.Services.Account.Tools {
 			return modelArt;
 		}
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private void AddBasicData(ISession pSess) {
 			var fb = new FabricFactorBuilder("<photo> refers to 'Kinstner Photo Gallery' "+
@@ -266,14 +269,68 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			////
 
-			fb = new FabricFactorBuilder(
+			fb = new FabricFactorBuilder("<photo> belongs to <album> ('photograph album')");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.BelongsTo,
+				vAlbum.FabricArtifact,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.DesRelatedArtifactRefineId = LiveArtifactId.PhotographAlbum;
+			pSess.Save(fb.ToFactor());
+		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryDateTimeOriginal(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.DateTimeOriginal);
+
+			if ( key == null ) {
+				return;
+			}
+
+			DateTime val = ImageUtil.ParseMetaDate(vTagMap[key]);
+			vPhoto.Date = val.Ticks;
+
+			//TODO: Ensure the photo's timezones are handled correctly.
+
+			var fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [eventor: occur second "+val+"]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddEventor(
+				FabEnumsData.EventorTypeId.Occur,
+				FabEnumsData.EventorPrecisionId.Second,
+				val
+			);
+			pSess.Save(fb.ToFactor());
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryPixelXDimension(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.PixelXDimension);
+
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.Width = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder(
 				"<photo> is an instance of 'photograph' [vec: 'width' "+vPhoto.Width+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				false
+				true
 			);
 			fb.AddVector(
 				LiveArtifactId.Width,
@@ -283,17 +340,26 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.VectorUnitId.Pixel
 			);
 			pSess.Save(fb.ToFactor());
+		}
 
-			////
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryPixelYDimension(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.PixelYDimension);
 
-			fb = new FabricFactorBuilder(
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.Height = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder(
 				"<photo> is an instance of 'photograph' [vec: 'height' "+vPhoto.Height+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				false
+				true
 			);
 			fb.AddVector(
 				LiveArtifactId.Height,
@@ -305,8 +371,6 @@ namespace PhotoGallery.Services.Account.Tools {
 			pSess.Save(fb.ToFactor());
 		}
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private void TryExposureTime(ISession pSess) {
 			string key = PhotoHasTag(ExifTag.ExposureTime);
@@ -318,7 +382,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			vPhoto.ExpTime = (long)(Convert.ToDouble(vTagMap[key])*1000000);
 
 			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
-					"[vec: 'shutter' "+vPhoto.ExpTime+" micro secs]");
+				"[vec: 'shutter' "+vPhoto.ExpTime+" micro secs]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
@@ -347,7 +411,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			vPhoto.FNum = (long)(Convert.ToDouble(vTagMap[key])*1000);
 
 			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
-					"[vec: 'fnumber' "+vPhoto.FNum+" milli units]");
+				"[vec: 'fnumber' "+vPhoto.FNum+" milli units]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,

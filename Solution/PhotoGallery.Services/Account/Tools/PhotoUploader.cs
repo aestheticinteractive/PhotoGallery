@@ -23,7 +23,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public WebUploadResult Result { get; private set; }
 		
 		private readonly HttpServerUtilityBase vServer;
-		private readonly int vAlbumId;
+		private readonly Album vAlbum;
 		private readonly string vExifData;
 		private readonly string vImageData;
 
@@ -36,10 +36,10 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoUploader(HttpServerUtilityBase pServer, int pAlbumId, string pFilename,
+		public PhotoUploader(HttpServerUtilityBase pServer, Album pAlbum, string pFilename,
 																string pExifData, string pImageData) {
 			vServer = pServer;
-			vAlbumId = pAlbumId;
+			vAlbum = pAlbum;
 			vExifData = pExifData;
 			vImageData = pImageData;
 
@@ -110,7 +110,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 					vPhoto = new Photo();
 					vPhoto.ImgName = (Result.Filename ?? "unknown");
-					vPhoto.Album = pSess.Load<Album>(vAlbumId);
+					vPhoto.Album = pSess.Load<Album>(vAlbum.Id);
 					vPhoto.Width = vOrig.Width;
 					vPhoto.Height = vOrig.Height;
 					vPhoto.Ratio = vOrig.Width/(float)vOrig.Height;
@@ -132,16 +132,17 @@ namespace PhotoGallery.Services.Account.Tools {
 		/*--------------------------------------------------------------------------------------------*/
 		private void Save() {
 			try {
-				string dir = vServer.MapPath("~"+ImageUtil.BuildPhotoPath(vAlbumId));
+				int aid = vAlbum.Id;
+				string dir = vServer.MapPath("~"+ImageUtil.BuildPhotoPath(aid));
 
 				if ( !Directory.Exists(dir) ) {
 					Directory.CreateDirectory(dir);
 				}
 
-				string path = ImageUtil.BuildPhotoPath(vAlbumId, vPhoto.Id, ImageUtil.PhotoSize.Large);
+				string path = ImageUtil.BuildPhotoPath(aid, vPhoto.Id, ImageUtil.PhotoSize.Large);
 				SaveJpeg(vServer.MapPath("~"+path), vImage, 90);
 
-				path = ImageUtil.BuildPhotoPath(vAlbumId, vPhoto.Id, ImageUtil.PhotoSize.Thumb);
+				path = ImageUtil.BuildPhotoPath(aid, vPhoto.Id, ImageUtil.PhotoSize.Thumb);
 				SaveJpeg(vServer.MapPath("~"+path), vThumb, 75);
 			}
 			catch ( Exception ) {
@@ -154,7 +155,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void AddExif(ISession pSess) {
-			var exif = new PhotoExif(vPhoto, vExifData);
+			var exif = new PhotoExif(vPhoto, vAlbum, vExifData);
 			exif.SaveData(pSess);
 			LogTimer("Exif Complete");
 		}
