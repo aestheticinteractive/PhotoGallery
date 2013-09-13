@@ -3,6 +3,7 @@ using PhotoGallery.Domain;
 
 namespace PhotoGallery.Services.Account.Tools {
 
+	/*================================================================================================*/
 	public enum LiveArtifactId : long {
 		Camera = 55435679045255168,
 		CameraMake = 55434672205725697,
@@ -10,18 +11,15 @@ namespace PhotoGallery.Services.Account.Tools {
 		Record = 55437863092748288,
 
 		Photograph = 55434279714291712,
-		FNumber = 55431237157781505, //<photo> is a photograph, vector(fnumber <num> unit)
-		ISOSpeed = 0, //<photo> is a photograph, vector(isospeed <iso> units)
+		FNumber = 55431237157781505,
+		ISOSpeed = 0, //<photo> is a photograph, vector(isospeed <iso> units) //TODO: create "ISOSpeed"
 		Shutter = 55434431082528768,
 		Flash = 55435679049449472, //<photo> uses a flash (if true)
 		Width = 55433968328114177, //<photo> is a photograph, vector(width <w> pixels)
 		Height = 55433968330211328, //<photo> is a photograph, vector(height <h> pixels)
-		FocalLength = 55435397586485248, //<photo> is a photograph, vector(focallen <f> millimeters)
-
-		//TODO: create a "ISOSpeed" Fabric Class
-		//Film = 55434464925319168, //
-		//FilmSpeed = 55433969909366785, //[speed]: <photo> uses film(speed), vector(speed <iso> unit)
+		FocalLength = 55435397586485248
 	};
+
 
 	/*================================================================================================*/
 	public class FabricFactorBuilder {
@@ -62,6 +60,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabEnumsData.VectorUnitPrefixId? VecUnitPrefix { get; private set; }
 		public long VecValue { get; private set; }
 		public LiveArtifactId? VecAxisArtifactId { get; private set; }
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
