@@ -14,6 +14,8 @@ namespace PhotoGallery.Services {
 		/*--------------------------------------------------------------------------------------------*/
 		public BaseLogic(IFabricClient pFab) {
 			Fab = pFab;
+			Fab.Config.Logger = new LogFabric();
+			//OneTimeLogic.CreateIsoSpeedClass(pFab);
 
 			if ( Connect.SessionFactory == null ) {
 				Connect.InitOnce();

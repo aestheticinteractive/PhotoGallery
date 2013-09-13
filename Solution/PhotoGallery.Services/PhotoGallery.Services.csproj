@@ -56,6 +56,8 @@
     <Compile Include="BaseLogic.cs" />
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
+    <Compile Include="OneTimeLogic.cs" />
+    <Compile Include="LogFabric.cs" />
     <Compile Include="Main\Dto\WebAlbum.cs" />
     <Compile Include="Main\Dto\WebAlbumCore.cs" />
     <Compile Include="Main\Dto\WebAlbumTag.cs" />
