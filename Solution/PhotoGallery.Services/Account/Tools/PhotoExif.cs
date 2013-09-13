@@ -98,17 +98,12 @@ namespace PhotoGallery.Services.Account.Tools {
 			TryModel(pSess, makeTag);
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
-				int n = 0;
-
-				n += TryExposureTime(pSess);
-				n += TryFNumber(pSess);
-				n += TryFocalLength(pSess);
-				n += TryIsoSpeed(pSess);
-				n += TryPixelXDimension(pSess);
-				n += TryPixelYDimension(pSess);
-
-				TryGenericPhoto(pSess, n);
-
+				AddBasicData(pSess);
+				TryExposureTime(pSess);
+				TryFNumber(pSess);
+				TryFocalLength(pSess);
+				TryIsoSpeed(pSess);
+				pSess.SaveOrUpdate(vPhoto);
 				tx.Commit();
 			}
 
@@ -121,7 +116,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			GPSLongitudeRef,
 			GPSLongitude,
 			GPSAltitudeRef,
-			GPSAltitude
+			GPSAltitude,
+			 
+			CONNECT TO ALBUM
 			*/
 
 			//pPhoto.ExifDTOrig = ImageUtil.ParseMetaDate((string)imgMeta[PropertyTagId.ExifDTOrig].Value);
@@ -137,11 +134,11 @@ namespace PhotoGallery.Services.Account.Tools {
 				return null;
 			}
 
-			string val = vTagMap[key];
+			vPhoto.Make = vTagMap[key];
 			const string makeDisamb = "camera make";
 
 			Tag makeTag = pSess.QueryOver<Tag>()
-				.Where(x => x.Name == val && x.Disamb == makeDisamb)
+				.Where(x => x.Name == vPhoto.Make && x.Disamb == makeDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
@@ -155,7 +152,7 @@ namespace PhotoGallery.Services.Account.Tools {
 				pSess.Save(makeArt);
 
 				makeTag = new Tag();
-				makeTag.Name = val;
+				makeTag.Name = vPhoto.Make;
 				makeTag.Disamb = makeDisamb;
 				makeTag.Note = "A make or brand of photographic cameras.";
 				makeTag.FabricArtifact = makeArt;
@@ -186,11 +183,11 @@ namespace PhotoGallery.Services.Account.Tools {
 				return;
 			}
 
-			string val = vTagMap[key];
+			vPhoto.Model = vTagMap[key];
 			const string modelDisamb = "camera model";
 
 			Tag modelTag = pSess.QueryOver<Tag>()
-				.Where(x => x.Name == val && x.Disamb == modelDisamb)
+				.Where(x => x.Name == vPhoto.Model && x.Disamb == modelDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
@@ -198,7 +195,7 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabricArtifact modelArt;
 
 				if ( modelTag == null ) {
-					modelArt = BuildModel(pSess, val, modelDisamb, pMakeTag);
+					modelArt = BuildModel(pSess, vPhoto.Model, modelDisamb, pMakeTag);
 				}
 				else {
 					modelArt = pSess.Load<FabricArtifact>(modelTag.FabricArtifact.Id);
@@ -251,198 +248,177 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private int TryExposureTime(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.ExposureTime);
-
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)(Convert.ToDouble(vTagMap[key])*1000000);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'shutter' "+val+" micro secs]");
+		private void AddBasicData(ISession pSess) {
+			var fb = new FabricFactorBuilder("<photo> refers to 'Kinstner Photo Gallery' "+
+				"('photograph') [iden: 'key' "+vPhoto.Id+"]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
-				LiveArtifactId.Photograph,
+				FabEnumsData.DescriptorTypeId.RefersTo,
+				LiveArtifactId.KinstnerPhotoGallery,
 				FabEnumsData.FactorAssertionId.Fact,
 				true
 			);
-			fb.AddVector(
-				LiveArtifactId.Shutter,
-				FabEnumsData.VectorTypeId.PosLong,
-				val,
-				FabEnumsData.VectorUnitPrefixId.Micro,
-				FabEnumsData.VectorUnitId.Second
+			fb.AddIdentor(
+				FabEnumsData.IdentorTypeId.Key,
+				vPhoto.Id+""
 			);
 			pSess.Save(fb.ToFactor());
-			return 1;
-		}
 
-		/*--------------------------------------------------------------------------------------------*/
-		private int TryFNumber(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.FNumber);
+			////
 
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)(Convert.ToDouble(vTagMap[key])*1000);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'fnumber' "+val+" milli units]");
+			fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'width' "+vPhoto.Width+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				true
-			);
-			fb.AddVector(
-				LiveArtifactId.FNumber,
-				FabEnumsData.VectorTypeId.PosLong,
-				val,
-				FabEnumsData.VectorUnitPrefixId.Milli,
-				FabEnumsData.VectorUnitId.Unit
-			);
-			pSess.Save(fb.ToFactor());
-			return 1;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		private int TryFocalLength(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.FocalLength);
-
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)Convert.ToDouble(vTagMap[key]);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'focal length' "+val+" milli meters]");
-			fb.Init(
-				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
-				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
-				true
-			);
-			fb.AddVector(
-				LiveArtifactId.FocalLength,
-				FabEnumsData.VectorTypeId.PosLong,
-				val,
-				FabEnumsData.VectorUnitPrefixId.Milli,
-				FabEnumsData.VectorUnitId.Metre
-			);
-			pSess.Save(fb.ToFactor());
-			return 1;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		private int TryIsoSpeed(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.ISOSpeedRatings);
-
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)Convert.ToDouble(vTagMap[key]);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'iso speed' "+val+" base units]");
-			fb.Init(
-				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
-				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
-				true
-			);
-			fb.AddVector(
-				LiveArtifactId.ISOSpeed,
-				FabEnumsData.VectorTypeId.PosLong,
-				val,
-				FabEnumsData.VectorUnitPrefixId.Base,
-				FabEnumsData.VectorUnitId.Unit
-			);
-			pSess.Save(fb.ToFactor());
-			return 1;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		private int TryPixelXDimension(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.PixelXDimension);
-
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)Convert.ToDouble(vTagMap[key]);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'width' "+val+" base pixels]");
-			fb.Init(
-				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
-				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
-				true
+				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Width,
 				FabEnumsData.VectorTypeId.PosLong,
-				val,
+				vPhoto.Width,
 				FabEnumsData.VectorUnitPrefixId.Base,
 				FabEnumsData.VectorUnitId.Pixel
 			);
 			pSess.Save(fb.ToFactor());
-			return 1;
-		}
 
-		/*--------------------------------------------------------------------------------------------*/
-		private int TryPixelYDimension(ISession pSess) {
-			string key = PhotoHasTag(ExifTag.PixelYDimension);
+			////
 
-			if ( key == null ) {
-				return 0;
-			}
-
-			long val = (long)Convert.ToDouble(vTagMap[key]);
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'height' "+val+" base pixels]");
+			fb = new FabricFactorBuilder(
+				"<photo> is an instance of 'photograph' [vec: 'height' "+vPhoto.Height+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				true
+				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Height,
 				FabEnumsData.VectorTypeId.PosLong,
-				val,
+				vPhoto.Height,
 				FabEnumsData.VectorUnitPrefixId.Base,
 				FabEnumsData.VectorUnitId.Pixel
 			);
 			pSess.Save(fb.ToFactor());
-			return 1;
 		}
-		
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void TryGenericPhoto(ISession pSess, int pPhotoFactorCount) {
-			if ( pPhotoFactorCount > 0 ) {
+		private void TryExposureTime(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.ExposureTime);
+
+			if ( key == null ) {
 				return;
 			}
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of a 'photograph'");
+			vPhoto.ExpTime = (long)(Convert.ToDouble(vTagMap[key])*1000000);
+
+			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+					"[vec: 'shutter' "+vPhoto.ExpTime+" micro secs]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				true
+				false
+			);
+			fb.AddVector(
+				LiveArtifactId.Shutter,
+				FabEnumsData.VectorTypeId.PosLong,
+				(long)vPhoto.ExpTime,
+				FabEnumsData.VectorUnitPrefixId.Micro,
+				FabEnumsData.VectorUnitId.Second
+			);
+			pSess.Save(fb.ToFactor());
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryFNumber(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.FNumber);
+
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.FNum = (long)(Convert.ToDouble(vTagMap[key])*1000);
+
+			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+					"[vec: 'fnumber' "+vPhoto.FNum+" milli units]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				false
+			);
+			fb.AddVector(
+				LiveArtifactId.FNumber,
+				FabEnumsData.VectorTypeId.PosLong,
+				(long)vPhoto.FNum,
+				FabEnumsData.VectorUnitPrefixId.Milli,
+				FabEnumsData.VectorUnitId.Unit
+			);
+			pSess.Save(fb.ToFactor());
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryFocalLength(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.FocalLength);
+
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.FocalLen = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+				"[vec: 'focal length' "+vPhoto.FocalLen+" milli meters]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				false
+			);
+			fb.AddVector(
+				LiveArtifactId.FocalLength,
+				FabEnumsData.VectorTypeId.PosLong,
+				(long)vPhoto.FocalLen,
+				FabEnumsData.VectorUnitPrefixId.Milli,
+				FabEnumsData.VectorUnitId.Metre
+			);
+			pSess.Save(fb.ToFactor());
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryIsoSpeed(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.ISOSpeedRatings);
+
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.Iso = (long)Convert.ToDouble(vTagMap[key]);
+
+			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+				"[vec: 'iso speed' "+vPhoto.Iso+" base units]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				false
+			);
+			fb.AddVector(
+				LiveArtifactId.ISOSpeed,
+				FabEnumsData.VectorTypeId.PosLong,
+				(long)vPhoto.Iso,
+				FabEnumsData.VectorUnitPrefixId.Base,
+				FabEnumsData.VectorUnitId.Unit
 			);
 			pSess.Save(fb.ToFactor());
 		}

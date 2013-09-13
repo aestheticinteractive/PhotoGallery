@@ -18,14 +18,23 @@ namespace PhotoGallery.Database.Maps {
 				.GeneratedBy.Native();
 
 			Map(x => x.ImgName).Length(64);
+			Map(x => x.Width);
+			Map(x => x.Height);
 			Map(x => x.Ratio);
-			
-			/*Map(x => x.Favorite).Default("0");
-			Map(x => x.ExifDTOrig).Nullable();
-			Map(x => x.ExifExposureTime).Nullable();
-			Map(x => x.ExifISOSpeed).Nullable();
-			Map(x => x.ExifFNumber).Nullable();
-			Map(x => x.ExifFocalLength).Nullable();*/
+
+			Map(x => x.Make).Length(128).Nullable();
+			Map(x => x.Model).Length(128).Nullable();
+
+			Map(x => x.FNum).Nullable();
+			Map(x => x.Iso).Nullable();
+			Map(x => x.Date).Nullable();
+			Map(x => x.ExpTime).Nullable();
+			Map(x => x.FocalLen).Nullable();
+			Map(x => x.Flash).Nullable();
+
+			Map(x => x.GpsLat).Nullable();
+			Map(x => x.GpsLng).Nullable();
+			Map(x => x.GpsAlt).Nullable();
 
 			References(x => x.FabricArtifact).Nullable();
 			References(x => x.Album);

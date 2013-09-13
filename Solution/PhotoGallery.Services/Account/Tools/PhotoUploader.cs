@@ -111,6 +111,8 @@ namespace PhotoGallery.Services.Account.Tools {
 					vPhoto = new Photo();
 					vPhoto.ImgName = (Result.Filename ?? "unknown");
 					vPhoto.Album = pSess.Load<Album>(vAlbumId);
+					vPhoto.Width = vOrig.Width;
+					vPhoto.Height = vOrig.Height;
 					vPhoto.Ratio = vOrig.Width/(float)vOrig.Height;
 					vPhoto.FabricArtifact = fa;
 					pSess.Save(vPhoto);

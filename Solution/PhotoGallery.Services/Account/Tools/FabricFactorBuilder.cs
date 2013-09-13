@@ -5,6 +5,8 @@ namespace PhotoGallery.Services.Account.Tools {
 
 	/*================================================================================================*/
 	public enum LiveArtifactId : long {
+		KinstnerPhotoGallery = 55612410061389824,
+
 		Camera = 55435679045255168,
 		CameraMake = 55434672205725697,
 		CameraModel = 55434672209920000,
@@ -39,21 +41,21 @@ namespace PhotoGallery.Services.Account.Tools {
 		public LiveArtifactId? DesRelatedArtifactRefineId { get; set; }
 		public LiveArtifactId? DesTypeRefineId { get; set; }
 
-		/*public FabEnumsData.DirectorTypeId? DirType { get; private set; }
-		public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
-		public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
+		//public FabEnumsData.DirectorTypeId? DirType { get; private set; }
+		//public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
+		//public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
 
-		public FabEnumsData.EventorTypeId? EveType { get; private set; }
-		public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
-		public DateTime EveDateTime { get; private set; }
+		//public FabEnumsData.EventorTypeId? EveType { get; private set; }
+		//public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
+		//public DateTime EveDateTime { get; private set; }
 
 		public FabEnumsData.IdentorTypeId? IdenType { get; private set; }
 		public string IdenValue { get; private set; }
 
-		public FabEnumsData.LocatorTypeId? LocType { get; private set; }
-		public double? LocValueX { get; private set; }
-		public double? LocValueY { get; private set; }
-		public double? LocValueZ { get; private set; }*/
+		//public FabEnumsData.LocatorTypeId? LocType { get; private set; }
+		//public double? LocValueX { get; private set; }
+		//public double? LocValueY { get; private set; }
+		//public double? LocValueZ { get; private set; }
 
 		public FabEnumsData.VectorTypeId? VecType { get; private set; }
 		public FabEnumsData.VectorUnitId? VecUnit { get; private set; }
@@ -104,6 +106,12 @@ namespace PhotoGallery.Services.Account.Tools {
 			VecUnit = pVecUnit;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public void AddIdentor(FabEnumsData.IdentorTypeId pKey, string pValue) {
+			IdenType = pKey;
+			IdenValue = pValue;
+		}
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
@@ -125,21 +133,21 @@ namespace PhotoGallery.Services.Account.Tools {
 			ff.DesRelatedArtifactRefineId = (long?)DesRelatedArtifactRefineId;
 			ff.DesTypeRefineId = (long?)DesTypeRefineId;
 
-			/*ff.DirTypeId = (byte?)DirType;
-			ff.DirPrimaryActionId = (byte?)DirPrimaryAction;
-			ff.DirRelatedActionId = (byte?)DirRelatedAction;
+			//ff.DirTypeId = (byte?)DirType;
+			//ff.DirPrimaryActionId = (byte?)DirPrimaryAction;
+			//ff.DirRelatedActionId = (byte?)DirRelatedAction;
 
-			ff.EveTypeId = (byte?)EveType;
-			ff.EvePrecisionId = (byte?)EvePrecision;
-			ff.EveDateTime = EveDateTime.ToUniversalTime().Ticks;
+			//ff.EveTypeId = (byte?)EveType;
+			//ff.EvePrecisionId = (byte?)EvePrecision;
+			//ff.EveDateTime = EveDateTime.ToUniversalTime().Ticks;
 
 			ff.IdenTypeId = (byte?)IdenType;
 			ff.IdenValue = IdenValue;
 
-			ff.LocTypeId = (byte?)LocType;
-			ff.LocValueX = LocValueX;
-			ff.LocValueY = LocValueY;
-			ff.LocValueZ = LocValueZ;*/
+			//ff.LocTypeId = (byte?)LocType;
+			//ff.LocValueX = LocValueX;
+			//ff.LocValueY = LocValueY;
+			//ff.LocValueZ = LocValueZ;
 
 			ff.VecTypeId = (byte?)VecType;
 			ff.VecUnitId = (byte?)VecUnit;
@@ -149,7 +157,6 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			return ff;
 		}
-
 	}
 
 }
