@@ -18,7 +18,8 @@ namespace PhotoGallery.Services.Account.Tools {
 		FNumber = 55431237157781505,
 		ISOSpeed = 56242555254210560,
 		Shutter = 55434431082528768,
-		Flash = 55435679049449472, //<photo> uses a flash (if true)
+		Utilize = 55435285740126208,
+		Flash = 55435679049449472,
 		Width = 55433968328114177,
 		Height = 55433968330211328,
 		FocalLength = 55435397586485248

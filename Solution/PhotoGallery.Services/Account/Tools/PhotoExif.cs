@@ -114,12 +114,12 @@ namespace PhotoGallery.Services.Account.Tools {
 				TryFNumber(pSess);
 				TryFocalLength(pSess);
 				TryIsoSpeed(pSess);
+				TryFlash(pSess);
 				pSess.SaveOrUpdate(vPhoto);
 				tx.Commit();
 			}
 
 			/*
-			Flash, //look for "fired"
 			GPSLatitudeRef,
 			GPSLatitude,
 			GPSLongitudeRef,
@@ -484,6 +484,32 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.VectorUnitPrefixId.Base,
 				FabEnumsData.VectorUnitId.Unit
 			);
+			pSess.Save(fb.ToFactor());
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryFlash(ISession pSess) {
+			string key = PhotoHasTag(ExifTag.Flash);
+
+			if ( key == null ) {
+				return;
+			}
+
+			vPhoto.Flash = (vTagMap[key].ToLower().IndexOf("fired") != -1);
+
+			if ( vPhoto.Flash != true ) {
+				return;
+			}
+
+			var fb = new FabricFactorBuilder("<photo> consumes ('utilize') 'flash'");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.Consumes,
+				LiveArtifactId.Flash,
+				FabEnumsData.FactorAssertionId.Fact,
+				false
+			);
+			fb.DesTypeRefineId = LiveArtifactId.Utilize;
 			pSess.Save(fb.ToFactor());
 		}
 
