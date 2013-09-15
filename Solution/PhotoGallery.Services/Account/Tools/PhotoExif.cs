@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
+using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Dto;
 using PhotoGallery.Services.Util;
 
@@ -18,7 +19,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			ISOSpeedRatings,
 			DateTimeOriginal,
 			ExposureTime,
-			Flash, //look for "fired"
+			Flash,
 			PixelXDimension,
 			PixelYDimension,
 			FocalLength,
@@ -61,8 +62,6 @@ namespace PhotoGallery.Services.Account.Tools {
 
 				string value = vData.Substring(prevI+2, postValueI-prevI-2);
 				value = value.Trim(new[] { ' ', '"' });
-
-				//Log.Debug("TAG   "+tag+": "+value);
 				vTagMap.Add(tag, value);
 			}
 		}
@@ -115,18 +114,11 @@ namespace PhotoGallery.Services.Account.Tools {
 				TryFocalLength(pSess);
 				TryIsoSpeed(pSess);
 				TryFlash(pSess);
+				TryGpsPos(pSess);
+
 				pSess.SaveOrUpdate(vPhoto);
 				tx.Commit();
 			}
-
-			/*
-			GPSLatitudeRef,
-			GPSLatitude,
-			GPSLongitudeRef,
-			GPSLongitude,
-			GPSAltitudeRef,
-			GPSAltitude,
-			*/
 		}
 
 
@@ -513,12 +505,82 @@ namespace PhotoGallery.Services.Account.Tools {
 			pSess.Save(fb.ToFactor());
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		private void TryGpsPos(ISession pSess) {
+			string keyLat = PhotoHasTag(ExifTag.GPSLatitude);
+			string keyLatRef = PhotoHasTag(ExifTag.GPSLatitudeRef);
+			string keyLng = PhotoHasTag(ExifTag.GPSLongitude);
+			string keyLngRef = PhotoHasTag(ExifTag.GPSLongitudeRef);
+			double alt = 0;
+
+			if ( keyLat == null || keyLatRef == null || keyLng == null || keyLngRef == null ) {
+				return;
+			}
+
+			try {
+				vPhoto.GpsLat = StringToCoord(vTagMap[keyLat], vTagMap[keyLatRef]);
+				vPhoto.GpsLng = StringToCoord(vTagMap[keyLng], vTagMap[keyLngRef]);
+
+				string keyAlt = PhotoHasTag(ExifTag.GPSAltitude);
+				string keyAltRef = PhotoHasTag(ExifTag.GPSAltitudeRef);
+
+				if ( keyAlt != null && keyAltRef != null ) {
+					alt = double.Parse(vTagMap[keyAlt]);
+
+					if ( vTagMap[keyAltRef] == "1" ) {
+						alt *= -1;
+					}
+				}
+			}
+			catch ( Exception e ) {
+				Log.Error("GPS: "+e.Message, e);
+				return;
+			}
+
+			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+				"[loc: earth coord "+vPhoto.GpsLat+", "+vPhoto.GpsLng+", "+vPhoto.GpsAlt+"]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				LiveArtifactId.Photograph,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddLocator(
+				FabEnumsData.LocatorTypeId.EarthCoord,
+				(double)vPhoto.GpsLat,
+				(double)vPhoto.GpsLng,
+				alt
+			);
+			pSess.Save(fb.ToFactor());
+		}
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private string PhotoHasTag(ExifTag pTag) {
 			string key = pTag+"";
 			return (vTagMap.ContainsKey(key) ? key : null);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private double StringToCoord(string pCoordVal, string pRefVal) {
+			string[] v = pCoordVal.Trim(new[] { '[', ']' }).Split(',');
+			double c = double.Parse(v[0]);
+
+			if ( v.Length > 1 ) {
+				c += double.Parse(v[1])/60;
+			}
+
+			if ( v.Length > 2 ) {
+				c += double.Parse(v[2])/3600;
+			}
+
+			if ( pRefVal == "S" || pRefVal == "W" ) {
+				c *= -1;
+			}
+
+			return c;
 		}
 
 	}

@@ -44,9 +44,9 @@ namespace PhotoGallery.Services.Account.Tools {
 		public LiveArtifactId? DesRelatedArtifactRefineId { get; set; }
 		public LiveArtifactId? DesTypeRefineId { get; set; }
 
-		//public FabEnumsData.DirectorTypeId? DirType { get; private set; }
-		//public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
-		//public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
+		public FabEnumsData.DirectorTypeId? DirType { get; private set; }
+		public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
+		public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
 
 		public FabEnumsData.EventorTypeId? EveType { get; private set; }
 		public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
@@ -55,10 +55,10 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabEnumsData.IdentorTypeId? IdenType { get; private set; }
 		public string IdenValue { get; private set; }
 
-		//public FabEnumsData.LocatorTypeId? LocType { get; private set; }
-		//public double? LocValueX { get; private set; }
-		//public double? LocValueY { get; private set; }
-		//public double? LocValueZ { get; private set; }
+		public FabEnumsData.LocatorTypeId? LocType { get; private set; }
+		public double? LocValueX { get; private set; }
+		public double? LocValueY { get; private set; }
+		public double? LocValueZ { get; private set; }
 
 		public FabEnumsData.VectorTypeId? VecType { get; private set; }
 		public FabEnumsData.VectorUnitId? VecUnit { get; private set; }
@@ -123,6 +123,22 @@ namespace PhotoGallery.Services.Account.Tools {
 			EveDateTime = pDateTime;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public void AddLocator(FabEnumsData.LocatorTypeId pLocType, double pX, double pY, double pZ) {
+			LocType = pLocType;
+			LocValueX = pX;
+			LocValueY = pY;
+			LocValueZ = pZ;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void AddDirector(FabEnumsData.DirectorTypeId pDirType,
+				FabEnumsData.DirectorActionId pPrimaryAct, FabEnumsData.DirectorActionId pRelatedAct) {
+			DirType = pDirType;
+			DirPrimaryAction = pPrimaryAct;
+			DirRelatedAction = pRelatedAct;
+		}
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
@@ -144,9 +160,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			ff.DesRelatedArtifactRefineId = (long?)DesRelatedArtifactRefineId;
 			ff.DesTypeRefineId = (long?)DesTypeRefineId;
 
-			//ff.DirTypeId = (byte?)DirType;
-			//ff.DirPrimaryActionId = (byte?)DirPrimaryAction;
-			//ff.DirRelatedActionId = (byte?)DirRelatedAction;
+			ff.DirTypeId = (byte?)DirType;
+			ff.DirPrimaryActionId = (byte?)DirPrimaryAction;
+			ff.DirRelatedActionId = (byte?)DirRelatedAction;
 
 			ff.EveTypeId = (byte?)EveType;
 			ff.EvePrecisionId = (byte?)EvePrecision;
@@ -155,10 +171,10 @@ namespace PhotoGallery.Services.Account.Tools {
 			ff.IdenTypeId = (byte?)IdenType;
 			ff.IdenValue = IdenValue;
 
-			//ff.LocTypeId = (byte?)LocType;
-			//ff.LocValueX = LocValueX;
-			//ff.LocValueY = LocValueY;
-			//ff.LocValueZ = LocValueZ;
+			ff.LocTypeId = (byte?)LocType;
+			ff.LocValueX = LocValueX;
+			ff.LocValueY = LocValueY;
+			ff.LocValueZ = LocValueZ;
 
 			ff.VecTypeId = (byte?)VecType;
 			ff.VecUnitId = (byte?)VecUnit;
