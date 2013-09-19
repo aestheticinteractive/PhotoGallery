@@ -23,6 +23,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public WebUploadResult Result { get; private set; }
 		
 		private readonly HttpServerUtilityBase vServer;
+		private readonly FabricUser vUser;
 		private readonly Album vAlbum;
 		private readonly string vExifData;
 		private readonly string vImageData;
@@ -36,9 +37,10 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotoUploader(HttpServerUtilityBase pServer, Album pAlbum, string pFilename,
-																string pExifData, string pImageData) {
+		public PhotoUploader(HttpServerUtilityBase pServer, FabricUser pUser, Album pAlbum, 
+												string pFilename, string pExifData, string pImageData) {
 			vServer = pServer;
+			vUser = pUser;
 			vAlbum = pAlbum;
 			vExifData = pExifData;
 			vImageData = pImageData;
@@ -113,9 +115,11 @@ namespace PhotoGallery.Services.Account.Tools {
 					vPhoto = new Photo();
 					vPhoto.ImgName = (Result.Filename ?? "unknown");
 					vPhoto.Album = pSess.Load<Album>(vAlbum.Id);
+					vPhoto.FabricUser = vUser;
 					vPhoto.Width = vOrig.Width;
 					vPhoto.Height = vOrig.Height;
 					vPhoto.Ratio = vOrig.Width/(float)vOrig.Height;
+					vPhoto.Created = DateTime.UtcNow.Ticks;
 					vPhoto.FabricArtifact = fa;
 					pSess.Save(vPhoto);
 					Result.PhotoId = vPhoto.Id;

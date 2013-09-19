@@ -21,6 +21,7 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.Width);
 			Map(x => x.Height);
 			Map(x => x.Ratio);
+			Map(x => x.Created);
 
 			Map(x => x.Make).Length(128).Nullable();
 			Map(x => x.Model).Length(128).Nullable();
@@ -38,6 +39,7 @@ namespace PhotoGallery.Database.Maps {
 
 			References(x => x.FabricArtifact).Nullable();
 			References(x => x.Album);
+			References(x => x.FabricUser);
 
 			HasMany(x => x.PhotoMetas);
 		}

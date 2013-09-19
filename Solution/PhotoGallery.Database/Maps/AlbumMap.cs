@@ -18,6 +18,7 @@ namespace PhotoGallery.Database.Maps {
 				.GeneratedBy.Native();
 
 			Map(x => x.Title).Length(64);
+			Map(x => x.Created);
 
 			References(x => x.FabricUser);
 			References(x => x.FabricArtifact).Nullable();

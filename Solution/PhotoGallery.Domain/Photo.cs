@@ -10,6 +10,7 @@ namespace PhotoGallery.Domain {
 		public virtual long Width { get; set; }
 		public virtual long Height { get; set; }
 		public virtual float Ratio { get; set; }
+		public virtual long Created { get; set; }
 
 		public virtual string Make { get; set; }
 		public virtual string Model { get; set; }
@@ -27,6 +28,7 @@ namespace PhotoGallery.Domain {
 
 		public virtual FabricArtifact FabricArtifact { get; set; }
 		public virtual Album Album { get; set; }
+		public virtual FabricUser FabricUser { get; set; }
 		
 		public virtual IList<PhotoMeta> PhotoMetas { get; set; }
 

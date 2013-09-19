@@ -37,9 +37,11 @@ namespace PhotoGallery.Services.Account.Tools {
 		private readonly Photo vPhoto;
 		private readonly Album vAlbum;
 		private readonly string vData;
+		private readonly string vPhotoLbl;
 		private readonly IDictionary<string, string> vTagMap;
 
 		private FabricArtifact vPhotoArt;
+		private FabricArtifact vUserArt;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +50,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			vPhoto = pPhoto;
 			vAlbum = pAlbum;
 			vData = pData;
+			vPhotoLbl = "<photo "+pPhoto.Id+">";
 			vTagMap = new Dictionary<string, string>();
 
 			int i = vData.IndexOf("\":");
@@ -69,6 +72,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		/*--------------------------------------------------------------------------------------------*/
 		public void SaveData(ISession pSess) {
 			vPhotoArt = pSess.Load<FabricArtifact>(vPhoto.FabricArtifact.Id);
+			vUserArt = pSess.Load<FabricArtifact>(vPhoto.FabricUser.FabricArtifact.Id);
 			InsertMetas(pSess);
 			InsertFactors(pSess);
 		}
@@ -155,7 +159,7 @@ namespace PhotoGallery.Services.Account.Tools {
 				makeTag.FabricArtifact = makeArt;
 				pSess.Save(makeTag);
 
-				var fb = new FabricFactorBuilder("<make> is an instance of 'make' ('camera')");
+				var fb = new FabricFactorBuilder(null, "<make> is an instance of 'make' ('camera')");
 				fb.Init(
 					makeArt,
 					FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
@@ -198,7 +202,8 @@ namespace PhotoGallery.Services.Account.Tools {
 					modelArt = pSess.Load<FabricArtifact>(modelTag.FabricArtifact.Id);
 				}
 
-				var fb = new FabricFactorBuilder("<photo> is created by ('record') <model>");
+				var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is created by ('record') "+
+					"<model "+vPhoto.Model+">");
 				fb.Init(
 					vPhotoArt,
 					FabEnumsData.DescriptorTypeId.IsCreatedBy,
@@ -230,7 +235,8 @@ namespace PhotoGallery.Services.Account.Tools {
 				return modelArt;
 			}
 
-			var fb = new FabricFactorBuilder("<model> is created by <make>");
+			var fb = new FabricFactorBuilder(null, "<model "+modelTag.Name+"> is created by "+
+				"<make "+pMakeTag.Name+">");
 			fb.Init(
 				modelArt,
 				FabEnumsData.DescriptorTypeId.IsCreatedBy,
@@ -244,7 +250,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void AddBasicData(ISession pSess) {
-			var fb = new FabricFactorBuilder("<photo> refers to 'Kinstner Photo Gallery' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" refers to 'Kinstner Photo Gallery' "+
 				"('photograph') [iden: 'key' "+vPhoto.Id+"]");
 			fb.Init(
 				vPhotoArt,
@@ -257,11 +263,12 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.IdentorTypeId.Key,
 				vPhoto.Id+""
 			);
+			fb.DesRelatedArtifactRefineId = LiveArtifactId.Photograph;
 			pSess.Save(fb.ToFactor());
 
 			////
 
-			fb = new FabricFactorBuilder("<photo> belongs to <album> ('photograph album')");
+			fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" belongs to <album "+vAlbum.Title+">");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.BelongsTo,
@@ -269,7 +276,27 @@ namespace PhotoGallery.Services.Account.Tools {
 				FabEnumsData.FactorAssertionId.Fact,
 				true
 			);
-			fb.DesRelatedArtifactRefineId = LiveArtifactId.PhotographAlbum;
+			pSess.Save(fb.ToFactor());
+
+			////
+
+			var cre = new DateTime(vPhoto.Created);
+
+			fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" ('computer file') created by ('upload') "+
+				"<user "+vPhoto.FabricUser.Name+"> [eventor: occur "+cre+"]");
+			fb.Init(
+				vPhotoArt,
+				FabEnumsData.DescriptorTypeId.IsCreatedBy,
+				vUserArt,
+				FabEnumsData.FactorAssertionId.Fact,
+				true
+			);
+			fb.AddEventor(
+				FabEnumsData.EventorTypeId.Occur,
+				cre
+			);
+			fb.DesPrimaryArtifactRefineId = LiveArtifactId.ComputerFile;
+			fb.DesTypeRefineId = LiveArtifactId.Upload;
 			pSess.Save(fb.ToFactor());
 		}
 
@@ -283,13 +310,13 @@ namespace PhotoGallery.Services.Account.Tools {
 				return;
 			}
 
-			DateTime val = ImageUtil.ParseMetaDate(vTagMap[key]);
+			DateTime val = ImageUtil.ParseMetaDate(vTagMap[key]); //assume EST for now
+			TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			val = TimeZoneInfo.ConvertTimeToUtc(val, est);
 			vPhoto.Date = val.Ticks;
 
-			//TODO: Ensure the photo's timezones are handled correctly.
-
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [eventor: occur second "+val+"]");
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
+				"[eventor: occur "+val+"]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
@@ -314,14 +341,14 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.Width = (long)Convert.ToDouble(vTagMap[key]);
 
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'width' "+vPhoto.Width+" base pixels]");
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
+				"[vec: 'width' "+vPhoto.Width+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				true
+				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Width,
@@ -343,14 +370,14 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.Height = (long)Convert.ToDouble(vTagMap[key]);
 
-			var fb = new FabricFactorBuilder(
-				"<photo> is an instance of 'photograph' [vec: 'height' "+vPhoto.Height+" base pixels]");
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
+				"[vec: 'height' "+vPhoto.Height+" base pixels]");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
 				FabEnumsData.FactorAssertionId.Fact,
-				true
+				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Height,
@@ -372,7 +399,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.ExpTime = (long)(Convert.ToDouble(vTagMap[key])*1000000);
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
 				"[vec: 'shutter' "+vPhoto.ExpTime+" micro secs]");
 			fb.Init(
 				vPhotoArt,
@@ -401,7 +428,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.FNum = (long)(Convert.ToDouble(vTagMap[key])*1000);
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
 				"[vec: 'fnumber' "+vPhoto.FNum+" milli units]");
 			fb.Init(
 				vPhotoArt,
@@ -430,7 +457,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.FocalLen = (long)Convert.ToDouble(vTagMap[key]);
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
 				"[vec: 'focal length' "+vPhoto.FocalLen+" milli meters]");
 			fb.Init(
 				vPhotoArt,
@@ -459,7 +486,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			vPhoto.Iso = (long)Convert.ToDouble(vTagMap[key]);
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
 				"[vec: 'iso speed' "+vPhoto.Iso+" base units]");
 			fb.Init(
 				vPhotoArt,
@@ -492,15 +519,14 @@ namespace PhotoGallery.Services.Account.Tools {
 				return;
 			}
 
-			var fb = new FabricFactorBuilder("<photo> consumes ('utilize') 'flash'");
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" uses 'flash'");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.Consumes,
+				FabEnumsData.DescriptorTypeId.Uses,
 				LiveArtifactId.Flash,
 				FabEnumsData.FactorAssertionId.Fact,
 				false
 			);
-			fb.DesTypeRefineId = LiveArtifactId.Utilize;
 			pSess.Save(fb.ToFactor());
 		}
 
@@ -529,6 +555,8 @@ namespace PhotoGallery.Services.Account.Tools {
 					if ( vTagMap[keyAltRef] == "1" ) {
 						alt *= -1;
 					}
+
+					vPhoto.GpsAlt = alt;
 				}
 			}
 			catch ( Exception e ) {
@@ -536,7 +564,7 @@ namespace PhotoGallery.Services.Account.Tools {
 				return;
 			}
 
-			var fb = new FabricFactorBuilder("<photo> is an instance of 'photograph' "+
+			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is an instance of 'photograph' "+
 				"[loc: earth coord "+vPhoto.GpsLat+", "+vPhoto.GpsLng+", "+vPhoto.GpsAlt+"]");
 			fb.Init(
 				vPhotoArt,

@@ -18,16 +18,19 @@ namespace PhotoGallery.Services.Account.Tools {
 		FNumber = 55431237157781505,
 		ISOSpeed = 56242555254210560,
 		Shutter = 55434431082528768,
-		Utilize = 55435285740126208,
 		Flash = 55435679049449472,
 		Width = 55433968328114177,
 		Height = 55433968330211328,
-		FocalLength = 55435397586485248
+		FocalLength = 55435397586485248,
+		ComputerFile = 55435461735219200,
+		Upload = 55437908941733888
 	};
 
 
 	/*================================================================================================*/
 	public class FabricFactorBuilder {
+
+		public FabricArtifact CreatorUserArtifact { get; private set; }
 
 		public FabricArtifact PrimaryArtifact { get; private set; }
 		public LiveArtifactId PrimaryArtifactId { get; private set; }
@@ -73,10 +76,13 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public FabricFactorBuilder() {}
+		public FabricFactorBuilder(FabricArtifact pCreatorUserArtifact) {
+			CreatorUserArtifact = pCreatorUserArtifact;
+		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public FabricFactorBuilder(string pInternalNote) {
+		public FabricFactorBuilder(FabricArtifact pCreatorUserArtifact, string pInternalNote) {
+			CreatorUserArtifact = pCreatorUserArtifact;
 			InternalNote = pInternalNote;
 		}
 
@@ -120,16 +126,14 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddEventor(FabEnumsData.EventorTypeId pEveType, DateTime pDateTime) {
-			var dt = pDateTime.ToUniversalTime();
-
+		public void AddEventor(FabEnumsData.EventorTypeId pEveType, DateTime pDateTimeUtc) {
 			EveType = pEveType;
-			EveYear = dt.Year;
-			EveMonth = (byte?)dt.Month;
-			EveDay = (byte?)dt.Day;
-			EveHour = (byte?)dt.Hour;
-			EveMinute = (byte?)dt.Minute;
-			EveSecond = (byte?)dt.Second;
+			EveYear = pDateTimeUtc.Year;
+			EveMonth = (byte?)pDateTimeUtc.Month;
+			EveDay = (byte?)pDateTimeUtc.Day;
+			EveHour = (byte?)pDateTimeUtc.Hour;
+			EveMinute = (byte?)pDateTimeUtc.Minute;
+			EveSecond = (byte?)pDateTimeUtc.Second;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -153,6 +157,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		/*--------------------------------------------------------------------------------------------*/
 		public FabricFactor ToFactor() {
 			var ff = new FabricFactor();
+			ff.Creator = CreatorUserArtifact;
 
 			ff.Primary = PrimaryArtifact;
 			ff.PrimaryArtifactId = (long)PrimaryArtifactId;

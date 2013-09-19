@@ -18,6 +18,7 @@ namespace PhotoGallery.Database.Maps {
 				.GeneratedBy.Native();
 
 			Map(x => x.FactorId).Nullable().Index(name+"_FactorId");
+			References(x => x.Creator).Nullable();
 
 			References(x => x.Primary).Nullable();
 			Map(x => x.PrimaryArtifactId);

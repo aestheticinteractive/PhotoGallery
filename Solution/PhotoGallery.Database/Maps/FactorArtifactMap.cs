@@ -19,6 +19,8 @@ namespace PhotoGallery.Database.Maps {
 
 			Map(x => x.ArtifactId).Nullable().Index(name+"_ArtifactId");
 			Map(x => x.Type);
+			Map(x => x.FromFab).Default("0");
+			References(x => x.Creator).Nullable();
 
 			HasMany(x => x.Albums); //0 or 1
 			HasMany(x => x.Photos); //0 or 1

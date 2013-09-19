@@ -5,6 +5,7 @@
 
 		public virtual int Id { get; set; }
 		public virtual long? FactorId { get; set; }
+		public virtual FabricArtifact Creator { get; set; }
 
 		public virtual FabricArtifact Primary { get; set; }
 		public virtual long PrimaryArtifactId { get; set; }

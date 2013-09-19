@@ -7,6 +7,7 @@ namespace PhotoGallery.Domain {
 
 		public virtual int Id { get; set; }
 		public virtual string Title { get; set; }
+		public virtual long Created { get; set; }
 
 		public virtual FabricUser FabricUser { get; set; }
 		public virtual FabricArtifact FabricArtifact { get; set; }
