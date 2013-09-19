@@ -14,6 +14,9 @@ namespace PhotoGallery.Domain {
 
 		public virtual int Id { get; set; }
 		public virtual long? ArtifactId { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string Disamb { get; set; }
+		public virtual string Note { get; set; }
 		public virtual byte Type { get; set; }
 		public virtual bool FromFab { get; set; }
 		public virtual FabricArtifact Creator { get; set; }

@@ -100,8 +100,8 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void InsertFactors(ISession pSess) {
-			Tag makeTag = TryMake(pSess);
-			TryModel(pSess, makeTag);
+			FabricArtifact makeArt = TryMake(pSess);
+			TryModel(pSess, makeArt);
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
 				AddBasicData(pSess);
@@ -128,7 +128,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private Tag TryMake(ISession pSess) {
+		private FabricArtifact TryMake(ISession pSess) {
 			string key = PhotoHasTag(ExifTag.Make);
 
 			if ( key == null ) {
@@ -138,24 +138,25 @@ namespace PhotoGallery.Services.Account.Tools {
 			vPhoto.Make = vTagMap[key];
 			const string makeDisamb = "camera make";
 
-			Tag makeTag = pSess.QueryOver<Tag>()
+			FabricArtifact makeArt = pSess.QueryOver<FabricArtifact>()
 				.Where(x => x.Name == vPhoto.Make && x.Disamb == makeDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
-			if ( makeTag != null ) {
-				return makeTag; //tag/artifact already created, don't do anything more
+			if ( makeArt != null ) {
+				return makeArt; //tag/artifact already created, don't do anything more
 			}
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
-				FabricArtifact makeArt = new FabricArtifact();
+				makeArt = new FabricArtifact();
 				makeArt.Type = (byte)FabricArtifact.ArtifactType.Tag;
+				makeArt.Name = vPhoto.Make;
+				makeArt.Disamb = makeDisamb;
+				makeArt.Note = "A make or brand of photographic cameras.";
 				pSess.Save(makeArt);
 
-				makeTag = new Tag();
-				makeTag.Name = vPhoto.Make;
-				makeTag.Disamb = makeDisamb;
-				makeTag.Note = "A make or brand of photographic cameras.";
+				Tag makeTag = new Tag();
+				makeTag.Name = makeArt.Name;
 				makeTag.FabricArtifact = makeArt;
 				pSess.Save(makeTag);
 
@@ -173,11 +174,11 @@ namespace PhotoGallery.Services.Account.Tools {
 				tx.Commit();
 			}
 
-			return makeTag;
+			return makeArt;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private void TryModel(ISession pSess, Tag pMakeTag) {
+		private void TryModel(ISession pSess, FabricArtifact pMakeArt) {
 			string key = PhotoHasTag(ExifTag.Model);
 
 			if ( key == null ) {
@@ -187,19 +188,14 @@ namespace PhotoGallery.Services.Account.Tools {
 			vPhoto.Model = vTagMap[key];
 			const string modelDisamb = "camera model";
 
-			Tag modelTag = pSess.QueryOver<Tag>()
+			FabricArtifact modelArt = pSess.QueryOver<FabricArtifact>()
 				.Where(x => x.Name == vPhoto.Model && x.Disamb == modelDisamb)
 				.Take(1)
 				.SingleOrDefault();
 
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
-				FabricArtifact modelArt;
-
-				if ( modelTag == null ) {
-					modelArt = BuildModel(pSess, vPhoto.Model, modelDisamb, pMakeTag);
-				}
-				else {
-					modelArt = pSess.Load<FabricArtifact>(modelTag.FabricArtifact.Id);
+				if ( modelArt == null ) {
+					modelArt = BuildModel(pSess, vPhoto.Model, modelDisamb, pMakeArt);
 				}
 
 				var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" is created by ('record') "+
@@ -219,28 +215,30 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private FabricArtifact BuildModel(ISession pSess, string pName, string pDisamb, Tag pMakeTag) {
+		private FabricArtifact BuildModel(ISession pSess, string pName, string pDisamb, 
+																			FabricArtifact pMakeArt) {
 			FabricArtifact modelArt = new FabricArtifact();
 			modelArt.Type = (byte)FabricArtifact.ArtifactType.Tag;
+			modelArt.Name = pName;
+			modelArt.Disamb = pDisamb;
+			modelArt.Note = "A model of photographic camera.";
 			pSess.Save(modelArt);
 
 			var modelTag = new Tag();
-			modelTag.Name = pName;
-			modelTag.Disamb = pDisamb;
-			modelTag.Note = "A model of photographic camera.";
+			modelTag.Name = modelArt.Name;
 			modelTag.FabricArtifact = modelArt;
 			pSess.Save(modelTag);
 
-			if ( pMakeTag == null ) {
+			if ( pMakeArt == null ) {
 				return modelArt;
 			}
 
 			var fb = new FabricFactorBuilder(null, "<model "+modelTag.Name+"> is created by "+
-				"<make "+pMakeTag.Name+">");
+				"<make "+pMakeArt.Name+">");
 			fb.Init(
 				modelArt,
 				FabEnumsData.DescriptorTypeId.IsCreatedBy,
-				pSess.Load<FabricArtifact>(pMakeTag.FabricArtifact.Id),
+				pMakeArt,
 				FabEnumsData.FactorAssertionId.Fact,
 				true
 			);

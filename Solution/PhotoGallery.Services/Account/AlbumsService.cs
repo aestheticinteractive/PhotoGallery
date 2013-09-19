@@ -31,6 +31,8 @@ namespace PhotoGallery.Services.Account {
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					var albumArt = new FabricArtifact();
 					albumArt.Type = (byte)FabricArtifact.ArtifactType.Album;
+					albumArt.Name = pTitle;
+					albumArt.Disamb = "photograph album";
 					s.Save(albumArt);
 
 					var a = new Album();
