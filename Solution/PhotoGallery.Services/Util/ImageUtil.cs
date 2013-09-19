@@ -13,11 +13,6 @@ namespace PhotoGallery.Services.Util {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static string BuildImageUrl(int pAlbumId, int pPhotoId, PhotoSize pSize) {
-			return "http://www.zachkinstner.com/gallery"+BuildPhotoPath(pAlbumId, pPhotoId, pSize);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
 		public static string BuildPhotoPath(int pAlbumId) {
 			return "/upload/photos/"+pAlbumId;
 		}

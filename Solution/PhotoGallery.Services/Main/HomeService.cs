@@ -21,19 +21,17 @@ namespace PhotoGallery.Services.Main {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<WebAlbum> GetAlbums(int pLimit) {
-			/*using ( ISession s = NewSession() ) {
+			using ( ISession s = NewSession() ) {
 				Photo phoAlias = null;
 
 				return GetAlbumQuery(s)
-					.OrderBy(Projections.Max(() => phoAlias.ExifDTOrig)).Desc
+					.OrderBy(Projections.Max(() => phoAlias.Date)).Desc
 					.Take(pLimit == 0 ? 9999 : pLimit)
 					.List<WebAlbum>();
-			};*/
-
-			return new List<WebAlbum>();
+			};
 		}
 
-		/*--------------------------------------------------------------------------------------------* /
+		/*--------------------------------------------------------------------------------------------*/
 		internal static IQueryOver<Album, Album> GetAlbumQuery(ISession pSession) {
 			Album albAlias = null;
 			Photo phoAlias = null;
@@ -46,16 +44,11 @@ namespace PhotoGallery.Services.Main {
 					.SelectMin(a => a.Title).WithAlias(() => dto.Title)
 					.SelectCount(() => phoAlias.Id).WithAlias(() => dto.NumPhotos)
 					.SelectMin(() => phoAlias.Id).WithAlias(() => dto.FirstPhotoId)
-					.SelectMin(() => phoAlias.ExifDTOrig).WithAlias(() => dto.StartDate)
-					.SelectMax(() => phoAlias.ExifDTOrig).WithAlias(() => dto.EndDate)
-					.SelectSubQuery(
-						QueryOver.Of<Photo>()
-						.Where(p => p.Album.Id == albAlias.Id && p.Favorite > 0)
-						.ToRowCountQuery()
-					).WithAlias(() => dto.NumFavs)
+					.SelectMin(() => phoAlias.Date).WithAlias(() => dto.StartDateTicks)
+					.SelectMax(() => phoAlias.Date).WithAlias(() => dto.EndDateTicks)
 				)
 				.TransformUsing(Transformers.AliasToBean<WebAlbum>());
-		}*/
+		}
 
 	}
 

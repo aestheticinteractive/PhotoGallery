@@ -1,5 +1,4 @@
-﻿using System;
-using PhotoGallery.Domain;
+﻿using PhotoGallery.Domain;
 using PhotoGallery.Services.Util;
 
 namespace PhotoGallery.Services.Main.Dto {
@@ -9,10 +8,7 @@ namespace PhotoGallery.Services.Main.Dto {
 		
 		public int PhotoId { get; internal set; }
 		public string ImgName { get; internal set; }
-		public int Favorite { get; internal set; }
 		public int AlbumId { get; internal set; }
-		public DateTime ExifDtOrig { get; internal set; }
-		public int FabricArtifactId { get; internal set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,9 +20,6 @@ namespace PhotoGallery.Services.Main.Dto {
 			PhotoId = p.Id;
 			ImgName = p.ImgName;
 			AlbumId = p.Album.Id;
-			/*Favorite = p.Favorite;
-			ExifDtOrig = p.ExifDTOrig;
-			FabricArtifactId = p.FabricArtifactId;*/
 		}
 
 
@@ -37,7 +30,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private string GetUrl(ImageUtil.PhotoSize pSize) {
-			return ImageUtil.BuildImageUrl(AlbumId, PhotoId, pSize);
+			return ImageUtil.BuildPhotoPath(AlbumId, PhotoId, pSize);
 		}
 
 	}

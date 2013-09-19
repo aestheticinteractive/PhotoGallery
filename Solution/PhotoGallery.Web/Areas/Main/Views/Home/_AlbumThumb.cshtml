@@ -11,8 +11,5 @@
 		<p class="textBox">
 			@Model.NumPhotos photo@(Model.NumPhotos==1?"":"s")
 		</p>
-		<p class="textBox">
-			@((int)Math.Round((Model.NumFavs/(float)Model.NumPhotos)*100))% favorites
-		</p>
 	</div>
 </div>
