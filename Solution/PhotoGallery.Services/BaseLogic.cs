@@ -24,7 +24,7 @@ namespace PhotoGallery.Services {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		protected ISession NewSession() {
+		internal static ISession NewSession() {
 			return new SessionProvider().OpenSession();
 		}
 

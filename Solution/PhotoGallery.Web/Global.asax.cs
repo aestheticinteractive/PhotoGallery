@@ -10,6 +10,7 @@ using Castle.Windsor.Installer;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services.Fabric;
 using PhotoGallery.Web.Application.Windsor;
 
 namespace PhotoGallery.Web {
@@ -23,6 +24,8 @@ namespace PhotoGallery.Web {
 		private static long FabricAppId;
 		private static string FabricAppSecret;
 		private static long FabricDataProvId;
+
+		private static IFabricClient FabricDataProvClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +80,9 @@ namespace PhotoGallery.Web {
 				FabricAppId, FabricAppSecret, FabricDataProvId, redir, FabricSessProv);
 
 			FabricClient.InitOnce(config);
+
+			FabricDataProvClient = new FabricClient();
+			//FabricService.BeginDataProv(FabricDataProvClient);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
