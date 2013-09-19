@@ -12,12 +12,25 @@ namespace PhotoGallery.Services.Fabric {
 	/*================================================================================================*/
 	public static class FabricService {
 
+		private static IFabricClient DataProvClient;
 		private static bool StopThreads;
-
-		private static Thread vDataProvThread;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		public static void SetDataProvClient(IFabricClient pFab) {
+			DataProvClient = pFab;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public static void CheckForNewTasks(IFabricClient pFab) {
+			var t = new Thread(StartDataProvThread);
+			t.Start(DataProvClient);
+
+			//t = new Thread(StartUserThread);
+			//t.Start(pFab);
+		}
+
 		/*--------------------------------------------------------------------------------------------*/
 		public static void StopAllThreads() {
 			StopThreads = true;
@@ -26,12 +39,6 @@ namespace PhotoGallery.Services.Fabric {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void BeginDataProv(IFabricClient pFab) {
-			vDataProvThread = new Thread(StartDataProvThread);
-			vDataProvThread.Start(pFab);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
 		private static void StartDataProvThread(object pFabClient) {
 			IFabricClient fab = (IFabricClient)pFabClient;
 			fab.UseDataProviderPerson = true;
@@ -39,24 +46,18 @@ namespace PhotoGallery.Services.Fabric {
 			Func<ISession, IList<FabricArtifact>> getArtList = (s => s
 				.QueryOver<FabricArtifact>()
 				.Where(x => x.ArtifactId == null && x.Creator == null)
+				.Take(10)
 				.List()
 			);
 
 			Func<ISession, IList<FabricFactor>> getFacList = (s => s
 				.QueryOver<FabricFactor>()
 				.Where(x => x.FactorId == null && x.Creator == null)
+				.Take(10)
 				.List()
 			);
 
-			while ( true ) {
-				SendAll(fab, getArtList, getFacList);
-
-				if ( StopThreads ) {
-					return;
-				}
-
-				Thread.Sleep(5000);
-			}
+			SendAll(fab, getArtList, getFacList);
 		}
 
 
@@ -69,7 +70,7 @@ namespace PhotoGallery.Services.Fabric {
 
 			using ( ISession s = BaseLogic.NewSession() ) {
 				artList = pGetArtList(s);
-			};
+			}
 
 			using ( ISession s = BaseLogic.NewSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
@@ -81,17 +82,29 @@ namespace PhotoGallery.Services.Fabric {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private static void SendArtifacts(IFabricClient pFab, ISession pSess, 
-																IEnumerable<FabricArtifact> pArtList) {
+																	IList<FabricArtifact> pArtList) {
+			Log.Debug("SendArtifacts: "+pArtList.Count);
+
 			foreach ( FabricArtifact art in pArtList ) {
-				Log.Debug("ArtToFab: "+art.Id+" / "+art.Name);
+				if ( StopThreads ) {
+					Log.Debug("SendArtifacts Stop!");
+					return;
+				}
 
-				FabInstance fi = new FabInstance() { ArtifactId = 10000+art.Id };
-				//FabInstance fi = pFab.Services.Modify.AddInstance
-				//	.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
+				try {
+					Log.Debug("SendArtifacts Art: "+art.Id+" / "+art.Name);
 
-				Log.Debug(" ... "+fi.ArtifactId);
-				art.ArtifactId = fi.ArtifactId;
-				pSess.Update(art);
+					FabInstance fi = new FabInstance { ArtifactId = 10000+art.Id };
+					//FabInstance fi = pFab.Services.Modify.AddInstance
+					//	.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
+
+					Log.Debug("SendArtifacts Fac: "+art.Id+" => "+fi.ArtifactId);
+					art.ArtifactId = fi.ArtifactId;
+					pSess.Update(art);
+				}
+				catch ( Exception e ) {
+					Log.Debug("SendArtifacts Err: "+art.Id+", "+e.Message);
+				}
 			}
 		}
 
