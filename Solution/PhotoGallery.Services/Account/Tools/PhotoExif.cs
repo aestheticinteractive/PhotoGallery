@@ -299,7 +299,6 @@ namespace PhotoGallery.Services.Account.Tools {
 			);
 			fb.AddEventor(
 				FabEnumsData.EventorTypeId.Occur,
-				FabEnumsData.EventorPrecisionId.Second,
 				val
 			);
 			pSess.Save(fb.ToFactor());

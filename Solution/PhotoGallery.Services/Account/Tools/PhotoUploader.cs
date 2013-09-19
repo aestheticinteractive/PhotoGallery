@@ -65,6 +65,8 @@ namespace PhotoGallery.Services.Account.Tools {
 				}
 
 				AddExif(pSess);
+
+				//TODO: Add URL class (and related Factors) to Fabric
 			}
 			catch ( Exception ex ) {
 				Log.Error("SaveFile failed: "+Result.Status);

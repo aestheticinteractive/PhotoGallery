@@ -49,8 +49,12 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
 
 		public FabEnumsData.EventorTypeId? EveType { get; private set; }
-		public FabEnumsData.EventorPrecisionId? EvePrecision { get; private set; }
-		public DateTime EveDateTime { get; private set; }
+		public long EveYear { get; private set; }
+		public byte? EveMonth { get; private set; }
+		public byte? EveDay { get; private set; }
+		public byte? EveHour { get; private set; }
+		public byte? EveMinute { get; private set; }
+		public byte? EveSecond { get; private set; }
 
 		public FabEnumsData.IdentorTypeId? IdenType { get; private set; }
 		public string IdenValue { get; private set; }
@@ -116,11 +120,16 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddEventor(FabEnumsData.EventorTypeId pEveType, 
-										FabEnumsData.EventorPrecisionId pEvePrec, DateTime pDateTime) {
+		public void AddEventor(FabEnumsData.EventorTypeId pEveType, DateTime pDateTime) {
+			var dt = pDateTime.ToUniversalTime();
+
 			EveType = pEveType;
-			EvePrecision = pEvePrec;
-			EveDateTime = pDateTime;
+			EveYear = dt.Year;
+			EveMonth = (byte?)dt.Month;
+			EveDay = (byte?)dt.Day;
+			EveHour = (byte?)dt.Hour;
+			EveMinute = (byte?)dt.Minute;
+			EveSecond = (byte?)dt.Second;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -165,8 +174,12 @@ namespace PhotoGallery.Services.Account.Tools {
 			ff.DirRelatedActionId = (byte?)DirRelatedAction;
 
 			ff.EveTypeId = (byte?)EveType;
-			ff.EvePrecisionId = (byte?)EvePrecision;
-			ff.EveDateTime = EveDateTime.ToUniversalTime().Ticks;
+			ff.EveYear = EveYear;
+			ff.EveMonth = EveMonth;
+			ff.EveDay = EveDay;
+			ff.EveHour = EveHour;
+			ff.EveMinute = EveMinute;
+			ff.EveSecond = EveSecond;
 
 			ff.IdenTypeId = (byte?)IdenType;
 			ff.IdenValue = IdenValue;

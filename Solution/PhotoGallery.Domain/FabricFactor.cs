@@ -26,8 +26,12 @@
 		public virtual byte? DirRelatedActionId { get; set; }
 
 		public virtual byte? EveTypeId { get; set; }
-		public virtual byte? EvePrecisionId { get; set; }
-		public virtual long? EveDateTime { get; set; }
+		public virtual long? EveYear { get; set; }
+		public virtual byte? EveMonth { get; set; }
+		public virtual byte? EveDay { get; set; }
+		public virtual byte? EveHour { get; set; }
+		public virtual byte? EveMinute { get; set; }
+		public virtual byte? EveSecond { get; set; }
 
 		public virtual byte? IdenTypeId { get; set; }
 		public virtual string IdenValue { get; set; }

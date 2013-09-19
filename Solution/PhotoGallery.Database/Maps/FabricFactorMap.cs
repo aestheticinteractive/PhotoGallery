@@ -39,8 +39,12 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.DirRelatedActionId).Nullable();
 
 			Map(x => x.EveTypeId).Nullable();
-			Map(x => x.EvePrecisionId).Nullable();
-			Map(x => x.EveDateTime).Nullable();
+			Map(x => x.EveYear).Nullable();
+			Map(x => x.EveMonth).Nullable();
+			Map(x => x.EveDay).Nullable();
+			Map(x => x.EveHour).Nullable();
+			Map(x => x.EveMinute).Nullable();
+			Map(x => x.EveSecond).Nullable();
 
 			Map(x => x.IdenTypeId).Nullable();
 			Map(x => x.IdenValue).Length(128).Nullable();
