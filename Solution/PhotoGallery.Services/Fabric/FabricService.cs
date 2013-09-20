@@ -6,6 +6,7 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services.Account.Tools;
 
 namespace PhotoGallery.Services.Fabric {
 	
@@ -60,9 +61,18 @@ namespace PhotoGallery.Services.Fabric {
 				.List()
 			);
 
+			//FabricArtifact primAlias = null;
+			//FabricArtifact relAlias = null;
+
 			Func<ISession, IList<FabricFactor>> getFacList = (s => s
 				.QueryOver<FabricFactor>()
 				.Where(x => x.FactorId == null && x.Creator == null)
+				/*.JoinAlias(x => x.Primary, () => primAlias, JoinType.LeftOuterJoin)
+					.Where(() => primAlias == null || primAlias.ArtifactId != null)
+				.JoinAlias(x => x.Related, () => relAlias, JoinType.LeftOuterJoin)
+					.Where(() => relAlias == null || relAlias.ArtifactId != null)*/
+				.Fetch(x => x.Primary).Eager
+				.Fetch(x => x.Related).Eager
 				.Take(10)
 				.List()
 			);
@@ -73,50 +83,83 @@ namespace PhotoGallery.Services.Fabric {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private static void SendAll(IFabricClient pFab, 
-													Func<ISession, IList<FabricArtifact>> pGetArtList,
-													Func<ISession, IList<FabricFactor>> pGetFacList) {
-			while ( true ) {
-				IList<FabricArtifact> artList;
+		private static void SendAll(IFabricClient pFab, Func<ISession, IList<FabricArtifact>> pGetArts,
+													Func<ISession, IList<FabricFactor>> pGetFacs) {
+			bool restart;
 
-				using ( ISession s = BaseService.NewSession() ) {
-					artList = pGetArtList(s);
+			while ( LoadAndSendArtifacts(pFab, pGetArts) ) {
+				//continue...
+			}
+			
+			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {
+				if ( restart ) {
+					SendAll(pFab, pGetArts, pGetFacs);
+					return;
 				}
+			}
+		}
 
-				Log.Debug("SendAll Artifacts: "+artList.Count);
+		/*--------------------------------------------------------------------------------------------*/
+		private static bool LoadAndSendArtifacts(IFabricClient pFab, 
+													Func<ISession, IList<FabricArtifact>> pGetArts) {
+			IList<FabricArtifact> artList;
 
-				if ( artList.Count == 0 ) {
-					break;
-				}
+			using ( ISession s = BaseService.NewSession() ) {
+				artList = pGetArts(s);
+			}
 
-				using ( ISession s = BaseService.NewSession() ) {
-					using ( ITransaction tx = s.BeginTransaction() ) {
-						SendArtifacts(pFab, s, artList);
-						tx.Commit();
-					}
+			LogDebug(pFab, "SendAll Artifacts: "+artList.Count);
+
+			if ( artList.Count == 0 ) {
+				return false;
+			}
+
+			using ( ISession s = BaseService.NewSession() ) {
+				using ( ITransaction tx = s.BeginTransaction() ) {
+					SendArtifacts(pFab, s, artList);
+					tx.Commit();
 				}
 			}
 
-			while ( true ) {
-				IList<FabricFactor> facList;
+			return true;
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		private static bool LoadAndSendFactors(IFabricClient pFab, 
+								Func<ISession, IList<FabricFactor>> pGetFacs, out bool pRestartAll) {
+			IList<FabricFactor> facList;
+			int skip = 0;
 
-				using ( ISession s = BaseService.NewSession() ) {
-					facList = pGetFacList(s);
+			using ( ISession s = BaseService.NewSession() ) {
+				facList = pGetFacs(s);
+			}
+
+			foreach ( FabricFactor ff in facList ) {
+				if ( ff.Primary != null && ff.Primary.ArtifactId == null ) {
+					skip++;
+					facList.Remove(ff);
 				}
-
-				Log.Debug("SendAll Factors: "+facList.Count);
-
-				if ( facList.Count == 0 ) {
-					break;
-				}
-
-				using ( ISession s = BaseService.NewSession() ) {
-					using ( ITransaction tx = s.BeginTransaction() ) {
-						SendFactors(pFab, s, facList);
-						tx.Commit();
-					}
+				else if ( ff.Related != null && ff.Related.ArtifactId == null ) {
+					skip++;
+					facList.Remove(ff);
 				}
 			}
+
+			LogDebug(pFab, "SendAll Factors: "+facList.Count+" (skip "+skip+")");
+			pRestartAll = (skip > 0);
+
+			if ( facList.Count == 0 ) {
+				return false;
+			}
+
+			using ( ISession s = BaseService.NewSession() ) {
+				using ( ITransaction tx = s.BeginTransaction() ) {
+					SendFactors(pFab, s, facList);
+					tx.Commit();
+				}
+			}
+
+			return true;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -124,7 +167,7 @@ namespace PhotoGallery.Services.Fabric {
 																IEnumerable<FabricArtifact> pArtList) {
 			foreach ( FabricArtifact art in pArtList ) {
 				if ( StopThreads ) {
-					Log.Debug("SendArtifacts Stop!");
+					LogDebug(pFab, "SendArtifacts Stop!");
 					return;
 				}
 
@@ -133,12 +176,12 @@ namespace PhotoGallery.Services.Fabric {
 					//FabInstance fi = pFab.Services.Modify.AddInstance
 					//	.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
 
-					Log.Debug("SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
+					LogDebug(pFab, "SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
 					art.ArtifactId = fi.ArtifactId;
 					pSess.Update(art);
 				}
 				catch ( Exception e ) {
-					Log.Debug("SendArtifacts Err: "+art.Id+", "+e.Message);
+					LogDebug(pFab, "SendArtifacts Err: "+art.Id+", "+e.Message);
 				}
 			}
 		}
@@ -147,11 +190,47 @@ namespace PhotoGallery.Services.Fabric {
 		private static void SendFactors(IFabricClient pFab, ISession pSess,
 																IEnumerable<FabricFactor> pFacList) {
 			var batch = new List<FabBatchNewFactor>();
-			
+			var batchMap = new Dictionary<long, FabricFactor>();
+			var fakeBatchRes = new List<FabBatchResult>();
+
 			foreach ( FabricFactor fac in pFacList ) {
-				var fb = new FabBatchNewFactor();
+				FabBatchNewFactor fb = FabricFactorBuilder.DbFactorToBatchFactor(fac);
 				batch.Add(fb);
+				batchMap.Add(fb.BatchId, fac);
+
+				var fbr = new FabBatchResult { BatchId = fb.BatchId, ResultId = 10000+fb.BatchId };
+				fakeBatchRes.Add(fbr);
 			}
+
+			if ( StopThreads ) {
+				LogDebug(pFab, "SendFactorsStop!");
+				return;
+			}
+
+			try {
+				IList<FabBatchResult> batchRes = fakeBatchRes;
+				//IList<FabBatchResult> batchRes = pFab.Services.Modify.AddFactors
+				//	.Post(batch.ToArray()).Data;
+
+				foreach ( FabBatchResult fbr in batchRes ) {
+					LogDebug(pFab, "SendFactors Fac: "+fbr.BatchId+" => "+fbr.ResultId);
+
+					FabricFactor ff = batchMap[fbr.BatchId];
+					ff.FactorId = fbr.ResultId;
+					pSess.Update(ff);
+				}
+				
+			}
+			catch ( Exception e ) {
+				LogDebug(pFab, "SendFactors Err: "+e.Message);
+			}
+		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		private static void LogDebug(IFabricClient pFab, string pText) {
+			Log.Debug("[Fabric Bg "+(pFab.UseDataProviderPerson ? "DP" : "User")+"] "+pText);
 		}
 
 	}

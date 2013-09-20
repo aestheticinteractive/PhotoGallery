@@ -45,9 +45,9 @@ namespace PhotoGallery.Services.Account {
 					////
 
 					var cre = new DateTime(a.Created);
-					var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);					
-					
-					var fb = new FabricFactorBuilder(userArt, "<album "+a.Title+"> refers to "+
+					var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);
+
+					var fb = new FabricFactorBuilder(null, "<album "+a.Title+"> refers to "+
 						"'Kinstner Photo Gallery' ('photograph album') [iden: 'key' "+a.Id+"]");
 					fb.Init(
 						albumArt,
@@ -65,7 +65,7 @@ namespace PhotoGallery.Services.Account {
 
 					////
 
-					fb = new FabricFactorBuilder(userArt, 
+					fb = new FabricFactorBuilder(null, 
 						"<album "+a.Title+"> is a <photograph album>");
 					fb.Init(
 						albumArt,
@@ -78,7 +78,7 @@ namespace PhotoGallery.Services.Account {
 
 					////
 
-					fb = new FabricFactorBuilder(userArt, 
+					fb = new FabricFactorBuilder(null, 
 						"<album> created by <user "+u.Name+"> [eventor: occur "+cre+"]");
 					fb.Init(
 						albumArt,

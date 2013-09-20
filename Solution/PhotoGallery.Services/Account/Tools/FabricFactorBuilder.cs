@@ -203,6 +203,72 @@ namespace PhotoGallery.Services.Account.Tools {
 			return ff;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public static FabBatchNewFactor DbFactorToBatchFactor(FabricFactor pFac) {
+			Func<long?, long> toLong = (x => (x == null ? 0 : (long)x));
+			Func<byte?, byte> toByte = (x => (x == null ? (byte)0 : (byte)x));
+			Func<double?, double> toDouble = (x => (x == null ? 0 : (double)x));
+
+			var bnf = new FabBatchNewFactor();
+			bnf.BatchId = pFac.Id;
+			bnf.PrimaryArtifactId = (pFac.Primary == null ? 
+				pFac.PrimaryArtifactId : toLong(pFac.Primary.ArtifactId));
+			bnf.RelatedArtifactId = (pFac.Related == null ? 
+				pFac.RelatedArtifactId : toLong(pFac.Related.ArtifactId));
+			bnf.FactorAssertionId = pFac.FactorAssertionId;
+			bnf.IsDefining = pFac.IsDefining;
+			bnf.Note = pFac.Note;
+
+			bnf.Descriptor = new FabBatchNewFactorDescriptor();
+			bnf.Descriptor.TypeId = pFac.DesTypeId;
+			bnf.Descriptor.PrimaryArtifactRefineId = pFac.DesPrimaryArtifactRefineId;
+			bnf.Descriptor.RelatedArtifactRefineId = pFac.DesRelatedArtifactRefineId;
+			bnf.Descriptor.TypeRefineId = pFac.DesTypeRefineId;
+
+			if ( pFac.DirTypeId != null ) {
+				bnf.Director = new FabBatchNewFactorDirector();
+				bnf.Director.TypeId = toByte(pFac.DirTypeId);
+				bnf.Director.PrimaryActionId = toByte(pFac.DirPrimaryActionId);
+				bnf.Director.RelatedActionId = toByte(pFac.DirRelatedActionId);
+			}
+
+			if ( pFac.EveTypeId != null ) {
+				bnf.Eventor = new FabBatchNewFactorEventor();
+				bnf.Eventor.TypeId = toByte(pFac.EveTypeId);
+				bnf.Eventor.Year = toLong(pFac.EveYear);
+				bnf.Eventor.Month = toByte(pFac.EveMonth);
+				bnf.Eventor.Day = toByte(pFac.EveDay);
+				bnf.Eventor.Hour = toByte(pFac.EveHour);
+				bnf.Eventor.Minute = toByte(pFac.EveMinute);
+				bnf.Eventor.Second = toByte(pFac.EveSecond);
+			}
+
+			if ( pFac.IdenTypeId != null ) {
+				bnf.Identor = new FabBatchNewFactorIdentor();
+				bnf.Identor.TypeId = toByte(pFac.IdenTypeId);
+				bnf.Identor.Value = pFac.IdenValue;
+			}
+
+			if ( pFac.LocTypeId != null ) {
+				bnf.Locator = new FabBatchNewFactorLocator();
+				bnf.Locator.TypeId = toByte(pFac.LocTypeId);
+				bnf.Locator.ValueX = toDouble(pFac.LocValueX);
+				bnf.Locator.ValueY = toDouble(pFac.LocValueY);
+				bnf.Locator.ValueZ = toDouble(pFac.LocValueZ);
+			}
+
+			if ( pFac.VecTypeId != null ) {
+				bnf.Vector = new FabBatchNewFactorVector();
+				bnf.Vector.TypeId = toByte(pFac.VecTypeId);
+				bnf.Vector.AxisArtifactId = toLong(pFac.VecAxisArtifactId);
+				bnf.Vector.UnitId = toByte(pFac.VecUnitId);
+				bnf.Vector.UnitPrefixId = toByte(pFac.VecUnitPrefixId);
+				bnf.Vector.Value = toLong(pFac.VecValue);
+			}
+
+			return bnf;
+		}
+
 	}
 
 }

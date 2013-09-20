@@ -248,7 +248,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void AddBasicData(ISession pSess) {
-			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" refers to 'Kinstner Photo Gallery' "+
+			var fb = new FabricFactorBuilder(null, vPhotoLbl+" refers to 'Kinstner Photo Gallery' "+
 				"('photograph') [iden: 'key' "+vPhoto.Id+"]");
 			fb.Init(
 				vPhotoArt,
@@ -266,7 +266,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			////
 
-			fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" belongs to <album "+vAlbum.Title+">");
+			fb = new FabricFactorBuilder(null, vPhotoLbl+" belongs to <album "+vAlbum.Title+">");
 			fb.Init(
 				vPhotoArt,
 				FabEnumsData.DescriptorTypeId.BelongsTo,
@@ -280,7 +280,7 @@ namespace PhotoGallery.Services.Account.Tools {
 
 			var cre = new DateTime(vPhoto.Created);
 
-			fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" ('computer file') created by ('upload') "+
+			fb = new FabricFactorBuilder(null, vPhotoLbl+" ('computer file') created by ('upload') "+
 				"<user "+vPhoto.FabricUser.Name+"> [eventor: occur "+cre+"]");
 			fb.Init(
 				vPhotoArt,
