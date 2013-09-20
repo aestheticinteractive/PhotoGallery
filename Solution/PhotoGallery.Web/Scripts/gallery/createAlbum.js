@@ -115,7 +115,8 @@ function resizeAndUploadImage(file, img, exifData) {
 		AlbumId: caData.albumId,
 		Filename: file.name,
 		ExifData: JSON.stringify(exifData),
-		ImageData: canvas.toDataURL("image/jpeg", 1.0)
+		ImageData: canvas.toDataURL("image/jpeg", 1.0),
+		LastImage: (caData.uploadIndex == caData.imageCount-1)
 	};
 	
 	/*var img2 = document.createElement("img");

@@ -34,10 +34,12 @@ namespace PhotoGallery.Services.Fabric {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public static void CheckForNewTasks(IFabricClient pUserFabClient=null) {
+			LogDebug(DataProvClient, "CheckForNewTasks");
 			var t = new Thread(StartDataProvThread);
 			t.Start(DataProvClient);
 
 			if ( pUserFabClient != null ) {
+				LogDebug(pUserFabClient, "CheckForNewTasks");
 				//t = new Thread(StartUserThread);
 				//t.Start(pFab);
 			}
@@ -61,16 +63,9 @@ namespace PhotoGallery.Services.Fabric {
 				.List()
 			);
 
-			//FabricArtifact primAlias = null;
-			//FabricArtifact relAlias = null;
-
 			Func<ISession, IList<FabricFactor>> getFacList = (s => s
 				.QueryOver<FabricFactor>()
 				.Where(x => x.FactorId == null && x.Creator == null)
-				/*.JoinAlias(x => x.Primary, () => primAlias, JoinType.LeftOuterJoin)
-					.Where(() => primAlias == null || primAlias.ArtifactId != null)
-				.JoinAlias(x => x.Related, () => relAlias, JoinType.LeftOuterJoin)
-					.Where(() => relAlias == null || relAlias.ArtifactId != null)*/
 				.Fetch(x => x.Primary).Eager
 				.Fetch(x => x.Related).Eager
 				.Take(10)

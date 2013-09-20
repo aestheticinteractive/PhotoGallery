@@ -6,6 +6,7 @@ using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
 using PhotoGallery.Services.Account.Tools;
+using PhotoGallery.Services.Fabric;
 
 namespace PhotoGallery.Services.Account {
 	
@@ -102,8 +103,8 @@ namespace PhotoGallery.Services.Account {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebUploadResult AddAlbumPhoto(HttpServerUtilityBase pServer, int pAlbumId,
-												string pFilename, string pExifData, string pImageData) {
+		public WebUploadResult AddAlbumPhoto(HttpServerUtilityBase pServer, int pAlbumId, 
+							string pFilename, string pExifData, string pImageData, bool pLastImage) {
 			using ( ISession s = NewSession() ) {
 				FabricUser u = HomeService.GetCurrentUser(Fab, s);
 
@@ -119,6 +120,11 @@ namespace PhotoGallery.Services.Account {
 
 				var up = new PhotoUploader(pServer, u, a, pFilename, pExifData, pImageData);
 				up.SaveFile(s);
+
+				if ( pLastImage ) {
+					FabricService.CheckForNewTasks(Fab);
+				}
+
 				return up.Result;
 			}
 		}

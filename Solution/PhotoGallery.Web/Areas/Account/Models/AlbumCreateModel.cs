@@ -39,6 +39,7 @@ namespace PhotoGallery.Web.Areas.Account.Models {
 		public string Filename { get; set; }
 		public string ExifData { get; set; }
 		public string ImageData { get; set; }
+		public bool LastImage { get; set; }
 
 	}
 

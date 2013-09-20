@@ -57,7 +57,7 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		[HttpPost]
 		public virtual ActionResult UploadImage(AlbumCreateImageModel pModel) {
 			WebUploadResult res = vAlbums.AddAlbumPhoto(Server, pModel.AlbumId,
-				pModel.Filename, pModel.ExifData, pModel.ImageData);
+				pModel.Filename, pModel.ExifData, pModel.ImageData, pModel.LastImage);
 			
 			if ( res.Status == WebUploadResult.UploadStatus.Success ) {
 				return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
