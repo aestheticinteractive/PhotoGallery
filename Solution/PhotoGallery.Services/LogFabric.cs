@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Logging;
 using PhotoGallery.Infrastructure;
 
@@ -10,38 +9,40 @@ namespace PhotoGallery.Services {
 	[ExcludeFromCodeCoverage]
 	public class LogFabric : IFabricLog {
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		public void Info(IFabricClientConfig pConfig, string pText) {
-			Output(pConfig, pText, Log.Info);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public void Debug(IFabricClientConfig pConfig, string pText) {
-			Output(pConfig, pText, Log.Debug);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public void Error(IFabricClientConfig pConfig, string pText) {
-			Output(pConfig, pText, Log.Error);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public void Fatal(IFabricClientConfig pConfig, string pText) {
-			Output(pConfig, pText, Log.Fatal);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public void Warn(IFabricClientConfig pConfig, string pText) {
-			Output(pConfig, pText, Log.Warn);
-		}
+		private const string Empty32 = "                                ";
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void Output(IFabricClientConfig pConfig, string pText, Action<String> pAction) {
-			pAction("FAB["+pConfig.ConfigKey+"]: "+pText);
+		public void Info(string pSessionId, string pText) {
+			Output(pSessionId, pText, Log.Info);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void Debug(string pSessionId, string pText) {
+			Output(pSessionId, pText, Log.Debug);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void Error(string pSessionId, string pText) {
+			Output(pSessionId, pText, Log.Error);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void Fatal(string pSessionId, string pText) {
+			Output(pSessionId, pText, Log.Fatal);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void Warn(string pSessionId, string pText) {
+			Output(pSessionId, pText, Log.Warn);
+		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		private void Output(string pSessionId, string pText, Action<String> pAction) {
+			pAction("FAB["+(pSessionId ?? Empty32)+"]: "+pText);
 		}
 
 	}

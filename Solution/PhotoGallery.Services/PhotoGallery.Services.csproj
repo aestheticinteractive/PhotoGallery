@@ -56,6 +56,7 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
+    <Compile Include="Fabric\Tools\FabricExporter.cs" />
     <Compile Include="Fabric\FabricService.cs" />
     <Compile Include="OneTimeService.cs" />
     <Compile Include="LogFabric.cs" />
@@ -70,9 +71,9 @@
     <Compile Include="Util\ImageUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Packages\FabricClient.0.2.4.0\lib\Fabric.Clients.Cs.dll</HintPath>
+      <HintPath>..\..\Packages\FabricClient.0.2.4.1\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -86,6 +87,7 @@
     <Reference Include="System" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
