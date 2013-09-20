@@ -110,8 +110,9 @@ namespace PhotoGallery.Services.Account.Tools {
 				using ( ITransaction tx = pSess.BeginTransaction() ) {
 					var fa = new FabricArtifact();
 					fa.Type = (byte)FabricArtifact.ArtifactType.Photo;
-					fa.Name = "Photo "+(Result.Filename ?? "unknown");
+					fa.Name = Result.Filename;
 					fa.Disamb = "Kinstner Photo Gallery";
+					fa.Creator = pSess.Load<FabricArtifact>(vUser.FabricArtifact.Id);
 					pSess.Save(fa);
 
 					vPhoto = new Photo();

@@ -29,11 +29,14 @@ namespace PhotoGallery.Services.Account {
 					return null;
 				}
 
+				var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);
+
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					var albumArt = new FabricArtifact();
 					albumArt.Type = (byte)FabricArtifact.ArtifactType.Album;
 					albumArt.Name = pTitle;
 					albumArt.Disamb = "photograph album";
+					albumArt.Creator = userArt;
 					s.Save(albumArt);
 
 					var a = new Album();
@@ -46,7 +49,6 @@ namespace PhotoGallery.Services.Account {
 					////
 
 					var cre = new DateTime(a.Created);
-					var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);
 
 					var fb = new FabricFactorBuilder(null, "<album "+a.Title+"> refers to "+
 						"'Kinstner Photo Gallery' ('photograph album') [iden: 'key' "+a.Id+"]");
