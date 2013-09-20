@@ -84,12 +84,23 @@ namespace PhotoGallery.Services.Account.Tools {
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
 				foreach ( KeyValuePair<string, string> pair in vTagMap ) {
 					string key = pair.Key;
+					string val = pair.Value;
 
-					if ( key.Length >= 5 && key.Substring(0, 5) == "Thumb" ) { continue; }
+					if ( key == "undefined" ) {
+						continue;
+					}
+
+					if ( key.Length >= 5 && key.Substring(0, 5) == "Thumb" ) {
+						continue;
+					}
+
+					if ( val.Length > 128 ) {
+						val = val.Substring(0, 128);
+					}
 
 					var pm = new PhotoMeta();
 					pm.Label = key;
-					pm.Value = pair.Value;
+					pm.Value = val;
 					pm.Photo = vPhoto;
 					pSess.Save(pm);
 				}

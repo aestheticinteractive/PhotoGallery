@@ -69,10 +69,10 @@ namespace PhotoGallery.Services.Account {
 					////
 
 					fb = new FabricFactorBuilder(null, 
-						"<album "+a.Title+"> is a <photograph album>");
+						"<album "+a.Title+"> is an instance of <photograph album>");
 					fb.Init(
 						albumArt,
-						FabEnumsData.DescriptorTypeId.IsA,
+						FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
 						LiveArtifactId.PhotographAlbum,
 						FabEnumsData.FactorAssertionId.Fact,
 						true

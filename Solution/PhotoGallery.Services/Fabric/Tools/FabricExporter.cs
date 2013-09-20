@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define SEND_TO_FABRIC
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Fabric.Clients.Cs;
@@ -81,17 +83,12 @@ namespace PhotoGallery.Services.Fabric.Tools {
 		private static void SendAll(IFabricClient pFab, Func<ISession, IList<FabricArtifact>> pGetArts,
 													Func<ISession, IList<FabricFactor>> pGetFacs) {
 			bool restart;
+			while ( LoadAndSendArtifacts(pFab, pGetArts) ) {}
+			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {}
 
-			while ( LoadAndSendArtifacts(pFab, pGetArts) ) {
-				//continue...
-			}
-			
-			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {
-				if ( restart ) {
-					LogDebug(pFab, "SendAll Restart!");
-					SendAll(pFab, pGetArts, pGetFacs);
-					return;
-				}
+			if ( restart ) {
+				LogDebug(pFab, "SendAll Restart!");
+				SendAll(pFab, pGetArts, pGetFacs);
 			}
 		}
 
@@ -143,15 +140,13 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			}
 
 			int skip = facList.Count-saveFacList.Count;
-
+			facList.Clear();
 			pRestartAll = (skip > 0);
 			LogDebug(pFab, "SendAll Factors: "+saveFacList.Count+" (+ skip "+skip+")");
 
-			if ( facList.Count == 0 ) {
+			if ( saveFacList.Count == 0 ) {
 				return false;
 			}
-
-			facList.Clear();
 
 			using ( ISession s = BaseService.NewSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
@@ -175,16 +170,19 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				}
 
 				try {
+#if SEND_TO_FABRIC
+					FabInstance fi = pFab.Services.Modify.AddInstance
+						.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
+#else
 					var fi = new FabInstance { ArtifactId = 10000+art.Id };
-					//FabInstance fi = pFab.Services.Modify.AddInstance
-					//	.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
+#endif
 
 					LogDebug(pFab, "SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
 					art.ArtifactId = fi.ArtifactId;
 					pSess.Update(art);
 				}
 				catch ( Exception e ) {
-					LogDebug(pFab, "SendArtifacts Err: "+art.Id+", "+e.Message);
+					LogError(pFab, "SendArtifacts Err: "+art.Id+", "+e.Message, e);
 				}
 			}
 		}
@@ -211,9 +209,12 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			}
 
 			try {
+#if SEND_TO_FABRIC
+				IList<FabBatchResult> batchRes = pFab.Services.Modify.AddFactors
+					.Post(batch.ToArray()).Data;
+#else
 				IList<FabBatchResult> batchRes = fakeBatchRes;
-				//IList<FabBatchResult> batchRes = pFab.Services.Modify.AddFactors
-				//	.Post(batch.ToArray()).Data;
+#endif
 
 				foreach ( FabBatchResult fbr in batchRes ) {
 					LogDebug(pFab, "SendFactors Fac: "+fbr.BatchId+" => "+fbr.ResultId);
@@ -225,15 +226,25 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				
 			}
 			catch ( Exception e ) {
-				LogDebug(pFab, "SendFactors Err: "+e.Message);
+				LogError(pFab, "SendFactors Err: "+e.Message, e);
 			}
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
+		private static string GetLogPrefix(IFabricClient pFab) {
+			return "FabBg["+(pFab.UseDataProviderPerson ? "DP" : "User")+"] ";
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
 		private static void LogDebug(IFabricClient pFab, string pText) {
-			Log.Debug("FabBg["+(pFab.UseDataProviderPerson ? "DP" : "User")+"] "+pText);
+			Log.Debug(GetLogPrefix(pFab)+pText);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private static void LogError(IFabricClient pFab, string pText, Exception pEx) {
+			Log.Error(GetLogPrefix(pFab)+pText, pEx);
 		}
 
 	}
