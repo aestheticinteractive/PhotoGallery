@@ -10,7 +10,7 @@ using PhotoGallery.Services.Main.Dto;
 namespace PhotoGallery.Services.Main {
 	
 	/*================================================================================================*/
-	public class HomeService : BaseLogic {
+	public class HomeService : BaseService {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

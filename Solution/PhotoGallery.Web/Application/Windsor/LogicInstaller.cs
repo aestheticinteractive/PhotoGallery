@@ -13,8 +13,8 @@ namespace PhotoGallery.Web.Application.Windsor {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public void Install(IWindsorContainer pCont, IConfigurationStore pStore) {
-			pCont.Register(Classes.FromAssemblyContaining<BaseLogic>()
-				.BasedOn<BaseLogic>()
+			pCont.Register(Classes.FromAssemblyContaining<BaseService>()
+				.BasedOn<BaseService>()
 				.LifestyleTransient());
 
 			pCont.Register(Component.For<IFabricClient>().ImplementedBy<FabricClient>());

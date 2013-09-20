@@ -1,33 +1,40 @@
 ﻿using Fabric.Clients.Cs;
 using NHibernate;
 using PhotoGallery.Database;
+using PhotoGallery.Services.Fabric;
 
 namespace PhotoGallery.Services {
 
 	/*================================================================================================*/
-	public class BaseLogic {
+	public class BaseService {
 
 		protected IFabricClient Fab { get; private set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public BaseLogic(IFabricClient pFab) {
+		public BaseService(IFabricClient pFab) {
 			Fab = pFab;
-			Fab.Config.Logger = new LogFabric();
-			//OneTimeLogic.CreateIsoSpeedClass(pFab);
+			FabricService.SetupClientLogger(Fab);
+		}
 
-			if ( Connect.SessionFactory == null ) {
-				Connect.InitOnce();
-				Connect.UpdateSchema();
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		public static void InitDatabase() {
+			if ( Connect.SessionFactory != null ) {
+				return;
 			}
+
+			Connect.InitOnce();
+			Connect.UpdateSchema();
+			//OneTimeLogic.CreateIsoSpeedClass(pFab);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		internal static ISession NewSession() {
 			return new SessionProvider().OpenSession();
 		}
-
 	}
 
 }

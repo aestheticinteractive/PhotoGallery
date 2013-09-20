@@ -5,7 +5,7 @@ using PhotoGallery.Infrastructure;
 namespace PhotoGallery.Services {
 
 	/*================================================================================================*/
-	internal class OneTimeLogic {
+	internal class OneTimeService {
 
 		private static bool IsoSpeedCreated;
 

@@ -10,6 +10,7 @@ using Castle.Windsor.Installer;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services;
 using PhotoGallery.Services.Fabric;
 using PhotoGallery.Web.Application.Windsor;
 
@@ -25,14 +26,16 @@ namespace PhotoGallery.Web {
 		private static string FabricAppSecret;
 		private static long FabricDataProvId;
 
+		private static IFabricSessionContainer FabricDataProvSess;
 		private static IFabricClient FabricDataProvClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		protected void Application_Start() {
-			SetupFabricClient();
 			Log.ConfigureOnce();
+			BaseService.InitDatabase();
+			SetupFabricClient();
 
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -74,15 +77,20 @@ namespace PhotoGallery.Web {
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
+			FabricDataProvSess = new FabricSessionContainer();
 			string redir = BaseUrl+"/Oauth/FabricRedirect";
 
 			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
 				FabricAppId, FabricAppSecret, FabricDataProvId, redir, FabricSessProv);
 
-			FabricClient.InitOnce(config);
+			var dataProvConfig = new FabricClientConfig("dataProv", "http://api.inthefabric.com",
+				FabricAppId, FabricAppSecret, FabricDataProvId, redir, (k => FabricDataProvSess));
 
-			FabricDataProvClient = new FabricClient();
-			//FabricService.BeginDataProv(FabricDataProvClient);
+			FabricClient.InitOnce(config);
+			FabricClient.AddConfig(dataProvConfig);
+
+			FabricDataProvClient = new FabricClient("dataProv");
+			FabricService.SetDataProvClient(FabricDataProvClient);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

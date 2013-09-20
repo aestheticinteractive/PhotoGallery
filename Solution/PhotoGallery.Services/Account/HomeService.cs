@@ -7,7 +7,7 @@ using PhotoGallery.Services.Account.Dto;
 namespace PhotoGallery.Services.Account {
 	
 	/*================================================================================================*/
-	public class HomeService : BaseLogic {
+	public class HomeService : BaseService {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,21 +8,21 @@ namespace PhotoGallery.Web.Controllers {
 	/*================================================================================================*/
 	public abstract partial class BaseController : Controller {
 
-		private readonly List<BaseLogic> vLogicList;
+		private readonly List<BaseService> vLogicList;
 		private Dictionary<string, bool> vLoginReqForActionMap;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public BaseController() {
-			vLogicList = new List<BaseLogic>();
+			vLogicList = new List<BaseService>();
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		protected void RegisterInjectedLogic(BaseLogic pLogic) {
-			vLogicList.Add(pLogic);
+		protected void RegisterInjectedLogic(BaseService pService) {
+			vLogicList.Add(pService);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

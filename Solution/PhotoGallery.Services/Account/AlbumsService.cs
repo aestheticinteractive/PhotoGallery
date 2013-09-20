@@ -10,7 +10,7 @@ using PhotoGallery.Services.Account.Tools;
 namespace PhotoGallery.Services.Account {
 	
 	/*================================================================================================*/
-	public class AlbumsService : BaseLogic {
+	public class AlbumsService : BaseService {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

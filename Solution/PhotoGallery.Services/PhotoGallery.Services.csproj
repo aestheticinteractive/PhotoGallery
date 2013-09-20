@@ -53,11 +53,11 @@
     <Compile Include="Account\Tools\PhotoExif.cs" />
     <Compile Include="Account\Tools\PhotoUploader.cs" />
     <Compile Include="Account\Dto\WebUser.cs" />
-    <Compile Include="BaseLogic.cs" />
+    <Compile Include="BaseService.cs" />
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
     <Compile Include="Fabric\FabricService.cs" />
-    <Compile Include="OneTimeLogic.cs" />
+    <Compile Include="OneTimeService.cs" />
     <Compile Include="LogFabric.cs" />
     <Compile Include="Main\Dto\WebAlbum.cs" />
     <Compile Include="Main\Dto\WebAlbumCore.cs" />
