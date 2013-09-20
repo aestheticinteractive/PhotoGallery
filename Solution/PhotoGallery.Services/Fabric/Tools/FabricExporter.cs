@@ -88,6 +88,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			
 			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {
 				if ( restart ) {
+					LogDebug(pFab, "SendAll Restart!");
 					SendAll(pFab, pGetArts, pGetFacs);
 					return;
 				}
@@ -123,7 +124,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 		private static bool LoadAndSendFactors(IFabricClient pFab, 
 								Func<ISession, IList<FabricFactor>> pGetFacs, out bool pRestartAll) {
 			IList<FabricFactor> facList;
-			int skip = 0;
+			var saveFacList = new List<FabricFactor>();
 
 			using ( ISession s = BaseService.NewSession() ) {
 				facList = pGetFacs(s);
@@ -131,25 +132,30 @@ namespace PhotoGallery.Services.Fabric.Tools {
 
 			foreach ( FabricFactor ff in facList ) {
 				if ( ff.Primary != null && ff.Primary.ArtifactId == null ) {
-					skip++;
-					facList.Remove(ff);
+					continue;
 				}
-				else if ( ff.Related != null && ff.Related.ArtifactId == null ) {
-					skip++;
-					facList.Remove(ff);
+				
+				if ( ff.Related != null && ff.Related.ArtifactId == null ) {
+					continue;
 				}
+
+				saveFacList.Add(ff);
 			}
 
-			LogDebug(pFab, "SendAll Factors: "+facList.Count+" (skip "+skip+")");
+			int skip = facList.Count-saveFacList.Count;
+
 			pRestartAll = (skip > 0);
+			LogDebug(pFab, "SendAll Factors: "+saveFacList.Count+" (+ skip "+skip+")");
 
 			if ( facList.Count == 0 ) {
 				return false;
 			}
 
+			facList.Clear();
+
 			using ( ISession s = BaseService.NewSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
-					SendFactors(pFab, s, facList);
+					SendFactors(pFab, s, saveFacList);
 					tx.Commit();
 				}
 			}
