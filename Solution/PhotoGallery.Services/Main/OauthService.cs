@@ -44,7 +44,7 @@ namespace PhotoGallery.Services.Main {
 		/*--------------------------------------------------------------------------------------------*/
 		private void CreateUser() {
 			using ( ISession sess = NewSession() ) {
-				FabUser fabUser = Fab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+				FabUser fabUser = FabricService.GetActiveUser(Fab);
 
 				FabricUser u = sess.QueryOver<FabricUser>()
 					.Where(x => x.Name == fabUser.Name)

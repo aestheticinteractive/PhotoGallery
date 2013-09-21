@@ -23,7 +23,7 @@ namespace PhotoGallery.Web.Controllers {
 			var m = new HeaderModel();
 			m.IsPersonAuthenticated = vAcctHome.IsPersonAuthenticated();
 			m.GetPersonLoginOpenScript = vAcctHome.GetPersonLoginOpenScript;
-			m.User = vAcctHome.GetFabUser();
+			m.User = vAcctHome.GetActiveFabUser();
 			return PartialView(MVC.Header.Views._Header, m);
 		}
 

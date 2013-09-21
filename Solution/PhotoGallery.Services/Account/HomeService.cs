@@ -3,6 +3,7 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
+using PhotoGallery.Services.Fabric;
 
 namespace PhotoGallery.Services.Account {
 	
@@ -28,12 +29,8 @@ namespace PhotoGallery.Services.Account {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public FabUser GetFabUser() {
-			if ( !IsPersonAuthenticated() ) {
-				return null;
-			}
-
-			return Fab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+		public FabUser GetActiveFabUser() {
+			return FabricService.GetActiveUser(Fab);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -53,7 +50,7 @@ namespace PhotoGallery.Services.Account {
 				return null;
 			}
 
-			FabUser fabUser = GetFabUser();
+			FabUser fabUser = GetActiveFabUser();
 
 			using ( ISession s = NewSession() ) {
 				FabricUser u = s.QueryOver<FabricUser>()
@@ -69,11 +66,7 @@ namespace PhotoGallery.Services.Account {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public static FabricUser GetCurrentUser(IFabricClient pFab, ISession pSess) {
-			if ( !pFab.PersonSession.IsAuthenticated ) {
-				return null;
-			}
-
-			FabUser fabUser = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+			FabUser fabUser = FabricService.GetActiveUser(pFab);
 
 			if ( fabUser == null ) {
 				return null;
