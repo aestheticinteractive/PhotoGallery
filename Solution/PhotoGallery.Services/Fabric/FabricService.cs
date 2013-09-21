@@ -25,8 +25,8 @@ namespace PhotoGallery.Services.Fabric {
 
 			FabUser fu = (ActiveUsers.Get(pFab.PersonSession.SessionId) as FabUser);
 
-			Log.Debug("FabricService ActiveUser Cache: Hit? "+
-				(fu != null)+" ("+pFab.PersonSession.SessionId+")");
+			//Log.Debug("FabricService ActiveUser Cache: Hit? "+
+			//	(fu != null)+" ("+pFab.PersonSession.SessionId+")");
 
 			if ( fu == null ) {
 				fu = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
@@ -60,6 +60,9 @@ namespace PhotoGallery.Services.Fabric {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public static void CheckForNewTasks(IFabricClient pUserFabClient=null) {
+			Log.Debug("FabricService: SKIPPING TASKS FOR NOW");
+			return;
+
 			var t = new Thread(FabricExporter.StartDataProvThread);
 			t.Start(DataProvClient);
 

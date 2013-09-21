@@ -111,7 +111,6 @@ namespace PhotoGallery.Services.Account.Tools {
 					var fa = new FabricArtifact();
 					fa.Type = (byte)FabricArtifact.ArtifactType.Photo;
 					fa.Name = Result.Filename;
-					fa.Disamb = "Kinstner Photo Gallery";
 					fa.Creator = pSess.Load<FabricArtifact>(vUser.FabricArtifact.Id);
 					pSess.Save(fa);
 
