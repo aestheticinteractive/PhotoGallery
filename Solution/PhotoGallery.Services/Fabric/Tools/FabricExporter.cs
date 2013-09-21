@@ -1,4 +1,4 @@
-﻿//#define SEND_TO_FABRIC
+﻿#define SEND_TO_FABRIC
 
 using System;
 using System.Collections.Generic;

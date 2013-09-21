@@ -60,8 +60,8 @@ namespace PhotoGallery.Services.Fabric {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public static void CheckForNewTasks(IFabricClient pUserFabClient=null) {
-			Log.Debug("FabricService: SKIPPING TASKS FOR NOW");
-			return;
+			//Log.Debug("FabricService: SKIPPING TASKS FOR NOW");
+			//return;
 
 			var t = new Thread(FabricExporter.StartDataProvThread);
 			t.Start(DataProvClient);
