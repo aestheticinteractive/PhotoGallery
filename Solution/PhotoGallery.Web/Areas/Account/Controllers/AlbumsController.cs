@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Web.Mvc;
+using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Account.Dto;
+using PhotoGallery.Services.Fabric;
 using PhotoGallery.Web.Application;
 using PhotoGallery.Web.Areas.Account.Models;
 using PhotoGallery.Web.Controllers;
@@ -27,6 +29,15 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 		public virtual ActionResult Index() {
 			var m = new AlbumsModel();
 			return View(m);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		[FabricAuthorize]
+		public virtual ActionResult StopFabricBg() {
+			FabricService.StopAllThreads();
+			Response.Write("Stopping Fabric background tasks...");
+			Log.Debug("Stopping Fabric background tasks...");
+			return null;
 		}
 
 

@@ -70,7 +70,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				.Where(x => x.FactorId == null && x.Creator.Id == u.Id)
 				.Fetch(x => x.Primary).Eager
 				.Fetch(x => x.Related).Eager
-				.Take(10)
+				.Take(20)
 				.List()
 			);
 
