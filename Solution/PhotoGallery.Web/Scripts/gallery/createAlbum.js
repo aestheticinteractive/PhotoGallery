@@ -5,7 +5,7 @@ var caData;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function submitCreateAlbum(albumUrl, photoUrl) {
+function submitCreateAlbum(albumUrl, photoUrl, editAlbumId) {
 	var form = $("#CreateAlbum");
 
 	form.validate();
@@ -26,15 +26,22 @@ function submitCreateAlbum(albumUrl, photoUrl) {
 	caData.failCount = 0;
 
 	var prog = $("#CreateAlbumProgress").show();
-	prog.find("#Title").html('Creating album "' + caData.title + '":');
+	var action = (editAlbumId == null ? "Creating" : "Editing");
+	prog.find("#Title").html(action+' album "' + caData.title + '":');
 	onCreateAlbumProgress();
 
 	var data = {
 		Title: caData.title
 	};
 
-	var jqxhr = $.post(albumUrl, data, onAlbumTitleSuccess);
-	jqxhr.fail(onAlbumTitleFail);
+	if ( editAlbumId == null ) {
+		var jqxhr = $.post(albumUrl, data, onAlbumTitleSuccess);
+		jqxhr.fail(onAlbumTitleFail);
+	}
+	else {
+		caData.albumId = editAlbumId;
+		createNextImage();
+	}
 }
 
 /*--------------------------------------------------------------------------------------------*/

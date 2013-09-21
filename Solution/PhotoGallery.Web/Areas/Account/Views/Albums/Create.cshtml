@@ -1,21 +1,27 @@
 ﻿@model AlbumCreateModel
 @{
+	bool create = (Model.EditAlbumId == null);
+
 	string albumUrl = Html.ActionLinkUrl(MVC.Account.Albums.CreateAlbum());
 	string imageUrl = Html.ActionLinkUrl(MVC.Account.Albums.UploadImage());
-	string onSubmit = "submitCreateAlbum('"+albumUrl+"','"+imageUrl+"'); return false;";
+	string onSubmit = "submitCreateAlbum('"+albumUrl+"','"+imageUrl+"',"+
+		(create ? "null" : Model.EditAlbumId+"")+"); return false;";
+	
+	string title = (create ? "Create New Album" : "Edit Album");
+	string errSumm = "Album was not "+(create ? "created" : "edited")+" successfully.";
 }
 
 <div class="row">
 	<div class="twelve columns">
 		<h4 class="borderBot">
-			Create New Album
+			@title
 		</h4>
 		<form id="CreateAlbum" onsubmit="@onSubmit">
 			<fieldset>
-				@Html.ValidationSummary(true, "Album was not created successfully.")
+				@Html.ValidationSummary(true, errSumm)
 				
 				@Html.LabelFor(m => m.Title)
-				@Html.TextBoxFor(m => m.Title, new { maxlength=64 })
+				@Html.TextBoxFor(m => m.Title, new { value=Model.Title, maxlength=64 })
 				@Html.ValidationMessageFor(m => m.Title)
 				
 				@Html.LabelFor(m => m.Files)

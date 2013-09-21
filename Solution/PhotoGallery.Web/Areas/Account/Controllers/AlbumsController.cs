@@ -40,6 +40,20 @@ namespace PhotoGallery.Web.Areas.Account.Controllers {
 
 		/*--------------------------------------------------------------------------------------------*/
 		[FabricAuthorize]
+		public virtual ActionResult Edit(int id) {
+			var m = new AlbumCreateModel();
+			m.EditAlbumId = id;
+			m.Title = vAlbums.GetAlbumTitle(id);
+
+			if ( m.Title == null ) {
+				return RedirectToAction(MVC.Account.Albums.Index());
+			}
+
+			return View(MVC.Account.Albums.Views.Create, m);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		[FabricAuthorize]
 		[HttpPost]
 		public virtual ActionResult CreateAlbum(AlbumCreateTitleModel pModel) {
 			int? albumId = vAlbums.AddAlbum(pModel.Title);
