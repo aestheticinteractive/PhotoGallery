@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using NHibernate;
@@ -42,7 +43,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				.List()
 			);
 
-			SendAll(fab, getArtList, getFacList);
+			SendAll(fab, getArtList, getFacList, 0);
 			LogDebug(fab, "StartDataProvThread done: "+sw.Elapsed.TotalMilliseconds+"ms");
 		}
 
@@ -73,7 +74,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				.List()
 			);
 
-			SendAll(fab, getArtList, getFacList);
+			SendAll(fab, getArtList, getFacList, 0);
 			LogDebug(fab, "StartUserThread done: "+sw.Elapsed.TotalMilliseconds+"ms");
 		}
 
@@ -81,14 +82,21 @@ namespace PhotoGallery.Services.Fabric.Tools {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private static void SendAll(IFabricClient pFab, Func<ISession, IList<FabricArtifact>> pGetArts,
-													Func<ISession, IList<FabricFactor>> pGetFacs) {
+											Func<ISession, IList<FabricFactor>> pGetFacs, int pLoopI) {
+			if ( pLoopI > 4 ) {
+				LogDebug(pFab, "SendAll Kill. Too many loops: "+pLoopI);
+				return;
+			}
+			
+			
 			bool restart;
 			while ( LoadAndSendArtifacts(pFab, pGetArts) ) {}
 			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {}
 
 			if ( restart ) {
+				Thread.Sleep(2000);
 				LogDebug(pFab, "SendAll Restart!");
-				SendAll(pFab, pGetArts, pGetFacs);
+				SendAll(pFab, pGetArts, pGetFacs, pLoopI+1);
 			}
 		}
 

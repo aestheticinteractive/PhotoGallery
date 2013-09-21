@@ -5,6 +5,7 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services.Fabric;
 
 namespace PhotoGallery.Services.Main {
 	
@@ -30,6 +31,7 @@ namespace PhotoGallery.Services.Main {
 
 			if ( Fab.PersonSession.IsAuthenticated ) {
 				CreateUser();
+				FabricService.CheckForNewTasks(Fab);
 				return true;
 			}
 
