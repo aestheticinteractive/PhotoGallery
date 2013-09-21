@@ -73,13 +73,13 @@ namespace PhotoGallery.Services.Account.Tools {
 		public void SaveData(ISession pSess) {
 			vPhotoArt = pSess.Load<FabricArtifact>(vPhoto.FabricArtifact.Id);
 			vUserArt = pSess.Load<FabricArtifact>(vPhoto.FabricUser.FabricArtifact.Id);
-			InsertMetas(pSess);
+			//InsertMetas(pSess);
 			InsertFactors(pSess);
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		public void InsertMetas(ISession pSess) {
 			using ( ITransaction tx = pSess.BeginTransaction() ) {
 				foreach ( KeyValuePair<string, string> pair in vTagMap ) {

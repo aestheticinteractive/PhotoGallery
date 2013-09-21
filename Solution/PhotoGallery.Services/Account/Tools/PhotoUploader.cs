@@ -153,6 +153,11 @@ namespace PhotoGallery.Services.Account.Tools {
 
 				path = ImageUtil.BuildPhotoPath(aid, vPhoto.Id, ImageUtil.PhotoSize.Thumb);
 				SaveJpeg(vServer.MapPath("~"+path), vThumb, 75);
+
+				path = ImageUtil.BuildPhotoPath(aid)+"/"+vPhoto.Id+"-exif.json";
+				using ( StreamWriter sw = new StreamWriter(vServer.MapPath("~"+path)) ) {
+					sw.WriteLine(vExifData);
+				}
 			}
 			catch ( Exception ) {
 				Result.Status = WebUploadResult.UploadStatus.SavePhotoError;
