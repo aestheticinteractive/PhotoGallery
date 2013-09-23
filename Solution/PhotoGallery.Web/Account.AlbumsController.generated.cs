@@ -43,6 +43,12 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult Edit()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.ActionResult CreateAlbum()
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CreateAlbum);
@@ -70,7 +76,9 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string StopFabricBg = "StopFabricBg";
             public readonly string Create = "Create";
+            public readonly string Edit = "Edit";
             public readonly string CreateAlbum = "CreateAlbum";
             public readonly string UploadImage = "UploadImage";
         }
@@ -79,12 +87,22 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string StopFabricBg = "StopFabricBg";
             public const string Create = "Create";
+            public const string Edit = "Edit";
             public const string CreateAlbum = "CreateAlbum";
             public const string UploadImage = "UploadImage";
         }
 
 
+        static readonly ActionParamsClass_Edit s_params_Edit = new ActionParamsClass_Edit();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Edit EditParams { get { return s_params_Edit; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Edit
+        {
+            public readonly string id = "id";
+        }
         static readonly ActionParamsClass_CreateAlbum s_params_CreateAlbum = new ActionParamsClass_CreateAlbum();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_CreateAlbum CreateAlbumParams { get { return s_params_CreateAlbum; } }
@@ -133,12 +151,31 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
             return callInfo;
         }
 
+        partial void StopFabricBgOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        public override System.Web.Mvc.ActionResult StopFabricBg()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.StopFabricBg);
+            StopFabricBgOverride(callInfo);
+            return callInfo;
+        }
+
         partial void CreateOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
         public override System.Web.Mvc.ActionResult Create()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Create);
             CreateOverride(callInfo);
+            return callInfo;
+        }
+
+        partial void EditOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int id);
+
+        public override System.Web.Mvc.ActionResult Edit(int id)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            EditOverride(callInfo, id);
             return callInfo;
         }
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using PhotoGallery.Services;
-using PhotoGallery.Web.Models;
 
 namespace PhotoGallery.Web.Controllers {
 
@@ -9,7 +8,6 @@ namespace PhotoGallery.Web.Controllers {
 	public abstract partial class BaseController : Controller {
 
 		private readonly List<BaseService> vLogicList;
-		private Dictionary<string, bool> vLoginReqForActionMap;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,12 +21,6 @@ namespace PhotoGallery.Web.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		protected void RegisterInjectedLogic(BaseService pService) {
 			vLogicList.Add(pService);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		protected T CreateModel<T>() where T : IBaseModel, new() {
-			T model = new T();
-			return model;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -46,53 +38,6 @@ namespace PhotoGallery.Web.Controllers {
 			}
 
 			base.OnActionExecuting(pContext);
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		public bool IsLoginRequired(string pActionName) {
-			bool defaultReq = GetDefaultIsLoginRequired();
-			string action = pActionName.ToLower();
-
-			if ( vLoginReqForActionMap == null ) {
-				vLoginReqForActionMap = new Dictionary<string, bool>();
-				List<string> logReq = LoginActions(true);
-				List<string> logNotReq = LoginActions(false);
-
-				for ( int i = 0 ; logReq != null && i < logReq.Count ; ++i ) {
-					vLoginReqForActionMap.Add(logReq[i].ToLower(), true);
-				}
-
-				for ( int i = 0 ; logNotReq != null && i < logNotReq.Count ; ++i ) {
-					vLoginReqForActionMap.Add(logNotReq[i].ToLower(), false);
-				}
-			}
-
-			if ( vLoginReqForActionMap.ContainsKey(action) ) {
-				return vLoginReqForActionMap[action];
-			}
-
-			return defaultReq;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		protected virtual bool GetDefaultIsLoginRequired() {
-#if ( !DEBUG || LIVEDB )
-			return true;
-#else
-			return false;
-#endif
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		protected virtual List<string> LoginActions(bool pRequiresLogin) {
-			return null;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public int GetInjectedLogicCount() {
-			return vLogicList.Count;
 		}
 
 	}

@@ -1,16 +1,17 @@
-﻿using PhotoGallery.Domain;
+﻿using System;
+using PhotoGallery.Domain;
+using PhotoGallery.Services.Util;
 
 namespace PhotoGallery.Services.Main.Dto {
 
 	/*================================================================================================*/
-	public class WebPhoto : WebPhotoCore {
+	public class WebPhoto : IWebPhoto {
 		
-		public string AlbumName { get; internal set; }
-
-		public double ExifExposureTime { get; internal set; }
-		public double ExifIsoSpeed { get; internal set; }
-		public double ExifFNumber { get; internal set; }
-		public double ExifFocalLength { get; internal set; }
+		public int PhotoId { get; internal set; }
+		public string ImgName { get; internal set; }
+		public int AlbumId { get; internal set; }
+		public float Ratio { get; internal set; }
+		public DateTime Created { get; internal set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,13 +19,33 @@ namespace PhotoGallery.Services.Main.Dto {
 		public WebPhoto() {}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebPhoto(Photo p) : base(p) {
-			AlbumName = p.Album.Title;
+		public WebPhoto(Photo p) {
+			PhotoId = p.Id;
+			ImgName = p.ImgName;
+			AlbumId = p.Album.Id;
+			Ratio = p.Ratio;
+			Created = new DateTime(p.Created);
+		}
 
-			/*ExifExposureTime = p.ExifExposureTime;
-			ExifIsoSpeed = p.ExifISOSpeed;
-			ExifFNumber = p.ExifFNumber;
-			ExifFocalLength = p.ExifFocalLength;*/
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		public string ImageUrl {
+			get {
+				return GetUrl(ImageUtil.PhotoSize.Large);
+			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public string ThumbUrl {
+			get {
+				return GetUrl(ImageUtil.PhotoSize.Thumb);
+			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private string GetUrl(ImageUtil.PhotoSize pSize) {
+			return ImageUtil.BuildPhotoPath(AlbumId, PhotoId, pSize);
 		}
 
 	}

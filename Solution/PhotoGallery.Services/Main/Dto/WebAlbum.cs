@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using PhotoGallery.Domain;
 
 namespace PhotoGallery.Services.Main.Dto {
 
 	/*================================================================================================*/
-	public class WebAlbum : WebAlbumCore {
+	public class WebAlbum {
 
 		public int Index { get; internal set; }
+		public int AlbumId { get; internal set; }
+		public string Title { get; internal set; }
+		public int UserId { get; internal set; }
+		public string UserName { get; internal set; }
 		public int NumPhotos { get; internal set; }
 		public int FirstPhotoId { get; internal set; }
 		public DateTime StartDate { get; internal set; }
 		public DateTime EndDate { get; internal set; }
-		public IList<WebAlbumTag> Tags { get; internal set; }
 
 		private long vStartTicks;
 		private long vEndTicks;
@@ -21,8 +23,14 @@ namespace PhotoGallery.Services.Main.Dto {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public WebAlbum() {}
-		public WebAlbum(Album pAlbum) : base(pAlbum) {}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public WebAlbum(Album pAlbum) {
+			AlbumId = pAlbum.Id;
+			Title = pAlbum.Title;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public long StartDateTicks {
 			get {
@@ -58,8 +66,6 @@ namespace PhotoGallery.Services.Main.Dto {
 			}
 		}
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public string DateRangeString {
 			get {

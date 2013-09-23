@@ -6,10 +6,14 @@
 	</p>
 	<div class="details">
 		<p class="textBox">
+			by <strong>@Model.UserName</strong>
+		</p>
+		<p class="textBox">
 			@Model.DateRangeString
 		</p>
 		<p class="textBox">
 			@Model.NumPhotos photo@(Model.NumPhotos==1?"":"s")
 		</p>
 	</div>
+	@Html.ActionLink(" ", MVC.Main.Home.Albums(Model.AlbumId))
 </div>

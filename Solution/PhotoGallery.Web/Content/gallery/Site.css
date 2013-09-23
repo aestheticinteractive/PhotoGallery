@@ -106,11 +106,9 @@ ul {
 	padding-bottom: 3px;
 }
 
-#Header p {
-	margin-top: 0;
-}
-
 #Header .logo {
+	position: relative;
+	top: 4px;
 	color: #fff;
 	font-weight: bold;
 }
@@ -135,12 +133,20 @@ ul {
 	background-position: 50% 25%;
 	float: left;
 	margin: 0 0 1px 1px;
+	position: relative;
+}
+
+#Page .thumb a {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 #Page .album {
 	width: 100%;
 	height: 50px;
-	position: relative;
 }
 
 #Page .album .textBox {
@@ -162,8 +168,19 @@ ul {
 	position: absolute;
 	margin: 4px;
 	bottom: 0;
-	
 }
+
+#Page .photoSmall {
+	width: 66px;
+	height: 66px;
+}
+
+/*@media only screen and (max-width: 480px) {
+	#Page .photoLarge {
+		width: 100%;
+		height: 300px;
+	}
+}*/
 
 
 
