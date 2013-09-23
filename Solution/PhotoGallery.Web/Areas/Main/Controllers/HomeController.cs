@@ -33,14 +33,29 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 				return RedirectToAction(MVC.Main.Home.Index());
 			}
 
-			var gs = new GallerySession(Session);
-			gs.PhotoSet = vHome.GetAlbumPhotoSet((int)id);
-
 			var m = new AlbumModel();
 			m.Album = vHome.GetAlbum((int)id);
-			m.Photos = gs.PhotoSet.GetAll();
+
+			if ( m.Album != null ) {
+				var gs = new GallerySession(Session);
+				gs.PhotoSet = vHome.GetAlbumPhotoSet(m.Album);
+				m.Photos = gs.PhotoSet.GetAll();
+			}
+
 			return View(MVC.Main.Home.Views.Album, m);
 		}
+
+		/*--------------------------------------------------------------------------------------------* /
+		public virtual ActionResult Photos(int? id) {
+			var gs = new GallerySession(Session);
+
+			if ( id == null || gs.PhotoSet == null ) {
+				return RedirectToAction(MVC.Main.Home.Index());
+			}
+
+			var m = new PhotoModel((int)id, gs.PhotoSet);
+			return View(MVC.Main.Home.Views.Photo, m);
+		}*/
 
 	}
 

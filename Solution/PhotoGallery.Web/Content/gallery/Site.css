@@ -175,13 +175,88 @@ ul {
 	height: 66px;
 }
 
-/*@media only screen and (max-width: 480px) {
-	#Page .photoLarge {
-		width: 100%;
-		height: 300px;
-	}
-}*/
 
+/*----------------------------------------------------------------------------------------------------*/
+
+
+#PhotoViewer {
+	background-color: rgba(100, 100, 100, 0.75);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding: 15px;
+	margin: 0;
+	display: none;
+}
+
+#PhotoViewer .hold {
+	background-color: #fff;
+	width: 100%;
+	height: 100%;
+}
+
+#PhotoViewer .photoHold {
+	width: 74%;
+	height: 100%;
+	padding: 5px;
+	float:left;
+}
+
+#PhotoViewer .detailsHold {
+	padding: 5px 5px 5px 0;
+	height: 100%;
+	float:left;
+}
+
+#PhotoViewer .border {
+	border-left: 1px solid #ccc;
+	padding-left: 5px;
+	height: 100%;
+}
+
+#PhotoViewer .photo {
+	width: 100%;
+	height: 100%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#PhotoViewer .button {
+	padding: 2px 5px;
+}
+
+@media only screen and (max-width: 1024px) {
+	#PhotoViewer {
+		padding: 0;
+		background-color: #000;
+	}
+	
+	#PhotoViewer .hold {
+		background-color: #000;
+		width: 100%;
+		height: 100%;
+	}
+
+	#PhotoViewer .photoHold {
+		width: 100%;
+		padding: 0;
+	}
+	
+	#PhotoViewer .detailsHold {
+		position: fixed;
+		bottom: 0;
+		height: auto;
+		width: 100%;
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	
+	#PhotoViewer .detailsHold p {
+		color: #fff;
+	}
+}
 
 
 /*----------------------------------------------------------------------------------------------------*/

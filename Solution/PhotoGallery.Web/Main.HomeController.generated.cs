@@ -95,13 +95,17 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             {
                 public readonly string _AlbumThumb = "_AlbumThumb";
                 public readonly string _PhotoThumb = "_PhotoThumb";
+                public readonly string _PhotoViewer = "_PhotoViewer";
                 public readonly string Album = "Album";
                 public readonly string Index = "Index";
+                public readonly string Photo = "Photo";
             }
             public readonly string _AlbumThumb = "~/Areas/Main/Views/Home/_AlbumThumb.cshtml";
             public readonly string _PhotoThumb = "~/Areas/Main/Views/Home/_PhotoThumb.cshtml";
+            public readonly string _PhotoViewer = "~/Areas/Main/Views/Home/_PhotoViewer.cshtml";
             public readonly string Album = "~/Areas/Main/Views/Home/Album.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Home/Index.cshtml";
+            public readonly string Photo = "~/Areas/Main/Views/Home/Photo.cshtml";
         }
     }
 

@@ -6,7 +6,6 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using PhotoGallery.Domain;
-using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Main.Dto;
 
 namespace PhotoGallery.Services.Main {
@@ -70,20 +69,23 @@ namespace PhotoGallery.Services.Main {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebPhotoSet GetAlbumPhotoSet(int pAlbumId) {
-			return new WebPhotoSet((skip, take) => {
+		public WebPhotoSet GetAlbumPhotoSet(WebAlbum pAlbum) {
+			int aid = pAlbum.AlbumId;
+
+			var wps = new WebPhotoSet((skip, take) => {
 				using ( ISession s = NewSession() ) {
 					IList<Photo> photos = s.QueryOver<Photo>()
-						.Where(x => x.Album.Id == pAlbumId)
+						.Where(x => x.Album.Id == aid)
 						.Skip(skip)
 						.Take(take)
 						.List();
 
-					Log.Debug("SET: "+skip+" / "+take+" ... "+pAlbumId+" / "+photos.Count);
-
 					return photos.Select(p => new WebPhoto(p)).Cast<IWebPhoto>().ToList();
 				}
 			});
+
+			wps.Title = pAlbum.Title;
+			return wps;
 		}
 
 	}
