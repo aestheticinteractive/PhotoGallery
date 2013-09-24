@@ -26,8 +26,9 @@ namespace PhotoGallery.Services.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public bool PersonOauthSuccess(HttpRequestBase pRequest) {
+		public bool PersonOauthSuccess(HttpRequestBase pRequest, HttpResponseBase pResponse) {
 			FabOauthAccess result = Fab.PersonSession.HandleGrantCodeRedirect(pRequest);
+			Fab.PersonSession.SaveToCookies(pResponse.Cookies);
 
 			if ( Fab.PersonSession.IsAuthenticated ) {
 				CreateUser();

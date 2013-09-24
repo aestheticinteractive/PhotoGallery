@@ -20,7 +20,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult FabricRedirect() {
-			if ( vOauth.PersonOauthSuccess(Request) ) {
+			if ( vOauth.PersonOauthSuccess(Request, Response) ) {
 				Response.Write(OauthService.CloseWindowScript);
 			}
 

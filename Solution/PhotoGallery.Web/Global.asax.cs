@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.SessionState;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Fabric.Clients.Cs;
@@ -29,11 +29,16 @@ namespace PhotoGallery.Web {
 		private static IFabricSessionContainer FabricDataProvSess;
 		private static IFabricClient FabricDataProvClient;
 
+		private Stopwatch vTimer;
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		protected void Application_Start() {
+			vTimer = Stopwatch.StartNew();
+
 			Log.ConfigureOnce();
+			Log.Debug("### Application_Start");
 			BaseService.InitDatabase();
 			SetupFabricClient();
 
@@ -48,6 +53,7 @@ namespace PhotoGallery.Web {
 
 		/*--------------------------------------------------------------------------------------------*/
 		protected void Application_End() {
+			Log.Debug("### Application_End: "+vTimer.Elapsed.TotalSeconds+" sec");
 			WindsorContainer.Dispose();
 		}
 
@@ -95,20 +101,7 @@ namespace PhotoGallery.Web {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private static IFabricSessionContainer FabricSessProv(string pConfigKey) {
-			string key = "Gallery_"+pConfigKey;
-			HttpSessionState sess = HttpContext.Current.Session;
-
-			if ( sess == null ) {
-				return null;
-			}
-
-			IFabricSessionContainer contain = (sess[key] as IFabricSessionContainer);
-
-			if ( contain == null ) {
-				sess[key] = (contain = new FabricSessionContainer());
-			}
-
-			return contain;
+			return FabricSessionContainer.FromHttpContext(HttpContext.Current, pConfigKey);
 		}
 
 
