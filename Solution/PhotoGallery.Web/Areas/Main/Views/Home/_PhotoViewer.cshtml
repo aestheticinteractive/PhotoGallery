@@ -27,10 +27,11 @@
 	initPhotoView();
 
 	@foreach ( IWebPhoto p in Model ) {
+		string url = Url.Content("~"+p.ImageUrl);
 		<text>
-			registerPhoto(@p.PhotoId, '@p.ImgName', '@p.ImageUrl', '@p.Created', @p.AlbumId);
+			registerPhoto(@p.PhotoId, '@p.ImgName', '@url', '@p.Created', @p.AlbumId);
 		</text>
 	}
 
-	viewPhoto(5565);
+	//viewPhoto(5565);
 </script>

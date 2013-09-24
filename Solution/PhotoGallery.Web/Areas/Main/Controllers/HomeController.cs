@@ -45,18 +45,6 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 			return View(MVC.Main.Home.Views.Album, m);
 		}
 
-		/*--------------------------------------------------------------------------------------------* /
-		public virtual ActionResult Photos(int? id) {
-			var gs = new GallerySession(Session);
-
-			if ( id == null || gs.PhotoSet == null ) {
-				return RedirectToAction(MVC.Main.Home.Index());
-			}
-
-			var m = new PhotoModel((int)id, gs.PhotoSet);
-			return View(MVC.Main.Home.Views.Photo, m);
-		}*/
-
 	}
 
 }

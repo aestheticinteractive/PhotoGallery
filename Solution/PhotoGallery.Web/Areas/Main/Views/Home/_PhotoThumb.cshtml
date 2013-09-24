@@ -1,5 +1,5 @@
 ﻿@model IWebPhoto
 
-<div class="thumb photoSmall" style="background-image: url(@Model.ThumbUrl);" 
+<div class="thumb photoSmall" style="background-image: url(@Url.Content("~"+Model.ThumbUrl));" 
 	title="@Model.ImgName - @Model.Created" onclick="viewPhoto(@Model.PhotoId); return false;">
 </div>
