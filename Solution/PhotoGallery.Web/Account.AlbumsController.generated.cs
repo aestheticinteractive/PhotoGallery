@@ -76,7 +76,6 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
-            public readonly string StopFabricBg = "StopFabricBg";
             public readonly string Create = "Create";
             public readonly string Edit = "Edit";
             public readonly string CreateAlbum = "CreateAlbum";
@@ -87,7 +86,6 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         public class ActionNameConstants
         {
             public const string Index = "Index";
-            public const string StopFabricBg = "StopFabricBg";
             public const string Create = "Create";
             public const string Edit = "Edit";
             public const string CreateAlbum = "CreateAlbum";
@@ -148,15 +146,6 @@ namespace PhotoGallery.Web.Areas.Account.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
-            return callInfo;
-        }
-
-        partial void StopFabricBgOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
-
-        public override System.Web.Mvc.ActionResult StopFabricBg()
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.StopFabricBg);
-            StopFabricBgOverride(callInfo);
             return callInfo;
         }
 

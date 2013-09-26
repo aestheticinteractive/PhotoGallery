@@ -1,6 +1,4 @@
-﻿#define SEND_TO_FABRIC
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -12,7 +10,7 @@ using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Account.Tools;
 
-namespace PhotoGallery.Services.Fabric.Tools {
+namespace PhotoGallery.Daemon {
 	
 	/*================================================================================================*/
 	internal static class FabricExporter {
@@ -54,7 +52,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			FabricUser u;
 			LogDebug(fab, "StartUserThread");
 
-			using ( ISession s = BaseService.NewSession() ) {
+			using ( ISession s = FabricService.NewSession() ) {
 				u = HomeService.GetCurrentUser(fab, s);
 			}
 
@@ -105,7 +103,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 													Func<ISession, IList<FabricArtifact>> pGetArts) {
 			IList<FabricArtifact> artList;
 
-			using ( ISession s = BaseService.NewSession() ) {
+			using ( ISession s = FabricService.NewSession() ) {
 				artList = pGetArts(s);
 			}
 
@@ -115,7 +113,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				return false;
 			}
 
-			using ( ISession s = BaseService.NewSession() ) {
+			using ( ISession s = FabricService.NewSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					SendArtifacts(pFab, s, artList);
 					tx.Commit();
@@ -131,7 +129,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			IList<FabricFactor> facList;
 			var saveFacList = new List<FabricFactor>();
 
-			using ( ISession s = BaseService.NewSession() ) {
+			using ( ISession s = FabricService.NewSession() ) {
 				facList = pGetFacs(s);
 			}
 
@@ -156,7 +154,7 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				return false;
 			}
 
-			using ( ISession s = BaseService.NewSession() ) {
+			using ( ISession s = FabricService.NewSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					SendFactors(pFab, s, saveFacList);
 					tx.Commit();
@@ -178,13 +176,8 @@ namespace PhotoGallery.Services.Fabric.Tools {
 				}
 
 				try {
-#if SEND_TO_FABRIC
 					FabInstance fi = pFab.Services.Modify.AddInstance
 						.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
-#else
-					var fi = new FabInstance { ArtifactId = 10000+art.Id };
-#endif
-
 					LogDebug(pFab, "SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
 					art.ArtifactId = fi.ArtifactId;
 					pSess.Update(art);
@@ -217,12 +210,8 @@ namespace PhotoGallery.Services.Fabric.Tools {
 			}
 
 			try {
-#if SEND_TO_FABRIC
 				IList<FabBatchResult> batchRes = pFab.Services.Modify.AddFactors
 					.Post(batch.ToArray()).Data;
-#else
-				IList<FabBatchResult> batchRes = fakeBatchRes;
-#endif
 
 				foreach ( FabBatchResult fbr in batchRes ) {
 					LogDebug(pFab, "SendFactors Fac: "+fbr.BatchId+" => "+fbr.ResultId);

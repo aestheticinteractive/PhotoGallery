@@ -38,6 +38,7 @@
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="Album.cs" />
+    <Compile Include="FabricPersonSession.cs" />
     <Compile Include="FabricUser.cs" />
     <Compile Include="FabricArtifact.cs" />
     <Compile Include="Photo.cs" />

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.Caching;
-using System.Threading;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using PhotoGallery.Infrastructure;
-using PhotoGallery.Services.Fabric.Tools;
 
 namespace PhotoGallery.Services.Fabric {
 	
@@ -12,7 +10,6 @@ namespace PhotoGallery.Services.Fabric {
 	public static class FabricService {
 
 		private static readonly MemoryCache ActiveUsers = new MemoryCache("ActiveUsers");
-		private static IFabricClient DataProvClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,11 +43,7 @@ namespace PhotoGallery.Services.Fabric {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public static void SetDataProvClient(IFabricClient pFab) {
-			DataProvClient = pFab;
-			DataProvClient.UseDataProviderPerson = true;
-			SetupClientLogger(pFab);
-
-			CheckForNewTasks();
+			//CheckForNewTasks();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -61,20 +54,6 @@ namespace PhotoGallery.Services.Fabric {
 		/*--------------------------------------------------------------------------------------------*/
 		public static void CheckForNewTasks(IFabricClient pUserFabClient=null) {
 			Log.Debug("FabricService: SKIPPING TASKS FOR NOW");
-			return;
-
-			var t = new Thread(FabricExporter.StartDataProvThread);
-			t.Start(DataProvClient);
-
-			if ( pUserFabClient != null ) {
-				t = new Thread(FabricExporter.StartUserThread);
-				t.Start(pUserFabClient);
-			}
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public static void StopAllThreads() {
-			FabricExporter.StopThreads = true;
 		}
 
 	}
