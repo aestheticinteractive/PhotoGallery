@@ -23,14 +23,20 @@ namespace PhotoGallery.Database {
 				return;
 			}
 
-			IPersistenceConfigurer conn = MsSqlConfiguration
-				.MsSql2008
-				.DefaultSchema("kpg")
-				.Dialect<NHibernate.Dialect.MsSql2008Dialect>()
+#if !DEBUG
+			const string prefix = "Prod_";
+#else
+			const string prefix = "Dev_";
+#endif
+
+			IPersistenceConfigurer conn = MySQLConfiguration
+				.Standard
+				//.DefaultSchema("kpg")
+				.Dialect<NHibernate.Dialect.MySQL5Dialect>()
 				.Provider<NHibernate.Connection.DriverConnectionProvider>()
-				.Driver<NHibernate.Driver.SqlClientDriver>()
-				.AdoNetBatchSize(500)
-				.ConnectionString(ConfigurationManager.AppSettings["DbConnStr"]);
+				.Driver<NHibernate.Driver.MySqlDataDriver>()
+				.AdoNetBatchSize(0)
+				.ConnectionString(ConfigurationManager.AppSettings[prefix+"DbConnStr"]);
 
 			SessionFactory = Fluently.Configure()
 				.Database(conn)

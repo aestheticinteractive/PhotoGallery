@@ -170,3 +170,5 @@ Solution/PhotoGallery.Web/NHibernate.config
 Solution/PhotoGallery.Web/logs/
 Solution/PhotoGallery.Web/upload/
 Solution/PhotoGallery.Web/PhotoGallery.Web.Publish.xml
+Docs/gallery-data-original.sql
+Docs/gallery-data.sql
