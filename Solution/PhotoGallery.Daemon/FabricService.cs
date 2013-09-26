@@ -18,13 +18,12 @@ namespace PhotoGallery.Daemon {
 		/*--------------------------------------------------------------------------------------------*/
 		public static void Init(string pBaseUrl, long pAppId, string pAppSecret, long pDataProvId) {
 			DpSess = new FabricSessionContainer();
-			string redir = pBaseUrl+"/Oauth/FabricRedirect";
 
 			FabricClient.InitOnce(new FabricClientConfig("main", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, redir, ProvideSession));
+				pAppId, pAppSecret, pDataProvId, "NONE", ProvideSession));
 
 			FabricClient.AddConfig(new FabricClientConfig("dataProv", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, redir, (k => DpSess)));
+				pAppId, pAppSecret, pDataProvId, "NONE", (k => DpSess)));
 
 			DbClient = new FabricClient("dataProv");
 			DbClient.UseDataProviderPerson = true;

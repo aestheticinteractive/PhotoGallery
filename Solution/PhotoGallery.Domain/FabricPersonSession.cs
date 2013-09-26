@@ -9,6 +9,7 @@
 		public virtual string BearerToken { get; set; }
 		public virtual string RefreshToken { get; set; }
 		public virtual long Expiration { get; set; }
+		public virtual bool TryUpdate { get; set; }
 
 		public virtual FabricUser FabricUser { get; set; }
 

@@ -22,6 +22,7 @@ namespace PhotoGallery.Database.Maps {
 			Map(x => x.BearerToken).Length(32);
 			Map(x => x.RefreshToken).Length(32).Nullable();
 			Map(x => x.Expiration);
+			Map(x => x.TryUpdate).Default("1");
 
 			References(x => x.FabricUser);
 		}
