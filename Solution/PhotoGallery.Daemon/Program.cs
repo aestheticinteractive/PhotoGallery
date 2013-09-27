@@ -82,7 +82,7 @@ namespace PhotoGallery.Daemon {
 			sc.SessProv = new SessionProvider();
 			sc.Query = new Queries();
 			sc.FabClientProv = FabClientProv;
-			sc.ExportProv = (d, c, u) => new Exporter(d, c, u);
+			sc.ExportProv = (ctx, fc, user) => new Exporter(ctx, fc, user);
 
 			return new Service(sc, FabricAppId, FabricAppSecret, FabricDataProvId);
 		}

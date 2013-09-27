@@ -45,12 +45,12 @@ namespace PhotoGallery.Daemon.Fabric {
 		private void StartDataProv() {
 			Log.Debug("StartDataProv");
 
-			var fd = new ExporterData();
-			fd.SessProv = vSvcCtx.SessProv;
-			fd.Query = vSvcCtx.Query;
+			var ec = new ExporterContext();
+			ec.SessProv = vSvcCtx.SessProv;
+			ec.Query = vSvcCtx.Query;
 
 			var t = new Thread(() => {
-				var fe = vSvcCtx.ExportProv(fd, vDbClient, null);
+				var fe = vSvcCtx.ExportProv(ec, vDbClient, null);
 				fe.SendAll(0);
 			});
 
@@ -61,26 +61,26 @@ namespace PhotoGallery.Daemon.Fabric {
 		private void StartUser(SavedSession pSaved) {
 			Log.Debug("StartUser: "+pSaved.SessionId);
 
-			var fd = new ExporterData();
-			fd.SessProv = vSvcCtx.SessProv;
-			fd.Query = vSvcCtx.Query;
-			fd.SavedSession = pSaved;
+			var ec = new ExporterContext();
+			ec.SessProv = vSvcCtx.SessProv;
+			ec.Query = vSvcCtx.Query;
+			ec.SavedSession = pSaved;
 
 			var t = new Thread(() => {
-				RegisterSession(fd.SavedSession);
+				RegisterSession(ec.SavedSession);
 				IFabricClient fab = vSvcCtx.FabClientProv(null); //obtains this thread's SavedSession
 				FabricUser u;
 
-				using ( ISession s = fd.SessProv.OpenSession() ) {
+				using ( ISession s = ec.SessProv.OpenSession() ) {
 					u = HomeService.GetCurrentUser(fab, s);
 				}
 
-				var fe = vSvcCtx.ExportProv(fd, fab, u);
+				var fe = vSvcCtx.ExportProv(ec, fab, u);
 				fe.SendAll(0);
-				CompleteSession(fd.SavedSession);
+				CompleteSession(ec.SavedSession);
 			});
 
-			t.Start(fd);
+			t.Start(ec);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

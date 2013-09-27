@@ -3,7 +3,7 @@
 namespace PhotoGallery.Daemon.Fabric {
 	
 	/*================================================================================================*/
-	public class ExporterData {
+	public class ExporterContext {
 
 		public ISessionProvider SessProv { get; set; }
 		public Queries Query { get; set; }

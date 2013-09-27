@@ -16,7 +16,7 @@ namespace PhotoGallery.Daemon.Fabric {
 
 		public static bool StopThreads;
 
-		private readonly ExporterData vData;
+		private readonly ExporterContext vCtx;
 		private readonly IFabricClient vFab;
 		private readonly FabricUser vUser;
 		private readonly Stopwatch vTimer;
@@ -24,8 +24,8 @@ namespace PhotoGallery.Daemon.Fabric {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public Exporter(ExporterData pData, IFabricClient pFab, FabricUser pUser) {
-			vData = pData;
+		public Exporter(ExporterContext pCtx, IFabricClient pFab, FabricUser pUser) {
+			vCtx = pCtx;
 			vFab = pFab;
 			vUser = pUser;
 			vTimer = new Stopwatch();
@@ -60,8 +60,8 @@ namespace PhotoGallery.Daemon.Fabric {
 		private bool LoadAndSendArtifacts() {
 			IList<FabricArtifact> artList;
 
-			using ( ISession s = vData.SessProv.OpenSession() ) {
-				artList = vData.Query.GetFabricArtifacts(s, vUser);
+			using ( ISession s = vCtx.SessProv.OpenSession() ) {
+				artList = vCtx.Query.GetFabricArtifacts(s, vUser);
 			}
 
 			LogDebug("SendAllArtifacts: "+artList.Count);
@@ -70,7 +70,7 @@ namespace PhotoGallery.Daemon.Fabric {
 				return false;
 			}
 
-			using ( ISession s = vData.SessProv.OpenSession() ) {
+			using ( ISession s = vCtx.SessProv.OpenSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					SendArtifacts(s, artList);
 					tx.Commit();
@@ -85,8 +85,8 @@ namespace PhotoGallery.Daemon.Fabric {
 			IList<FabricFactor> facList;
 			var saveFacList = new List<FabricFactor>();
 
-			using ( ISession s = vData.SessProv.OpenSession() ) {
-				facList = vData.Query.GetFabricFactors(s, vUser);
+			using ( ISession s = vCtx.SessProv.OpenSession() ) {
+				facList = vCtx.Query.GetFabricFactors(s, vUser);
 			}
 
 			foreach ( FabricFactor ff in facList ) {
@@ -110,7 +110,7 @@ namespace PhotoGallery.Daemon.Fabric {
 				return false;
 			}
 
-			using ( ISession s = vData.SessProv.OpenSession() ) {
+			using ( ISession s = vCtx.SessProv.OpenSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
 					SendFactors(s, saveFacList);
 					tx.Commit();
