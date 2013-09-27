@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Threading;
+using PhotoGallery.Database;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
 
@@ -13,30 +14,32 @@ namespace PhotoGallery.Daemon {
 		private static long FabricAppId;
 		private static string FabricAppSecret;
 		private static long FabricDataProvId;
+		private static FabricService FabSvc;
 		private static bool Stopped;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public static void Main(string[] pArgs) {
-			Console.CancelKeyPress += OnCancelKeyPress;
 			Log.ConfigureOnce();
 			Log.WriteToConsole = true;
+
+			Log.Info("Starting PhotoGallery Daemon...");
+			Console.CancelKeyPress += OnCancelKeyPress;
 
 			Log.Debug("Initializing database connection...");
 			BaseService.InitDatabase();
 
 			Log.Debug("Initializing Fabric Client...");
-			SetupFabricClient();
-
+			FabSvc = BuildFabricService();
 
 			while ( true ) {
 				if ( !Stopped ) {
-					FabricService.FindSessions();
-					FabricService.DeleteOldSessions();
+					FabSvc.FindSessions();
+					FabSvc.DeleteOldSessions();
 				}
 
-				Thread.Sleep(5000);
+				Thread.Sleep(10000);
 			}
 		}
 
@@ -50,12 +53,12 @@ namespace PhotoGallery.Daemon {
 
 			Log.Debug("**** Program cancelled. Stopping all threads ****");
 			pEventArgs.Cancel = true;
-			FabricService.StopAllThreads();
+			FabSvc.StopAllThreads();
 			Stopped = true;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static void SetupFabricClient() {
+		private static FabricService BuildFabricService() {
 #if !DEBUG
 			const string prefix = "Prod_";
 #else
@@ -74,7 +77,8 @@ namespace PhotoGallery.Daemon {
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
-			FabricService.Init(BaseUrl, FabricAppId, FabricAppSecret, FabricDataProvId);
+			return new FabricService(new SessionProvider(), new Queries(),
+				FabricAppId, FabricAppSecret, FabricDataProvId);
 		}
 
 	}

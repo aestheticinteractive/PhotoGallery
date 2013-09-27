@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Fabric.Clients.Cs;
@@ -13,36 +12,73 @@ using PhotoGallery.Services;
 namespace PhotoGallery.Daemon {
 
 	/*================================================================================================*/
-	public static class FabricService {
+	public class FabricService {
 
-		private static IFabricSessionContainer DpSess;
-		private static IFabricClient DbClient;
 		private static ConcurrentDictionary<string, SavedSession> SavedSessMap;
+
+		private readonly ISessionProvider vSessProv;
+		private readonly Queries vQuery;
+		private readonly IFabricSessionContainer vDpSess;
+		private readonly IFabricClient vDbClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void Init(string pBaseUrl, long pAppId, string pAppSecret, long pDataProvId) {
-			DpSess = new FabricSessionContainer();
+		public FabricService(ISessionProvider pSessProv, Queries pQuery,
+													long pAppId, string pAppSecret, long pDataProvId) {
+			vSessProv = pSessProv;
+			vQuery = pQuery;
+			vDpSess = new FabricSessionContainer();
+
+			if ( SavedSessMap == null ) {
+				SavedSessMap = new ConcurrentDictionary<string, SavedSession>();
+			}
+
+			////
 
 			FabricClient.InitOnce(new FabricClientConfig("main", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, "NONE", ProvideSession));
+				pAppId, pAppSecret, pDataProvId, "NONE", ProvideFabricSession));
 
 			FabricClient.AddConfig(new FabricClientConfig("dataProv", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, "NONE", (k => DpSess)));
+				pAppId, pAppSecret, pDataProvId, "NONE", (k => vDpSess)));
 
-			DbClient = new FabricClient("dataProv");
-			DbClient.UseDataProviderPerson = true;
-			SetupClientLogger(DbClient);
+			vDbClient = new FabricClient("dataProv");
+			vDbClient.UseDataProviderPerson = true;
+			vDbClient.Config.Logger = new LogFabric { WriteToConsole = true };
 
-			var t = new Thread(FabricExporter.StartDataProvThread);
-			t.Start(DbClient);
-
-			SavedSessMap = new ConcurrentDictionary<string, SavedSession>();
+			StartDataProv();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static IFabricSessionContainer ProvideSession(string pConfigKey) {
+		private void StartDataProv() {
+			Log.Debug("StartDataProv");
+
+			var fd = new FabricExporterData();
+			fd.SessProv = vSessProv;
+			fd.Query = vQuery;
+			fd.Fab = vDbClient;
+
+			var t = new Thread(FabricExporter.StartDataProvThread);
+			t.Start(fd);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void StartUser(SavedSession pSaved) {
+			Log.Debug("StartUser: "+pSaved.SessionId);
+
+			var fd = new FabricExporterData();
+			fd.SessProv = vSessProv;
+			fd.Query = vQuery;
+			fd.SavedSession = pSaved;
+			fd.RegisterSession = RegisterSession;
+			fd.CompleteSession = CompleteSession;
+
+			var t = new Thread(FabricExporter.StartUserThread);
+			t.Start(fd);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private static IFabricSessionContainer ProvideFabricSession(string pConfigKey) {
 			SavedSession saved = (SavedSession)Thread.CurrentContext.GetProperty(SavedSession.PropName);
 			return new FabricSessionContainer { Person = saved };
 		}
@@ -50,42 +86,31 @@ namespace PhotoGallery.Daemon {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void FindSessions() {
-			using ( ISession s = NewSession() ) {
-				IList<FabricPersonSession> list = s.QueryOver<FabricPersonSession>()
-					.Where(x => x.TryUpdate)
-					.List();
-
+		public void FindSessions() {
+			using ( ISession s = vSessProv.OpenSession() ) {
+				IList<FabricPersonSession> list = vQuery.FindUpdatableSessions(s);
 				Log.Debug("FindSessions: "+list.Count);
 
 				foreach ( FabricPersonSession fps in list ) {
-					fps.TryUpdate = false;
-					s.Save(fps);
-
+					vQuery.TurnOffSessionUpdate(s, fps);
 					var saved = new SavedSession(fps);
 
-					if ( IsSessionActive(saved) ) {
-						continue;
+					if ( !IsSessionActive(saved) ) {
+						StartUser(saved);
 					}
 
-					var t = new Thread(FabricExporter.StartUserThread);
-					t.Start(saved);
 				}
 			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static void DeleteOldSessions() {
-			using ( ISession s = NewSession() ) {
-				IList<FabricPersonSession> list = s.QueryOver<FabricPersonSession>()
-					.Where(x => x.Expiration <= DateTime.UtcNow.Ticks)
-					.List();
-
+		public void DeleteOldSessions() {
+			using ( ISession s = vSessProv.OpenSession() ) {
+				IList<FabricPersonSession> list = vQuery.FindExpiredSessions(s);
 				Log.Debug("DeleteOldSessions: "+list.Count);
 
 				foreach ( FabricPersonSession fps in list ) {
-					s.Delete(fps);
-
+					vQuery.DeleteSession(s, fps);
 					var saved = new SavedSession(fps);
 
 					if ( IsSessionActive(saved) ) {
@@ -95,41 +120,34 @@ namespace PhotoGallery.Daemon {
 			}
 		}
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void RegisterSession(SavedSession pSaved) {
+		private void RegisterSession(SavedSession pSaved) {
 			Log.Info("RegisterSession: "+pSaved.SessionId);
 			SavedSessMap.GetOrAdd(pSaved.SessionId, pSaved);
+			Thread.CurrentContext.SetProperty(pSaved);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static bool IsSessionActive(SavedSession pSaved) {
+		private bool IsSessionActive(SavedSession pSaved) {
 			bool act = SavedSessMap.ContainsKey(pSaved.SessionId);
 			Log.Info("IsSessionActive: "+act);
 			return act;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static bool CompleteSession(SavedSession pSaved) {
+		private void CompleteSession(SavedSession pSaved) {
 			Log.Info("CompleteSession: "+pSaved.SessionId);
-			return SavedSessMap.TryRemove(pSaved.SessionId, out pSaved);
+			SavedSessMap.TryRemove(pSaved.SessionId, out pSaved);
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void StopAllThreads() {
+		public void StopAllThreads() {
 			Log.Debug("StopAllThreads");
 			FabricExporter.StopThreads = true;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public static void SetupClientLogger(IFabricClient pFab) {
-			pFab.Config.Logger = new LogFabric { WriteToConsole = true };
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public static ISession NewSession() {
-			return new SessionProvider().OpenSession();
 		}
 
 	}

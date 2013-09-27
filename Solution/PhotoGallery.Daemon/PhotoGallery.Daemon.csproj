@@ -41,6 +41,8 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="FabricExporterData.cs" />
+    <Compile Include="Queries.cs" />
     <Compile Include="SavedSession.cs" />
     <Compile Include="FabricService.cs" />
     <Compile Include="FabricExporter.cs" />

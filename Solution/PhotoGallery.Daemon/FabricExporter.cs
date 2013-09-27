@@ -7,120 +7,102 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services;
 using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Account.Tools;
 
 namespace PhotoGallery.Daemon {
 	
 	/*================================================================================================*/
-	internal static class FabricExporter {
+	public class FabricExporter {
 
 		public static bool StopThreads;
 
+		private readonly FabricExporterData vData;
+		private readonly IFabricClient vFab;
+		private readonly FabricUser vUser;
+		private readonly Stopwatch vTimer;
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void StartDataProvThread(object pFabClient) {
-			var sw = Stopwatch.StartNew();
-			IFabricClient fab = (IFabricClient)pFabClient;
-			LogDebug(fab, "StartDataProvThread");
+		public static void StartDataProvThread(object pData) {
+			FabricExporterData fd = (FabricExporterData)pData;
 
-			Func<ISession, IList<FabricArtifact>> getArtList = (s => s
-				.QueryOver<FabricArtifact>()
-				.Where(x => x.ArtifactId == null && x.Creator == null)
-				.Take(10)
-				.List()
-			);
-
-			Func<ISession, IList<FabricFactor>> getFacList = (s => s
-				.QueryOver<FabricFactor>()
-				.Where(x => x.FactorId == null && x.Creator == null)
-				.Fetch(x => x.Primary).Eager
-				.Fetch(x => x.Related).Eager
-				.Take(10)
-				.List()
-			);
-
-			SendAll(fab, getArtList, getFacList, 0);
-			LogDebug(fab, "StartDataProvThread done: "+sw.Elapsed.TotalMilliseconds+"ms");
+			var fe = new FabricExporter(fd, fd.Fab, null);
+			fe.SendAll(0);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static void StartUserThread(object pSavedSession) {
-			SavedSession saved = (SavedSession)pSavedSession;
-			Thread.CurrentContext.SetProperty(saved);
-			FabricService.RegisterSession(saved);
+		public static void StartUserThread(object pData) {
+			FabricExporterData fd = (FabricExporterData)pData;
+			fd.RegisterSession(fd.SavedSession);
 
-			var sw = Stopwatch.StartNew();
 			IFabricClient fab = new FabricClient(); //obtains this thread's SavedSession
-			FabricUser u;
-			LogDebug(fab, "StartUserThread");
+			fab.Config.Logger = new LogFabric { WriteToConsole = true };
 
-			using ( ISession s = FabricService.NewSession() ) {
+			FabricUser u;
+
+			using ( ISession s = fd.SessProv.OpenSession() ) {
 				u = HomeService.GetCurrentUser(fab, s);
 			}
 
-			Func<ISession, IList<FabricArtifact>> getArtList = (s => s
-				.QueryOver<FabricArtifact>()
-				.Where(x => x.ArtifactId == null && x.Creator.Id == u.Id)
-				.Take(10)
-				.List()
-			);
+			var fe = new FabricExporter(fd, fab, u);
+			fe.SendAll(0);
 
-			Func<ISession, IList<FabricFactor>> getFacList = (s => s
-				.QueryOver<FabricFactor>()
-				.Where(x => x.FactorId == null && x.Creator.Id == u.Id)
-				.Fetch(x => x.Primary).Eager
-				.Fetch(x => x.Related).Eager
-				.Take(20)
-				.List()
-			);
-
-			SendAll(fab, getArtList, getFacList, 0);
-			FabricService.CompleteSession(saved);
-			LogDebug(fab, "StartUserThread done: "+sw.Elapsed.TotalMilliseconds+"ms");
+			fd.CompleteSession(fd.SavedSession);
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private static void SendAll(IFabricClient pFab, Func<ISession, IList<FabricArtifact>> pGetArts,
-											Func<ISession, IList<FabricFactor>> pGetFacs, int pLoopI) {
+		public FabricExporter(FabricExporterData pData, IFabricClient pFab, FabricUser pUser) {
+			vData = pData;
+			vFab = pFab;
+			vUser = pUser;
+			vTimer = new Stopwatch();
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		private void SendAll(int pLoopI) {
+			vTimer.Start();
+			LogDebug("SendAll ("+pLoopI+")");
+
 			if ( pLoopI > 4 ) {
-				LogDebug(pFab, "SendAll Kill. Too many loops: "+pLoopI);
+				LogDebug("SendAll kill (too many loops)");
 				return;
 			}
-			
-			
+
 			bool restart;
-			while ( LoadAndSendArtifacts(pFab, pGetArts) ) {}
-			while ( LoadAndSendFactors(pFab, pGetFacs, out restart) ) {}
+			while ( LoadAndSendArtifacts() ) { }
+			while ( LoadAndSendFactors(out restart) ) { }
 
 			if ( restart ) {
 				Thread.Sleep(2000);
-				LogDebug(pFab, "SendAll Restart!");
-				SendAll(pFab, pGetArts, pGetFacs, pLoopI+1);
+				LogDebug("SendAll restart");
+				SendAll(pLoopI+1);
 			}
-		}
 
+			LogDebug("SendAll done");
+		}
+		
 		/*--------------------------------------------------------------------------------------------*/
-		private static bool LoadAndSendArtifacts(IFabricClient pFab, 
-													Func<ISession, IList<FabricArtifact>> pGetArts) {
+		private bool LoadAndSendArtifacts() {
 			IList<FabricArtifact> artList;
 
-			using ( ISession s = FabricService.NewSession() ) {
-				artList = pGetArts(s);
+			using ( ISession s = vData.SessProv.OpenSession() ) {
+				artList = vData.Query.GetFabricArtifacts(s, vUser);
 			}
 
-			LogDebug(pFab, "SendAll Artifacts: "+artList.Count);
+			LogDebug("SendAllArtifacts: "+artList.Count);
 
 			if ( artList.Count == 0 ) {
 				return false;
 			}
 
-			using ( ISession s = FabricService.NewSession() ) {
+			using ( ISession s = vData.SessProv.OpenSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
-					SendArtifacts(pFab, s, artList);
+					SendArtifacts(s, artList);
 					tx.Commit();
 				}
 			}
@@ -129,13 +111,12 @@ namespace PhotoGallery.Daemon {
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
-		private static bool LoadAndSendFactors(IFabricClient pFab, 
-								Func<ISession, IList<FabricFactor>> pGetFacs, out bool pRestartAll) {
+		private bool LoadAndSendFactors(out bool pRestartAll) {
 			IList<FabricFactor> facList;
 			var saveFacList = new List<FabricFactor>();
 
-			using ( ISession s = FabricService.NewSession() ) {
-				facList = pGetFacs(s);
+			using ( ISession s = vData.SessProv.OpenSession() ) {
+				facList = vData.Query.GetFabricFactors(s, vUser);
 			}
 
 			foreach ( FabricFactor ff in facList ) {
@@ -153,15 +134,15 @@ namespace PhotoGallery.Daemon {
 			int skip = facList.Count-saveFacList.Count;
 			facList.Clear();
 			pRestartAll = (skip > 0);
-			LogDebug(pFab, "SendAll Factors: "+saveFacList.Count+" (+ skip "+skip+")");
+			LogDebug("SendAllFactors: "+saveFacList.Count+" (+ skip "+skip+")");
 
 			if ( saveFacList.Count == 0 ) {
 				return false;
 			}
 
-			using ( ISession s = FabricService.NewSession() ) {
+			using ( ISession s = vData.SessProv.OpenSession() ) {
 				using ( ITransaction tx = s.BeginTransaction() ) {
-					SendFactors(pFab, s, saveFacList);
+					SendFactors(s, saveFacList);
 					tx.Commit();
 				}
 			}
@@ -172,30 +153,28 @@ namespace PhotoGallery.Daemon {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private static void SendArtifacts(IFabricClient pFab, ISession pSess, 
-																IEnumerable<FabricArtifact> pArtList) {
+		private void SendArtifacts(ISession pSess, IEnumerable<FabricArtifact> pArtList) {
 			foreach ( FabricArtifact art in pArtList ) {
 				if ( StopThreads ) {
-					LogDebug(pFab, "SendArtifacts Stop!");
+					LogDebug("SendArtifacts Stop!");
 					return;
 				}
 
 				try {
-					FabInstance fi = pFab.Services.Modify.AddInstance
+					FabInstance fi = vFab.Services.Modify.AddInstance
 						.Post(art.Name, art.Disamb, art.Note).FirstDataItem();
-					LogDebug(pFab, "SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
+					LogDebug("SendArtifacts Art: "+art.Id+" => "+fi.ArtifactId+" ("+art.Name+")");
 					art.ArtifactId = fi.ArtifactId;
 					pSess.Update(art);
 				}
 				catch ( Exception e ) {
-					LogError(pFab, "SendArtifacts Err: "+art.Id+", "+e.Message, e);
+					LogError("SendArtifacts Err: "+art.Id+", "+e.Message, e);
 				}
 			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static void SendFactors(IFabricClient pFab, ISession pSess,
-																IEnumerable<FabricFactor> pFacList) {
+		private void SendFactors(ISession pSess, IEnumerable<FabricFactor> pFacList) {
 			var batch = new List<FabBatchNewFactor>();
 			var batchMap = new Dictionary<long, FabricFactor>();
 			var fakeBatchRes = new List<FabBatchResult>();
@@ -210,16 +189,16 @@ namespace PhotoGallery.Daemon {
 			}
 
 			if ( StopThreads ) {
-				LogDebug(pFab, "SendFactorsStop!");
+				LogDebug("SendFactorsStop!");
 				return;
 			}
 
 			try {
-				IList<FabBatchResult> batchRes = pFab.Services.Modify.AddFactors
+				IList<FabBatchResult> batchRes = vFab.Services.Modify.AddFactors
 					.Post(batch.ToArray()).Data;
 
 				foreach ( FabBatchResult fbr in batchRes ) {
-					LogDebug(pFab, "SendFactors Fac: "+fbr.BatchId+" => "+fbr.ResultId);
+					LogDebug("SendFactors Fac: "+fbr.BatchId+" => "+fbr.ResultId);
 
 					FabricFactor ff = batchMap[fbr.BatchId];
 					ff.FactorId = fbr.ResultId;
@@ -228,25 +207,31 @@ namespace PhotoGallery.Daemon {
 				
 			}
 			catch ( Exception e ) {
-				LogError(pFab, "SendFactors Err: "+e.Message, e);
+				LogError("SendFactors Err: "+e.Message, e);
 			}
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private static string GetLogPrefix(IFabricClient pFab) {
-			return "FabBg["+(pFab.UseDataProviderPerson ? "DP" : "User")+"] ";
-		}
-		
-		/*--------------------------------------------------------------------------------------------*/
-		private static void LogDebug(IFabricClient pFab, string pText) {
-			Log.Debug(GetLogPrefix(pFab)+pText);
+		private void LogDebug(string pText) {
+			Log.Debug(GetLogPrefix()+pText+GetLogTime());
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static void LogError(IFabricClient pFab, string pText, Exception pEx) {
-			Log.Error(GetLogPrefix(pFab)+pText, pEx);
+		private void LogError(string pText, Exception pEx) {
+			Log.Error(GetLogPrefix()+pText+GetLogTime(), pEx);
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		private string GetLogPrefix() {
+			string s = (vFab.UseDataProviderPerson ? "DataProv" : "User-"+vFab.PersonSession.SessionId);
+			return "Export["+s+"] ";
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private string GetLogTime() {
+			return " ("+vTimer.Elapsed.TotalSeconds.ToString("0.000")+" sec)";
 		}
 
 	}
