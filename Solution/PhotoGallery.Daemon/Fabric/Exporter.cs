@@ -12,7 +12,7 @@ using PhotoGallery.Services.Account.Tools;
 namespace PhotoGallery.Daemon.Fabric {
 	
 	/*================================================================================================*/
-	public class Exporter {
+	public class Exporter : IExporter {
 
 		public static bool StopThreads;
 

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Database", "Ph
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Daemon", "PhotoGallery.Daemon\PhotoGallery.Daemon.csproj", "{98A30808-B5CB-4F94-9100-E599F47D8235}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoGallery.Test", "PhotoGallery.Test\PhotoGallery.Test.csproj", "{C38A1211-13EA-487C-A97E-5FA1FFD01693}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,21 @@ Global
 		{98A30808-B5CB-4F94-9100-E599F47D8235}.Release|Mixed Platforms.Build.0 = Release|x86
 		{98A30808-B5CB-4F94-9100-E599F47D8235}.Release|x86.ActiveCfg = Release|x86
 		{98A30808-B5CB-4F94-9100-E599F47D8235}.Release|x86.Build.0 = Release|x86
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.DebugLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.DebugLive|Any CPU.Build.0 = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.DebugLive|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.DebugLive|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.DebugLive|x86.ActiveCfg = Debug|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C38A1211-13EA-487C-A97E-5FA1FFD01693}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

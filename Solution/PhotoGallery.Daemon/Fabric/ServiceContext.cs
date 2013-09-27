@@ -11,7 +11,8 @@ namespace PhotoGallery.Daemon.Fabric {
 		public virtual ISessionProvider SessProv { get; set; }
 		public virtual Queries Query { get; set; }
 		public virtual Func<string, IFabricClient> FabClientProv { get; set; }
-		public virtual Func<ExporterContext, IFabricClient, FabricUser, Exporter> ExportProv { get; set; }
+		public virtual Func<ExporterContext, IFabricClient, FabricUser, IExporter>
+			ExportProv { get; set; }
 
 	}
 

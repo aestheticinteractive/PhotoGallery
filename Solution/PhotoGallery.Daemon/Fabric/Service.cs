@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Fabric.Clients.Cs;
@@ -6,14 +7,14 @@ using Fabric.Clients.Cs.Session;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
-using PhotoGallery.Services.Account;
 
 namespace PhotoGallery.Daemon.Fabric {
 
 	/*================================================================================================*/
 	public class Service {
 
-		private static ConcurrentDictionary<string, SavedSession> SavedSessMap;
+		private static ConcurrentDictionary<string, SavedSession> SavedSessByIdMap;
+		private static ConcurrentDictionary<int, string> SavedSessIdByThreadMap;
 
 		private readonly ServiceContext vSvcCtx;
 		private readonly IFabricClient vDbClient;
@@ -24,10 +25,12 @@ namespace PhotoGallery.Daemon.Fabric {
 		public Service(ServiceContext pSvcCtx, long pAppId, string pAppSecret, long pDataProvId) {
 			vSvcCtx = pSvcCtx;
 
-			if ( SavedSessMap == null ) {
-				SavedSessMap = new ConcurrentDictionary<string, SavedSession>();
-				const string apiUrl = "http://api.inthefabric.com";
+			if ( !FabricClient.IsInitialized ) {
+				SavedSessByIdMap = new ConcurrentDictionary<string, SavedSession>();
+				SavedSessIdByThreadMap = new ConcurrentDictionary<int, string>();
+
 				IFabricSessionContainer dpSess = new FabricSessionContainer();
+				const string apiUrl = "http://api.inthefabric.com";
 
 				FabricClient.InitOnce(new FabricClientConfig("main", apiUrl,
 					pAppId, pAppSecret, pDataProvId, "NONE", ProvideFabricSession));
@@ -50,8 +53,13 @@ namespace PhotoGallery.Daemon.Fabric {
 			ec.Query = vSvcCtx.Query;
 
 			var t = new Thread(() => {
-				var fe = vSvcCtx.ExportProv(ec, vDbClient, null);
-				fe.SendAll(0);
+				try {
+					var fe = vSvcCtx.ExportProv(ec, vDbClient, null);
+					fe.SendAll(0);
+				}
+				catch ( Exception e ) {
+					Log.Error("StartDataProv Exception: "+e.Message, e);
+				}
 			});
 
 			t.Start();
@@ -67,26 +75,34 @@ namespace PhotoGallery.Daemon.Fabric {
 			ec.SavedSession = pSaved;
 
 			var t = new Thread(() => {
-				RegisterSession(ec.SavedSession);
-				IFabricClient fab = vSvcCtx.FabClientProv(null); //obtains this thread's SavedSession
-				FabricUser u;
+				try {
+					RegisterSession(ec.SavedSession);
+					IFabricClient fab = vSvcCtx.FabClientProv(null); //gets thread's SavedSession
+					FabricUser u;
 
-				using ( ISession s = ec.SessProv.OpenSession() ) {
-					u = HomeService.GetCurrentUser(fab, s);
+					using ( ISession s = ec.SessProv.OpenSession() ) {
+						u = vSvcCtx.Query.GetCurrentUser(s, fab);
+					}
+
+					var fe = vSvcCtx.ExportProv(ec, fab, u);
+					fe.SendAll(0);
+					CompleteSession(ec.SavedSession);
 				}
-
-				var fe = vSvcCtx.ExportProv(ec, fab, u);
-				fe.SendAll(0);
-				CompleteSession(ec.SavedSession);
+				catch ( Exception e ) {
+					Log.Error("StartUser Exception: "+e.Message, e);
+				}
 			});
 
-			t.Start(ec);
+			t.Start();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private static IFabricSessionContainer ProvideFabricSession(string pConfigKey) {
-			SavedSession saved = (SavedSession)Thread.CurrentContext.GetProperty(SavedSession.PropName);
-			return new FabricSessionContainer { Person = saved };
+			string sessId = SavedSessIdByThreadMap[Thread.CurrentThread.ManagedThreadId];
+
+			var fsc = new FabricSessionContainer();
+			fsc.Person = SavedSessByIdMap[sessId];
+			return fsc;
 		}
 
 
@@ -104,7 +120,6 @@ namespace PhotoGallery.Daemon.Fabric {
 					if ( !IsSessionActive(saved) ) {
 						StartUser(saved);
 					}
-
 				}
 			}
 		}
@@ -131,21 +146,24 @@ namespace PhotoGallery.Daemon.Fabric {
 		/*--------------------------------------------------------------------------------------------*/
 		private void RegisterSession(SavedSession pSaved) {
 			Log.Info("RegisterSession: "+pSaved.SessionId);
-			SavedSessMap.GetOrAdd(pSaved.SessionId, pSaved);
-			Thread.CurrentContext.SetProperty(pSaved);
+			SavedSessByIdMap.GetOrAdd(pSaved.SessionId, pSaved);
+			SavedSessIdByThreadMap.GetOrAdd(Thread.CurrentThread.ManagedThreadId, pSaved.SessionId);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private bool IsSessionActive(SavedSession pSaved) {
-			bool act = SavedSessMap.ContainsKey(pSaved.SessionId);
-			Log.Info("IsSessionActive: "+act);
+			bool act = SavedSessByIdMap.ContainsKey(pSaved.SessionId);
+			Log.Info("IsSessionActive: "+pSaved.SessionId+" / "+act);
 			return act;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void CompleteSession(SavedSession pSaved) {
 			Log.Info("CompleteSession: "+pSaved.SessionId);
-			SavedSessMap.TryRemove(pSaved.SessionId, out pSaved);
+			string id;
+
+			SavedSessByIdMap.TryRemove(pSaved.SessionId, out pSaved);
+			SavedSessIdByThreadMap.TryRemove(Thread.CurrentThread.ManagedThreadId, out id);
 		}
 
 

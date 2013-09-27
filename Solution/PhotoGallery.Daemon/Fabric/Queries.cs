@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fabric.Clients.Cs;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
+using PhotoGallery.Services.Account;
 
 namespace PhotoGallery.Daemon.Fabric {
 
@@ -37,6 +39,14 @@ namespace PhotoGallery.Daemon.Fabric {
 			pSess.Delete(pPersonSess);
 			Log.Debug("DeleteSession: "+pPersonSess.SessionId);
 		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		public virtual FabricUser GetCurrentUser(ISession pSess, IFabricClient pFabClient) {
+			return HomeService.GetCurrentUser(pFabClient, pSess);
+		}
+
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

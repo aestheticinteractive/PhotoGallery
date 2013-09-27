@@ -2,21 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98A30808-B5CB-4F94-9100-E599F47D8235}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C38A1211-13EA-487C-A97E-5FA1FFD01693}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PhotoGallery.Daemon</RootNamespace>
-    <AssemblyName>PhotoGallery.Daemon</AssemblyName>
+    <RootNamespace>PhotoGallery.Test</RootNamespace>
+    <AssemblyName>PhotoGallery.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,47 +37,39 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="Fabric\IExporter.cs" />
-    <Compile Include="Fabric\ServiceContext.cs" />
-    <Compile Include="Fabric\ExporterContext.cs" />
-    <Compile Include="Fabric\Queries.cs" />
-    <Compile Include="Fabric\SavedSession.cs" />
-    <Compile Include="Fabric\Service.cs" />
-    <Compile Include="Fabric\Exporter.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Daemon\TService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Fabric.Clients.Cs">
       <HintPath>..\..\Packages\FabricClient.0.2.4.2\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections">
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>C:\Zach\Programs\Dev\MySQL Connector Net 6.5.4\Assemblies\v2.0\MySql.Data.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Moq">
+      <HintPath>..\..\Packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\..\Packages\ServiceStack.Text.3.9.63\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Global\GlobalAppSettings.config">
-      <Link>GlobalAppSettings.config</Link>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PhotoGallery.Daemon\PhotoGallery.Daemon.csproj">
+      <Project>{98A30808-B5CB-4F94-9100-E599F47D8235}</Project>
+      <Name>PhotoGallery.Daemon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PhotoGallery.Database\PhotoGallery.Database.csproj">
       <Project>{7AC01DEB-7FD8-43D7-9101-A07219572890}</Project>
       <Name>PhotoGallery.Database</Name>
@@ -98,9 +86,10 @@
       <Project>{E19B4F01-9FEA-4775-A662-DCF0FD19A617}</Project>
       <Name>PhotoGallery.Services</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <ProjectReference Include="..\PhotoGallery.Web\PhotoGallery.Web.csproj">
+      <Project>{3758EB03-B4A2-43FA-957C-B5C23894A515}</Project>
+      <Name>PhotoGallery.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
