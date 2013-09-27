@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Fabric.Clients.Cs;
@@ -7,7 +8,7 @@ using NHibernate;
 using PhotoGallery.Database;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
-using PhotoGallery.Services;
+using PhotoGallery.Services.Account;
 
 namespace PhotoGallery.Daemon {
 
@@ -18,34 +19,33 @@ namespace PhotoGallery.Daemon {
 
 		private readonly ISessionProvider vSessProv;
 		private readonly Queries vQuery;
-		private readonly IFabricSessionContainer vDpSess;
+		private readonly Func<string, IFabricClient> vFabClientProv;
 		private readonly IFabricClient vDbClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public FabricService(ISessionProvider pSessProv, Queries pQuery,
+		public FabricService(ISessionProvider pSessProv, Queries pQuery, 
+													Func<string, IFabricClient> pFabClientProv,
 													long pAppId, string pAppSecret, long pDataProvId) {
 			vSessProv = pSessProv;
 			vQuery = pQuery;
-			vDpSess = new FabricSessionContainer();
+			vFabClientProv = pFabClientProv;
 
 			if ( SavedSessMap == null ) {
 				SavedSessMap = new ConcurrentDictionary<string, SavedSession>();
+				const string apiUrl = "http://api.inthefabric.com";
+				IFabricSessionContainer dpSess = new FabricSessionContainer();
+
+				FabricClient.InitOnce(new FabricClientConfig("main", apiUrl,
+					pAppId, pAppSecret, pDataProvId, "NONE", ProvideFabricSession));
+
+				FabricClient.AddConfig(new FabricClientConfig("dataProv", apiUrl,
+					pAppId, pAppSecret, pDataProvId, "NONE", (k => dpSess)));
 			}
 
-			////
-
-			FabricClient.InitOnce(new FabricClientConfig("main", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, "NONE", ProvideFabricSession));
-
-			FabricClient.AddConfig(new FabricClientConfig("dataProv", "http://api.inthefabric.com",
-				pAppId, pAppSecret, pDataProvId, "NONE", (k => vDpSess)));
-
-			vDbClient = new FabricClient("dataProv");
+			vDbClient = vFabClientProv("dataProv");
 			vDbClient.UseDataProviderPerson = true;
-			vDbClient.Config.Logger = new LogFabric { WriteToConsole = true };
-
 			StartDataProv();
 		}
 
@@ -56,10 +56,13 @@ namespace PhotoGallery.Daemon {
 			var fd = new FabricExporterData();
 			fd.SessProv = vSessProv;
 			fd.Query = vQuery;
-			fd.Fab = vDbClient;
 
-			var t = new Thread(FabricExporter.StartDataProvThread);
-			t.Start(fd);
+			var t = new Thread(() => {
+				var fe = new FabricExporter(fd, vDbClient, null);
+				fe.SendAll(0);
+			});
+
+			t.Start();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -70,10 +73,21 @@ namespace PhotoGallery.Daemon {
 			fd.SessProv = vSessProv;
 			fd.Query = vQuery;
 			fd.SavedSession = pSaved;
-			fd.RegisterSession = RegisterSession;
-			fd.CompleteSession = CompleteSession;
 
-			var t = new Thread(FabricExporter.StartUserThread);
+			var t = new Thread(() => {
+				RegisterSession(fd.SavedSession);
+				IFabricClient fab = vFabClientProv(null); //obtains this thread's SavedSession
+				FabricUser u;
+
+				using ( ISession s = fd.SessProv.OpenSession() ) {
+					u = HomeService.GetCurrentUser(fab, s);
+				}
+
+				var fe = new FabricExporter(fd, fab, u);
+				fe.SendAll(0);
+				CompleteSession(fd.SavedSession);
+			});
+
 			t.Start(fd);
 		}
 

@@ -1,6 +1,4 @@
-﻿using System;
-using Fabric.Clients.Cs;
-using PhotoGallery.Database;
+﻿using PhotoGallery.Database;
 
 namespace PhotoGallery.Daemon {
 	
@@ -9,10 +7,7 @@ namespace PhotoGallery.Daemon {
 
 		public ISessionProvider SessProv { get; set; }
 		public Queries Query { get; set; }
-		public IFabricClient Fab { get; set; }
 		public SavedSession SavedSession { get; set; }
-		public Action<SavedSession> RegisterSession { get; set; }
-		public Action<SavedSession> CompleteSession { get; set; }
 
 	}
 

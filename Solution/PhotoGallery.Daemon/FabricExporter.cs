@@ -7,8 +7,6 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
-using PhotoGallery.Services;
-using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Account.Tools;
 
 namespace PhotoGallery.Daemon {
@@ -26,36 +24,6 @@ namespace PhotoGallery.Daemon {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public static void StartDataProvThread(object pData) {
-			FabricExporterData fd = (FabricExporterData)pData;
-
-			var fe = new FabricExporter(fd, fd.Fab, null);
-			fe.SendAll(0);
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public static void StartUserThread(object pData) {
-			FabricExporterData fd = (FabricExporterData)pData;
-			fd.RegisterSession(fd.SavedSession);
-
-			IFabricClient fab = new FabricClient(); //obtains this thread's SavedSession
-			fab.Config.Logger = new LogFabric { WriteToConsole = true };
-
-			FabricUser u;
-
-			using ( ISession s = fd.SessProv.OpenSession() ) {
-				u = HomeService.GetCurrentUser(fab, s);
-			}
-
-			var fe = new FabricExporter(fd, fab, u);
-			fe.SendAll(0);
-
-			fd.CompleteSession(fd.SavedSession);
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
 		public FabricExporter(FabricExporterData pData, IFabricClient pFab, FabricUser pUser) {
 			vData = pData;
 			vFab = pFab;
@@ -64,7 +32,7 @@ namespace PhotoGallery.Daemon {
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
-		private void SendAll(int pLoopI) {
+		public void SendAll(int pLoopI) {
 			vTimer.Start();
 			LogDebug("SendAll ("+pLoopI+")");
 
@@ -85,7 +53,9 @@ namespace PhotoGallery.Daemon {
 
 			LogDebug("SendAll done");
 		}
-		
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private bool LoadAndSendArtifacts() {
 			IList<FabricArtifact> artList;

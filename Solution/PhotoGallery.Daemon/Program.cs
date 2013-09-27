@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Threading;
+using Fabric.Clients.Cs;
 using PhotoGallery.Database;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
@@ -77,8 +78,15 @@ namespace PhotoGallery.Daemon {
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
-			return new FabricService(new SessionProvider(), new Queries(),
+			return new FabricService(new SessionProvider(), new Queries(), FabClientProv,
 				FabricAppId, FabricAppSecret, FabricDataProvId);
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		private static IFabricClient FabClientProv(string pConfigKey) {
+			var fab = new FabricClient(pConfigKey);
+			fab.Config.Logger = new LogFabric { WriteToConsole = true };
+			return fab;
 		}
 
 	}
