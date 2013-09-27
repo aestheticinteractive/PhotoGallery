@@ -1,9 +1,9 @@
 ﻿using PhotoGallery.Database;
 
-namespace PhotoGallery.Daemon {
+namespace PhotoGallery.Daemon.Fabric {
 	
 	/*================================================================================================*/
-	public class FabricExporterData {
+	public class ExporterData {
 
 		public ISessionProvider SessProv { get; set; }
 		public Queries Query { get; set; }

@@ -5,7 +5,7 @@ using Fabric.Clients.Cs.Api;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Domain;
 
-namespace PhotoGallery.Daemon {
+namespace PhotoGallery.Daemon.Fabric {
 
 	/*================================================================================================*/
 	public class SavedSession : IFabricPersonSession, IContextProperty {

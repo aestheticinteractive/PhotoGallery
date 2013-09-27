@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Threading;
 using Fabric.Clients.Cs;
+using PhotoGallery.Daemon.Fabric;
 using PhotoGallery.Database;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
@@ -15,7 +16,7 @@ namespace PhotoGallery.Daemon {
 		private static long FabricAppId;
 		private static string FabricAppSecret;
 		private static long FabricDataProvId;
-		private static FabricService FabSvc;
+		private static Service FabSvc;
 		private static bool Stopped;
 
 
@@ -59,7 +60,7 @@ namespace PhotoGallery.Daemon {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static FabricService BuildFabricService() {
+		private static Service BuildFabricService() {
 #if !DEBUG
 			const string prefix = "Prod_";
 #else
@@ -78,7 +79,7 @@ namespace PhotoGallery.Daemon {
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
-			return new FabricService(new SessionProvider(), new Queries(), FabClientProv,
+			return new Service(new SessionProvider(), new Queries(), FabClientProv,
 				FabricAppId, FabricAppSecret, FabricDataProvId);
 		}
 		

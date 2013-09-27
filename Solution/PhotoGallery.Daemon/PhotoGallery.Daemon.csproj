@@ -41,11 +41,11 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="FabricExporterData.cs" />
-    <Compile Include="Queries.cs" />
-    <Compile Include="SavedSession.cs" />
-    <Compile Include="FabricService.cs" />
-    <Compile Include="FabricExporter.cs" />
+    <Compile Include="Fabric\ExporterData.cs" />
+    <Compile Include="Fabric\Queries.cs" />
+    <Compile Include="Fabric\SavedSession.cs" />
+    <Compile Include="Fabric\Service.cs" />
+    <Compile Include="Fabric\Exporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

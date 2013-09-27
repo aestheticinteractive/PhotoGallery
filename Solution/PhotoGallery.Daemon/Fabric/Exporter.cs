@@ -9,14 +9,14 @@ using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Tools;
 
-namespace PhotoGallery.Daemon {
+namespace PhotoGallery.Daemon.Fabric {
 	
 	/*================================================================================================*/
-	public class FabricExporter {
+	public class Exporter {
 
 		public static bool StopThreads;
 
-		private readonly FabricExporterData vData;
+		private readonly ExporterData vData;
 		private readonly IFabricClient vFab;
 		private readonly FabricUser vUser;
 		private readonly Stopwatch vTimer;
@@ -24,7 +24,7 @@ namespace PhotoGallery.Daemon {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public FabricExporter(FabricExporterData pData, IFabricClient pFab, FabricUser pUser) {
+		public Exporter(ExporterData pData, IFabricClient pFab, FabricUser pUser) {
 			vData = pData;
 			vFab = pFab;
 			vUser = pUser;

@@ -10,10 +10,10 @@ using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account;
 
-namespace PhotoGallery.Daemon {
+namespace PhotoGallery.Daemon.Fabric {
 
 	/*================================================================================================*/
-	public class FabricService {
+	public class Service {
 
 		private static ConcurrentDictionary<string, SavedSession> SavedSessMap;
 
@@ -25,7 +25,7 @@ namespace PhotoGallery.Daemon {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public FabricService(ISessionProvider pSessProv, Queries pQuery, 
+		public Service(ISessionProvider pSessProv, Queries pQuery, 
 													Func<string, IFabricClient> pFabClientProv,
 													long pAppId, string pAppSecret, long pDataProvId) {
 			vSessProv = pSessProv;
@@ -53,12 +53,12 @@ namespace PhotoGallery.Daemon {
 		private void StartDataProv() {
 			Log.Debug("StartDataProv");
 
-			var fd = new FabricExporterData();
+			var fd = new ExporterData();
 			fd.SessProv = vSessProv;
 			fd.Query = vQuery;
 
 			var t = new Thread(() => {
-				var fe = new FabricExporter(fd, vDbClient, null);
+				var fe = new Exporter(fd, vDbClient, null);
 				fe.SendAll(0);
 			});
 
@@ -69,7 +69,7 @@ namespace PhotoGallery.Daemon {
 		private void StartUser(SavedSession pSaved) {
 			Log.Debug("StartUser: "+pSaved.SessionId);
 
-			var fd = new FabricExporterData();
+			var fd = new ExporterData();
 			fd.SessProv = vSessProv;
 			fd.Query = vQuery;
 			fd.SavedSession = pSaved;
@@ -83,7 +83,7 @@ namespace PhotoGallery.Daemon {
 					u = HomeService.GetCurrentUser(fab, s);
 				}
 
-				var fe = new FabricExporter(fd, fab, u);
+				var fe = new Exporter(fd, fab, u);
 				fe.SendAll(0);
 				CompleteSession(fd.SavedSession);
 			});
@@ -161,7 +161,7 @@ namespace PhotoGallery.Daemon {
 		/*--------------------------------------------------------------------------------------------*/
 		public void StopAllThreads() {
 			Log.Debug("StopAllThreads");
-			FabricExporter.StopThreads = true;
+			Exporter.StopThreads = true;
 		}
 
 	}

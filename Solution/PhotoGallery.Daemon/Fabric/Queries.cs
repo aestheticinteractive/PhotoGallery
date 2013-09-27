@@ -4,7 +4,7 @@ using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 
-namespace PhotoGallery.Daemon {
+namespace PhotoGallery.Daemon.Fabric {
 
 	/*================================================================================================*/
 	public class Queries {
