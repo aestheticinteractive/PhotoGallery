@@ -15,6 +15,8 @@ namespace PhotoGallery.Infrastructure {
 		public const string Action = "Action";
 		public const string Session = "Session";
 
+		public static bool WriteToConsole;
+
 		private static readonly ILog LogInstance = LogManager.GetLogger(typeof(Log));
 		private static bool Configured = false;
 
@@ -163,6 +165,11 @@ namespace PhotoGallery.Infrastructure {
 			Trace.WriteLine(pText);
 			if ( pException != null ) { Trace.WriteLine(pException); }
 #endif
+
+			if ( WriteToConsole ) {
+				Console.WriteLine(pText);
+				if ( pException != null ) { Console.WriteLine(pException); }
+			}
 		}
 
 	}

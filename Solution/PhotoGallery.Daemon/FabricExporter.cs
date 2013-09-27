@@ -46,9 +46,13 @@ namespace PhotoGallery.Daemon {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static void StartUserThread(object pFabClient) {
+		public static void StartUserThread(object pSavedSession) {
+			SavedSession saved = (SavedSession)pSavedSession;
+			Thread.CurrentContext.SetProperty(saved);
+			FabricService.RegisterSession(saved);
+
 			var sw = Stopwatch.StartNew();
-			IFabricClient fab = (IFabricClient)pFabClient;
+			IFabricClient fab = new FabricClient(); //obtains this thread's SavedSession
 			FabricUser u;
 			LogDebug(fab, "StartUserThread");
 
@@ -73,6 +77,7 @@ namespace PhotoGallery.Daemon {
 			);
 
 			SendAll(fab, getArtList, getFacList, 0);
+			FabricService.CompleteSession(saved);
 			LogDebug(fab, "StartUserThread done: "+sw.Elapsed.TotalMilliseconds+"ms");
 		}
 

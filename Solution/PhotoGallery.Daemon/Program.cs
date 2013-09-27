@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Threading;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
 
@@ -11,14 +13,45 @@ namespace PhotoGallery.Daemon {
 		private static long FabricAppId;
 		private static string FabricAppSecret;
 		private static long FabricDataProvId;
+		private static bool Stopped;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public static void Main(string[] pArgs) {
+			Console.CancelKeyPress += OnCancelKeyPress;
 			Log.ConfigureOnce();
+			Log.WriteToConsole = true;
+
+			Log.Debug("Initializing database connection...");
 			BaseService.InitDatabase();
+
+			Log.Debug("Initializing Fabric Client...");
 			SetupFabricClient();
+
+
+			while ( true ) {
+				if ( !Stopped ) {
+					FabricService.FindSessions();
+					FabricService.DeleteOldSessions();
+				}
+
+				Thread.Sleep(5000);
+			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private static void OnCancelKeyPress(object pSender, ConsoleCancelEventArgs pEventArgs) {
+			if ( Stopped ) {
+				pEventArgs.Cancel = false;
+				Log.Debug("**** Program stopping ****");
+				return;
+			}
+
+			Log.Debug("**** Program cancelled. Stopping all threads ****");
+			pEventArgs.Cancel = true;
+			FabricService.StopAllThreads();
+			Stopped = true;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
