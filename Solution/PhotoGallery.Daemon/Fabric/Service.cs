@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Session;
 using NHibernate;
-using PhotoGallery.Database;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account;
@@ -17,20 +15,14 @@ namespace PhotoGallery.Daemon.Fabric {
 
 		private static ConcurrentDictionary<string, SavedSession> SavedSessMap;
 
-		private readonly ISessionProvider vSessProv;
-		private readonly Queries vQuery;
-		private readonly Func<string, IFabricClient> vFabClientProv;
+		private readonly ServiceContext vSvcCtx;
 		private readonly IFabricClient vDbClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public Service(ISessionProvider pSessProv, Queries pQuery, 
-													Func<string, IFabricClient> pFabClientProv,
-													long pAppId, string pAppSecret, long pDataProvId) {
-			vSessProv = pSessProv;
-			vQuery = pQuery;
-			vFabClientProv = pFabClientProv;
+		public Service(ServiceContext pSvcCtx, long pAppId, string pAppSecret, long pDataProvId) {
+			vSvcCtx = pSvcCtx;
 
 			if ( SavedSessMap == null ) {
 				SavedSessMap = new ConcurrentDictionary<string, SavedSession>();
@@ -44,7 +36,7 @@ namespace PhotoGallery.Daemon.Fabric {
 					pAppId, pAppSecret, pDataProvId, "NONE", (k => dpSess)));
 			}
 
-			vDbClient = vFabClientProv("dataProv");
+			vDbClient = vSvcCtx.FabClientProv("dataProv");
 			vDbClient.UseDataProviderPerson = true;
 			StartDataProv();
 		}
@@ -54,11 +46,11 @@ namespace PhotoGallery.Daemon.Fabric {
 			Log.Debug("StartDataProv");
 
 			var fd = new ExporterData();
-			fd.SessProv = vSessProv;
-			fd.Query = vQuery;
+			fd.SessProv = vSvcCtx.SessProv;
+			fd.Query = vSvcCtx.Query;
 
 			var t = new Thread(() => {
-				var fe = new Exporter(fd, vDbClient, null);
+				var fe = vSvcCtx.ExportProv(fd, vDbClient, null);
 				fe.SendAll(0);
 			});
 
@@ -70,20 +62,20 @@ namespace PhotoGallery.Daemon.Fabric {
 			Log.Debug("StartUser: "+pSaved.SessionId);
 
 			var fd = new ExporterData();
-			fd.SessProv = vSessProv;
-			fd.Query = vQuery;
+			fd.SessProv = vSvcCtx.SessProv;
+			fd.Query = vSvcCtx.Query;
 			fd.SavedSession = pSaved;
 
 			var t = new Thread(() => {
 				RegisterSession(fd.SavedSession);
-				IFabricClient fab = vFabClientProv(null); //obtains this thread's SavedSession
+				IFabricClient fab = vSvcCtx.FabClientProv(null); //obtains this thread's SavedSession
 				FabricUser u;
 
 				using ( ISession s = fd.SessProv.OpenSession() ) {
 					u = HomeService.GetCurrentUser(fab, s);
 				}
 
-				var fe = new Exporter(fd, fab, u);
+				var fe = vSvcCtx.ExportProv(fd, fab, u);
 				fe.SendAll(0);
 				CompleteSession(fd.SavedSession);
 			});
@@ -101,12 +93,12 @@ namespace PhotoGallery.Daemon.Fabric {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public void FindSessions() {
-			using ( ISession s = vSessProv.OpenSession() ) {
-				IList<FabricPersonSession> list = vQuery.FindUpdatableSessions(s);
+			using ( ISession s = vSvcCtx.SessProv.OpenSession() ) {
+				IList<FabricPersonSession> list = vSvcCtx.Query.FindUpdatableSessions(s);
 				Log.Debug("FindSessions: "+list.Count);
 
 				foreach ( FabricPersonSession fps in list ) {
-					vQuery.TurnOffSessionUpdate(s, fps);
+					vSvcCtx.Query.TurnOffSessionUpdate(s, fps);
 					var saved = new SavedSession(fps);
 
 					if ( !IsSessionActive(saved) ) {
@@ -119,12 +111,12 @@ namespace PhotoGallery.Daemon.Fabric {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void DeleteOldSessions() {
-			using ( ISession s = vSessProv.OpenSession() ) {
-				IList<FabricPersonSession> list = vQuery.FindExpiredSessions(s);
+			using ( ISession s = vSvcCtx.SessProv.OpenSession() ) {
+				IList<FabricPersonSession> list = vSvcCtx.Query.FindExpiredSessions(s);
 				Log.Debug("DeleteOldSessions: "+list.Count);
 
 				foreach ( FabricPersonSession fps in list ) {
-					vQuery.DeleteSession(s, fps);
+					vSvcCtx.Query.DeleteSession(s, fps);
 					var saved = new SavedSession(fps);
 
 					if ( IsSessionActive(saved) ) {

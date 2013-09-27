@@ -78,9 +78,13 @@ namespace PhotoGallery.Daemon {
 			FabricAppSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
 			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
+			var sc = new ServiceContext();
+			sc.SessProv = new SessionProvider();
+			sc.Query = new Queries();
+			sc.FabClientProv = FabClientProv;
+			sc.ExportProv = (d, c, u) => new Exporter(d, c, u);
 
-			return new Service(new SessionProvider(), new Queries(), FabClientProv,
-				FabricAppId, FabricAppSecret, FabricDataProvId);
+			return new Service(sc, FabricAppId, FabricAppSecret, FabricDataProvId);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
