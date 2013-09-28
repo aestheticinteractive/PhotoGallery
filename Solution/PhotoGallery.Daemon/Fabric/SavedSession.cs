@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Contexts;
 using System.Web;
 using Fabric.Clients.Cs.Api;
 using Fabric.Clients.Cs.Session;
@@ -8,7 +7,7 @@ using PhotoGallery.Domain;
 namespace PhotoGallery.Daemon.Fabric {
 
 	/*================================================================================================*/
-	public class SavedSession : IFabricPersonSession, IContextProperty {
+	public class SavedSession : IFabricPersonSession {
 
 		public const string PropName = "SavedSess";
 
@@ -86,16 +85,13 @@ namespace PhotoGallery.Daemon.Fabric {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public bool IsNewContextOK(Context pNewContext) {
-			return true;
+		public void ClearSession() {
+			Session = null;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void Freeze(Context pNewContext) {}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public string Name {
-			get { return PropName; }
+		public bool IsActive() {
+			return (Session != null);
 		}
 
 	}

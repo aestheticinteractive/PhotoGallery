@@ -125,8 +125,7 @@ namespace PhotoGallery.Daemon.Fabric {
 		/*--------------------------------------------------------------------------------------------*/
 		private void SendArtifacts(ISession pSess, IEnumerable<FabricArtifact> pArtList) {
 			foreach ( FabricArtifact art in pArtList ) {
-				if ( StopThreads ) {
-					LogDebug("SendArtifacts Stop!");
+				if ( StopExporting() ) {
 					return;
 				}
 
@@ -158,8 +157,7 @@ namespace PhotoGallery.Daemon.Fabric {
 				fakeBatchRes.Add(fbr);
 			}
 
-			if ( StopThreads ) {
-				LogDebug("SendFactorsStop!");
+			if ( StopExporting() ) {
 				return;
 			}
 
@@ -183,6 +181,13 @@ namespace PhotoGallery.Daemon.Fabric {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
+		private bool StopExporting() {
+			bool stop = (vCtx.SavedSession != null && !vCtx.SavedSession.IsActive());
+			LogDebug("IsSavedSessionInactive: "+stop+" / "+StopThreads);
+			return (stop || StopThreads);
+		}
+		
 		/*--------------------------------------------------------------------------------------------*/
 		private void LogDebug(string pText) {
 			Log.Debug(GetLogPrefix()+pText+GetLogTime());

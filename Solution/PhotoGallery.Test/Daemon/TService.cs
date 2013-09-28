@@ -168,6 +168,45 @@ namespace PhotoGallery.Test.Daemon {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
+		[Test]
+		public void FindSessionsDuplicate() {
+			var mockSess = new Mock<ISession>();
+			vMockSessProv.Setup(x => x.OpenSession()).Returns(mockSess.Object);
+
+			var fps = new FabricPersonSession();
+			fps.SessionId = "sessionId0";
+
+			var list = new List<FabricPersonSession>();
+			list.Add(fps);
+
+			vMockQuery.Setup(x => x.FindUpdatableSessions(mockSess.Object)).Returns(list);
+
+			var oldClientProv = vSvcCtx.FabClientProv;
+
+			vSvcCtx.FabClientProv = (ck => {
+				Thread.Sleep(600);
+				return oldClientProv(ck);
+			});
+
+			////
+
+			var svc = NewService();
+			svc.FindSessions();
+			Thread.Sleep(200);
+			svc.FindSessions();
+			Thread.Sleep(200);
+			svc.FindSessions();
+			Thread.Sleep(1000); //wait for Threads to finish
+
+			////
+
+			//Includes DataProv's key
+			Assert.AreEqual(2, vFabClientKeys.Count, "Incorrect FabricClient count.");
+		}
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		/*--------------------------------------------------------------------------------------------*/
 		[TestCase(0)]
 		[TestCase(1)]
 		[TestCase(8)]
@@ -185,6 +224,13 @@ namespace PhotoGallery.Test.Daemon {
 
 			vMockQuery.Setup(x => x.FindExpiredSessions(mockSess.Object)).Returns(list);
 
+			var oldClientProv = vSvcCtx.FabClientProv;
+
+			vSvcCtx.FabClientProv = (ck => {
+				Thread.Sleep(600);
+				return oldClientProv(ck);
+			});
+
 			////
 
 			var svc = NewService();
@@ -201,7 +247,35 @@ namespace PhotoGallery.Test.Daemon {
 				mockSess.Object, It.IsAny<FabricPersonSession>()), Times.Exactly(pCount));
 		}
 
-		//TEST: Service scenarios where IsSessionActive() returns true
+		/*--------------------------------------------------------------------------------------------*/
+		[Test]
+		public void DeleteOldSessionsDuplicate() {
+			var mockSess = new Mock<ISession>();
+			vMockSessProv.Setup(x => x.OpenSession()).Returns(mockSess.Object);
+			
+			var fps = new FabricPersonSession();
+			fps.SessionId = "sessionId0";
+				
+			var list = new List<FabricPersonSession>();
+			list.Add(fps);
+
+			vMockQuery.Setup(x => x.FindUpdatableSessions(mockSess.Object)).Returns(list);
+			vMockQuery.Setup(x => x.FindExpiredSessions(mockSess.Object)).Returns(list);
+
+			////
+
+			var svc = NewService();
+			
+			svc.FindSessions();
+			vExportCtxs[1].SavedSession = new SavedSession(new FabricPersonSession());
+
+			Thread.Sleep(200);
+			//svc.DeleteOldSessions();
+
+			////
+
+			Assert.Null(vExportCtxs[1].SavedSession.Session, "Session was not cleared.");
+		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

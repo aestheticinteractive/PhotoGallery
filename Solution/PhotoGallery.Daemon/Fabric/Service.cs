@@ -164,6 +164,7 @@ namespace PhotoGallery.Daemon.Fabric {
 
 			SavedSessByIdMap.TryRemove(pSaved.SessionId, out pSaved);
 			SavedSessIdByThreadMap.TryRemove(Thread.CurrentThread.ManagedThreadId, out id);
+			pSaved.ClearSession();
 		}
 
 
