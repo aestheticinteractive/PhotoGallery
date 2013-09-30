@@ -4,20 +4,20 @@ using Fabric.Clients.Cs;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
-using PhotoGallery.Daemon.Fabric;
+using PhotoGallery.Daemon.Export;
 using PhotoGallery.Database;
 using PhotoGallery.Domain;
 
 namespace PhotoGallery.Test.Daemon {
 
 	/*================================================================================================*/
-	[TestFixture]
+	//[TestFixture]
 	public class TService {
 
-		private Mock<ISessionProvider> vMockSessProv;
+		/*private Mock<ISessionProvider> vMockSessProv;
 		private Mock<Queries> vMockQuery;
 		private Mock<IExporter> vMockExport;
-		private ServiceContext vSvcCtx;
+		private GalleryExportDelegate vSvcCtx;
 
 		private IList<Mock<IFabricClient>> vMockFabClients;
 		private IList<string> vFabClientKeys;
@@ -28,7 +28,7 @@ namespace PhotoGallery.Test.Daemon {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[SetUp]
 		public void SetUp() {
 			FabricClient.ResetInitialization();
@@ -37,7 +37,7 @@ namespace PhotoGallery.Test.Daemon {
 			vMockQuery = new Mock<Queries>();
 			vMockExport = new Mock<IExporter>();
 
-			vSvcCtx = new ServiceContext();
+			vSvcCtx = new GalleryExportDelegate();
 			vSvcCtx.SessProv = vMockSessProv.Object;
 			vSvcCtx.Query = vMockQuery.Object;
 
@@ -69,14 +69,14 @@ namespace PhotoGallery.Test.Daemon {
 			};
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		private Service NewService() {
 			return new Service(vSvcCtx, 123, "secret", 456);
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[Test]
 		public void New() {
 			FabricClient.ResetInitialization();
@@ -106,7 +106,7 @@ namespace PhotoGallery.Test.Daemon {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[TestCase(0)]
 		[TestCase(1)]
 		[TestCase(8)]
@@ -167,7 +167,7 @@ namespace PhotoGallery.Test.Daemon {
 				mockSess.Object, It.IsAny<IFabricClient>()), Times.Exactly(pCount));
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[Test]
 		public void FindSessionsDuplicate() {
 			var mockSess = new Mock<ISession>();
@@ -206,7 +206,7 @@ namespace PhotoGallery.Test.Daemon {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[TestCase(0)]
 		[TestCase(1)]
 		[TestCase(8)]
@@ -247,7 +247,7 @@ namespace PhotoGallery.Test.Daemon {
 				mockSess.Object, It.IsAny<FabricPersonSession>()), Times.Exactly(pCount));
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[Test]
 		public void DeleteOldSessionsDuplicate() {
 			var mockSess = new Mock<ISession>();
@@ -279,13 +279,13 @@ namespace PhotoGallery.Test.Daemon {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		[Test]
 		public void StopAllThreads() {
 			var svc = NewService();
 			svc.StopAllThreads();
 			Assert.True(Exporter.StopThreads, "Incorrect Exporter.StopThreads.");
-		}
+		}*/
 
 	}
 

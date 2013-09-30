@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
 using Fabric.Clients.Cs;
-using PhotoGallery.Daemon.Fabric;
+using Fabric.Clients.Cs.Session;
+using PhotoGallery.Daemon.Export;
 using PhotoGallery.Database;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
@@ -12,11 +12,7 @@ namespace PhotoGallery.Daemon {
 	/*================================================================================================*/
 	public class Program {
 
-		private static string BaseUrl;
-		private static long FabricAppId;
-		private static string FabricAppSecret;
-		private static long FabricDataProvId;
-		private static Service FabSvc;
+		private static GalleryExport GalExp;
 		private static bool Stopped;
 
 
@@ -33,16 +29,8 @@ namespace PhotoGallery.Daemon {
 			BaseService.InitDatabase();
 
 			Log.Debug("Initializing Fabric Client...");
-			FabSvc = BuildFabricService();
-
-			while ( true ) {
-				if ( !Stopped ) {
-					FabSvc.FindSessions();
-					FabSvc.DeleteOldSessions();
-				}
-
-				Thread.Sleep(10000);
-			}
+			GalExp = BuildGalleryExport();
+			GalExp.Start();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -55,42 +43,28 @@ namespace PhotoGallery.Daemon {
 
 			Log.Debug("**** Program cancelled. Stopping all threads ****");
 			pEventArgs.Cancel = true;
-			FabSvc.StopAllThreads();
+			GalExp.Stop();
 			Stopped = true;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		private static Service BuildFabricService() {
+		private static GalleryExport BuildGalleryExport() {
 #if !DEBUG
 			const string prefix = "Prod_";
 #else
 			const string prefix = "Dev_";
 #endif
+			var appId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
+			var appSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
+			var dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 
-#if MONO_DEV
-			BaseUrl = "http://localhost:3333";
-			FabricAppId = 0000;
-			FabricAppSecret = "xxxx";
-			FabricDataProvId = 0000;
-#else
-			BaseUrl = ConfigurationManager.AppSettings[prefix+"BaseUrl"];
-			FabricAppId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
-			FabricAppSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
-			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
-#endif
-
-			var sc = new ServiceContext();
-			sc.SessProv = new SessionProvider();
-			sc.Query = new Queries();
-			sc.FabClientProv = FabClientProv;
-			sc.ExportProv = (ctx, fc, user) => new Exporter(ctx, fc, user);
-
-			return new Service(sc, FabricAppId, FabricAppSecret, FabricDataProvId);
+			var query = new Queries(new SessionProvider());
+			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
-		private static IFabricClient FabClientProv(string pConfigKey) {
-			var fab = new FabricClient(pConfigKey);
+		private static IFabricClient FabClientProv(IFabricPersonSession pPerson){
+			var fab = (pPerson == null ? new FabricClient() : new FabricClient(pPerson));
 			fab.Config.Logger = new LogFabric { WriteToConsole = true };
 			return fab;
 		}

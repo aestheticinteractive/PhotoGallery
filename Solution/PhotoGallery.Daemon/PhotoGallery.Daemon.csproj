@@ -41,19 +41,17 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="Fabric\IExporter.cs" />
-    <Compile Include="Fabric\ServiceContext.cs" />
-    <Compile Include="Fabric\ExporterContext.cs" />
-    <Compile Include="Fabric\Queries.cs" />
-    <Compile Include="Fabric\SavedSession.cs" />
-    <Compile Include="Fabric\Service.cs" />
-    <Compile Include="Fabric\Exporter.cs" />
+    <Compile Include="Export\GalleryExportForClient.cs" />
+    <Compile Include="Export\GalleryExport.cs" />
+    <Compile Include="Export\Queries.cs" />
+    <Compile Include="Export\SavedSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Fabric.Clients.Cs">
-      <HintPath>..\..\Packages\FabricClient.0.2.4.2\lib\Fabric.Clients.Cs.dll</HintPath>
+    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Packages\FabricClient.0.2.4.3\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>

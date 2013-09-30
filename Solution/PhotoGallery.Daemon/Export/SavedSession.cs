@@ -4,7 +4,7 @@ using Fabric.Clients.Cs.Api;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Domain;
 
-namespace PhotoGallery.Daemon.Fabric {
+namespace PhotoGallery.Daemon.Export {
 
 	/*================================================================================================*/
 	public class SavedSession : IFabricPersonSession {
@@ -80,18 +80,6 @@ namespace PhotoGallery.Daemon.Fabric {
 		/*--------------------------------------------------------------------------------------------*/
 		public FabOauthAccess HandleGrantCodeRedirect(HttpRequestBase pRedirectRequest) {
 			throw new NotImplementedException();
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		public void ClearSession() {
-			Session = null;
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public bool IsActive() {
-			return (Session != null);
 		}
 
 	}

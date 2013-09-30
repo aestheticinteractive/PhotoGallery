@@ -41,8 +41,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Fabric.Clients.Cs">
-      <HintPath>..\..\Packages\FabricClient.0.2.4.2\lib\Fabric.Clients.Cs.dll</HintPath>
+    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Packages\FabricClient.0.2.4.3\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
