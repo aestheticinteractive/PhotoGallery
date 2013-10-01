@@ -106,22 +106,6 @@ namespace PhotoGallery.Daemon.Export {
 			}
 		}
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		public virtual FabricArtifact LoadArtifact(int pId) {
-			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.Get<FabricArtifact>(pId);
-			}
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public virtual FabricFactor LoadFactor(int pId) {
-			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.Get<FabricFactor>(pId);
-			}
-		}
-		
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual void UpdateObjects(IList<object> pObjects) {
 			using ( ISession sess = vSessProv.OpenSession() ) {

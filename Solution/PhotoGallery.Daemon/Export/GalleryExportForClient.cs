@@ -21,8 +21,11 @@ namespace PhotoGallery.Daemon.Export {
 		private readonly Queries vQuery;
 		private readonly IFabricClient vClient;
 		private readonly FabricUser vUser;
-		private readonly IList<object> vUpdateList;
 		private readonly bool vStop;
+
+		private readonly IList<object> vUpdateList;
+		private readonly IDictionary<int, FabricArtifact> vInstanceMap;
+		private readonly IDictionary<int, FabricFactor> vFactorMap;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,8 +35,11 @@ namespace PhotoGallery.Daemon.Export {
 			vQuery = pQuery;
 			vClient = pClient;
 			vUser = pUser;
-			vUpdateList = new List<object>();
 			vStop = (vClient == null || (!vClient.UseDataProviderPerson && vUser == null));
+
+			vUpdateList = new List<object>();
+			vInstanceMap = new Dictionary<int, FabricArtifact>();
+			vFactorMap = new Dictionary<int, FabricFactor>();
 		}
 
 
@@ -74,6 +80,8 @@ namespace PhotoGallery.Daemon.Export {
 				d.Disamb = art.Disamb;
 				d.Note = art.Note;
 				dataList.Add(d);
+
+				vInstanceMap.Add(art.Id, art);
 			}
 
 			LogDebug("GetNewInstances: "+dataList.Count);
@@ -102,6 +110,7 @@ namespace PhotoGallery.Daemon.Export {
 				}
 
 				dataList.Add(FabricFactorBuilder.DbFactorToBatchFactor(ff));
+				vFactorMap.Add(ff.Id, ff);
 			}
 
 			LogDebug("GetNewFactors: "+dataList.Count+" (skip "+(facList.Count-dataList.Count)+")");
@@ -119,7 +128,7 @@ namespace PhotoGallery.Daemon.Export {
 		public void OnInstanceExport(InstanceData pInstanceData, FabInstance pInstance) {
 			LogInfo("OnInstanceExport: "+pInstanceData.ExporterId+" => "+pInstance.ArtifactId);
 
-			FabricArtifact art = vQuery.LoadArtifact((int)pInstanceData.ExporterId);
+			FabricArtifact art = vInstanceMap[(int)pInstanceData.ExporterId];
 			art.ArtifactId = pInstance.ArtifactId;
 			vUpdateList.Add(art);
 		}
@@ -133,7 +142,7 @@ namespace PhotoGallery.Daemon.Export {
 		public void OnFactorExport(FabBatchResult pFactor) {
 			LogInfo("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId);
 
-			FabricFactor fac = vQuery.LoadFactor((int)pFactor.BatchId);
+			FabricFactor fac = vFactorMap[(int)pFactor.BatchId];
 			fac.FactorId = pFactor.ResultId;
 			vUpdateList.Add(fac);
 		}
@@ -151,8 +160,11 @@ namespace PhotoGallery.Daemon.Export {
 
 			if ( vUpdateList.Count > 0 ) {
 				vQuery.UpdateObjects(vUpdateList);
-				vUpdateList.Clear();
 			}
+
+			vUpdateList.Clear();
+			vInstanceMap.Clear();
+			vFactorMap.Clear();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
