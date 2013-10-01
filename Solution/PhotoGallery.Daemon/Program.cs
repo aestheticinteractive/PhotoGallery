@@ -49,11 +49,6 @@ namespace PhotoGallery.Daemon {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private static GalleryExport BuildGalleryExport() {
-#if !DEBUG
-			const string prefix = "Prod_";
-#else
-			const string prefix = "Dev_";
-#endif
 			var appId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
 			var appSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
 			var dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);

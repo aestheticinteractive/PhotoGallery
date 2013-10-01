@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
+using Fabric.Clients.Cs.Session;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
@@ -32,7 +34,7 @@ namespace PhotoGallery.Services.Main {
 
 			if ( Fab.PersonSession.IsAuthenticated ) {
 				CreateUser();
-				FabricService.CheckForNewTasks(Fab);
+				AddFabricPersonSession(Fab.PersonSession, NewSession());
 				return true;
 			}
 
@@ -68,6 +70,27 @@ namespace PhotoGallery.Services.Main {
 				u.FabricArtifact = a;
 				sess.Save(u);
 			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		internal static void AddFabricPersonSession(IFabricPersonSession pPerson, ISession pSess) {
+			FabricPersonSession fps = pSess.QueryOver<FabricPersonSession>()
+				.Where(x => x.SessionId == pPerson.SessionId)
+				.Take(1)
+				.List()
+				.FirstOrDefault();
+
+			if ( fps == null ) {
+				fps = new FabricPersonSession();
+				fps.SessionId = pPerson.SessionId;
+				fps.GrantCode = pPerson.GrantCode;
+				fps.BearerToken = pPerson.BearerToken;
+				fps.RefreshToken = pPerson.RefreshToken;
+				fps.Expiration = pPerson.Expiration.Ticks;
+			}
+
+			fps.TryUpdate = true;
+			pSess.SaveOrUpdate(fps);
 		}
 
 	}

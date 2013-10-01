@@ -105,11 +105,13 @@ namespace PhotoGallery.Daemon.Export {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnClassExport(ClassData pClassData, FabClass pClass) {
-			//do nothing
+			LogDebug("OnClassExport: "+pClassData.ExporterId+" => "+pClass.ArtifactId);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnInstanceExport(InstanceData pInstanceData, FabInstance pInstance) {
+			LogDebug("OnInstanceExport: "+pInstanceData.ExporterId+" => "+pInstance.ArtifactId);
+
 			FabricArtifact art = vQuery.LoadArtifact((int)pInstanceData.ExporterId);
 			art.ArtifactId = pInstance.ArtifactId;
 			vUpdateList.Add(art);
@@ -118,11 +120,13 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnUrlExport(UrlData pUrlData, FabUrl pUrl) {
-			//do nothing
+			LogDebug("OnUrlExport: "+pUrlData.ExporterId+" => "+pUrl.ArtifactId);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnFactorExport(FabBatchResult pFactor) {
+			LogDebug("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId);
+
 			FabricFactor fac = vQuery.LoadFactor((int)pFactor.BatchId);
 			fac.FactorId = pFactor.ResultId;
 			vUpdateList.Add(fac);
@@ -138,30 +142,24 @@ namespace PhotoGallery.Daemon.Export {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private void TrySendUpdates(bool pForce=false) {
-			if ( !pForce && vUpdateList.Count < 10 ) {
+			if ( vUpdateList.Count == 0 ) {
 				return;
 			}
 
-			LogDebug("TrySendUpdates: "+vUpdateList.Count+" / "+pForce);
+			if ( !pForce && !Stopped && vUpdateList.Count < 10 ) {
+				return;
+			}
+
+			LogDebug("TrySendUpdates: "+vUpdateList.Count+" (f="+pForce+", s="+Stopped+")");
 			vQuery.UpdateObjects(vUpdateList);
+			vUpdateList.Clear();
 		}
 
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private void LogDebug(string pText) {
-			Log.Debug(GetLogPrefix()+pText+GetLogTime());
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		private string GetLogPrefix() {
-			return "GalleryExportForClient["+(vClient.UseDataProviderPerson ?
-				"DataProv" :"User-"+vClient.PersonSession.SessionId)+"] ";
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		private string GetLogTime() {
-			return " ("+vTimer.Elapsed.TotalSeconds.ToString("0.000")+" sec)";
+			string lbl = (vClient.UseDataProviderPerson ?
+				"DataProv" : "User-"+vClient.PersonSession.SessionId);
+			Log.Debug("GEFC["+lbl+"] "+vTimer.Elapsed.TotalSeconds.ToString("0.000")+"s | "+pText);
 		}
 
 	}

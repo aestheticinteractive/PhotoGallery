@@ -6,7 +6,7 @@ using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Dto;
 using PhotoGallery.Services.Account.Tools;
-using PhotoGallery.Services.Fabric;
+using PhotoGallery.Services.Main;
 
 namespace PhotoGallery.Services.Account {
 	
@@ -133,14 +133,10 @@ namespace PhotoGallery.Services.Account {
 				var up = new PhotoUploader(pServer, u, a, pFilename, pExifData, pImageData);
 				up.SaveFile(s);
 
-				if ( pLastImage ) {
-					FabricService.CheckForNewTasks(Fab);
-				}
-
+				OauthService.AddFabricPersonSession(Fab.PersonSession, s);
 				return up.Result;
 			}
 		}
-
 	}
 
 }

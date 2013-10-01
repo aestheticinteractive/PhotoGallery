@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Diagnostics;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -11,7 +10,6 @@ using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
-using PhotoGallery.Services.Fabric;
 using PhotoGallery.Web.Application.Windsor;
 
 namespace PhotoGallery.Web {
@@ -29,16 +27,12 @@ namespace PhotoGallery.Web {
 		private static IFabricSessionContainer FabricDataProvSess;
 		private static IFabricClient FabricDataProvClient;
 
-		private Stopwatch vTimer;
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		protected void Application_Start() {
-			vTimer = Stopwatch.StartNew();
-
 			Log.ConfigureOnce();
-			Log.Debug("### Application_Start");
+			Log.Debug("==== Application_Start ====");
 			BaseService.InitDatabase();
 			SetupFabricClient();
 
@@ -53,7 +47,7 @@ namespace PhotoGallery.Web {
 
 		/*--------------------------------------------------------------------------------------------*/
 		protected void Application_End() {
-			Log.Debug("### Application_End: "+vTimer.Elapsed.TotalSeconds+" sec");
+			Log.Debug("==== Application_End ====");
 			WindsorContainer.Dispose();
 		}
 
@@ -96,7 +90,6 @@ namespace PhotoGallery.Web {
 			FabricClient.AddConfig(dataProvConfig);
 
 			FabricDataProvClient = new FabricClient("dataProv");
-			FabricService.SetDataProvClient(FabricDataProvClient);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

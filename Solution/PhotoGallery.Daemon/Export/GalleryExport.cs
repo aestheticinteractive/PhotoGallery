@@ -40,8 +40,12 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void Start() {
-			while ( !vStop ) {
-				vExpSvc.StartNewExports();
+			while ( true ) {
+				if ( !vStop ) { //don't exit the loop; the user decides when to finally exit the app
+					Stop();
+					vExpSvc.StartNewExports();
+				}
+
 				Thread.Sleep(10000);
 			}
 		}
@@ -108,6 +112,7 @@ namespace PhotoGallery.Daemon.Export {
 
 			return clients;
 		}
+
 	}
 
 }

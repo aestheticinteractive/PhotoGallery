@@ -2,7 +2,6 @@
 using System.Runtime.Caching;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
-using PhotoGallery.Infrastructure;
 
 namespace PhotoGallery.Services.Fabric {
 	
@@ -37,23 +36,6 @@ namespace PhotoGallery.Services.Fabric {
 			}
 
 			return fu;
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		public static void SetDataProvClient(IFabricClient pFab) {
-			//CheckForNewTasks();
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		internal static void SetupClientLogger(IFabricClient pFab) {
-			pFab.Config.Logger = new LogFabric();
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public static void CheckForNewTasks(IFabricClient pUserFabClient=null) {
-			Log.Debug("FabricService: SKIPPING TASKS FOR NOW");
 		}
 
 	}

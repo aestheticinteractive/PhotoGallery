@@ -1,7 +1,6 @@
 ﻿using Fabric.Clients.Cs;
 using NHibernate;
 using PhotoGallery.Database;
-using PhotoGallery.Services.Fabric;
 
 namespace PhotoGallery.Services {
 
@@ -15,7 +14,7 @@ namespace PhotoGallery.Services {
 		/*--------------------------------------------------------------------------------------------*/
 		public BaseService(IFabricClient pFab) {
 			Fab = pFab;
-			FabricService.SetupClientLogger(Fab);
+			Fab.Config.Logger = new LogFabric();
 		}
 
 
