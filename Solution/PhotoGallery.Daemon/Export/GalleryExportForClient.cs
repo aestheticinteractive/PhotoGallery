@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
@@ -8,6 +7,7 @@ using Fabric.Clients.Cs.Daemon.Data;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Tools;
+using InstanceData = Fabric.Clients.Cs.Daemon.Data.InstanceData;
 
 namespace PhotoGallery.Daemon.Export {
 
@@ -45,20 +45,25 @@ namespace PhotoGallery.Daemon.Export {
 			return Stopped;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public bool FakeFabricRequestMode() {
+			return true;
+		}
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<IClassData> GetNewClasses() {
-			return new List<IClassData>();
+		public IList<ClassData> GetNewClasses() {
+			return new List<ClassData>();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<IInstanceData> GetNewInstances() {
+		public IList<InstanceData> GetNewInstances() {
 			IList<FabricArtifact> artList = vQuery.GetFabricArtifacts(vUser);
-			var dataList = new List<IInstanceData>();
+			var dataList = new List<InstanceData>();
 
 			foreach ( FabricArtifact art in artList ) {
-				var d = new Fabric.Clients.Cs.Daemon.Data.InstanceData();
+				var d = new InstanceData();
 				d.ExporterId = art.Id;
 				d.Name = art.Name;
 				d.Disamb = art.Disamb;
@@ -71,8 +76,8 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<IUrlData> GetNewUrls() {
-			return new List<IUrlData>();
+		public IList<UrlData> GetNewUrls() {
+			return new List<UrlData>();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -99,12 +104,12 @@ namespace PhotoGallery.Daemon.Export {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnClassExport(IClassData pClassData, FabClass pClass) {
+		public void OnClassExport(ClassData pClassData, FabClass pClass) {
 			//do nothing
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnInstanceExport(IInstanceData pInstanceData, FabInstance pInstance) {
+		public void OnInstanceExport(InstanceData pInstanceData, FabInstance pInstance) {
 			FabricArtifact art = vQuery.LoadArtifact((int)pInstanceData.ExporterId);
 			art.ArtifactId = pInstance.ArtifactId;
 			vUpdateList.Add(art);
@@ -112,7 +117,7 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnUrlExport(IUrlData pUrlData, FabUrl pUrl) {
+		public void OnUrlExport(UrlData pUrlData, FabUrl pUrl) {
 			//do nothing
 		}
 
