@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
@@ -21,6 +22,7 @@ namespace PhotoGallery.Daemon.Export {
 		private readonly IFabricClient vClient;
 		private readonly FabricUser vUser;
 		private readonly IList<object> vUpdateList;
+		private readonly bool vStop;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +33,7 @@ namespace PhotoGallery.Daemon.Export {
 			vClient = pClient;
 			vUser = pUser;
 			vUpdateList = new List<object>();
+			vStop = (vClient == null || (!vClient.UseDataProviderPerson && vUser == null));
 		}
 
 
@@ -42,7 +45,7 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public bool StopExporting() {
-			return Stopped;
+			return (Stopped || vStop);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -59,7 +62,9 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<InstanceData> GetNewInstances() {
-			IList<FabricArtifact> artList = vQuery.GetFabricArtifacts(vUser);
+			SaveUpdates();
+
+			IList<FabricArtifact> artList = vQuery.GetFabricArtifacts(10, vUser);
 			var dataList = new List<InstanceData>();
 
 			foreach ( FabricArtifact art in artList ) {
@@ -82,7 +87,9 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<FabBatchNewFactor> GetNewFactors() {
-			IList<FabricFactor> facList = vQuery.GetFabricFactors(vUser);
+			SaveUpdates();
+
+			IList<FabricFactor> facList = vQuery.GetFabricFactors(20, vUser);
 			var dataList = new List<FabBatchNewFactor>();
 
 			foreach ( FabricFactor ff in facList ) {
@@ -105,61 +112,63 @@ namespace PhotoGallery.Daemon.Export {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnClassExport(ClassData pClassData, FabClass pClass) {
-			LogDebug("OnClassExport: "+pClassData.ExporterId+" => "+pClass.ArtifactId);
+			LogInfo("OnClassExport: "+pClassData.ExporterId+" => "+pClass.ArtifactId);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnInstanceExport(InstanceData pInstanceData, FabInstance pInstance) {
-			LogDebug("OnInstanceExport: "+pInstanceData.ExporterId+" => "+pInstance.ArtifactId);
+			LogInfo("OnInstanceExport: "+pInstanceData.ExporterId+" => "+pInstance.ArtifactId);
 
 			FabricArtifact art = vQuery.LoadArtifact((int)pInstanceData.ExporterId);
 			art.ArtifactId = pInstance.ArtifactId;
 			vUpdateList.Add(art);
-			TrySendUpdates();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnUrlExport(UrlData pUrlData, FabUrl pUrl) {
-			LogDebug("OnUrlExport: "+pUrlData.ExporterId+" => "+pUrl.ArtifactId);
+			LogInfo("OnUrlExport: "+pUrlData.ExporterId+" => "+pUrl.ArtifactId);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnFactorExport(FabBatchResult pFactor) {
-			LogDebug("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId);
+			LogInfo("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId);
 
 			FabricFactor fac = vQuery.LoadFactor((int)pFactor.BatchId);
 			fac.FactorId = pFactor.ResultId;
 			vUpdateList.Add(fac);
-			TrySendUpdates();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnExportComplete() {
-			TrySendUpdates(true);
+			SaveUpdates();
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void TrySendUpdates(bool pForce=false) {
-			if ( vUpdateList.Count == 0 ) {
-				return;
-			}
+		private void SaveUpdates() {
+			LogDebug("SaveUpdates: "+vUpdateList.Count);
 
-			if ( !pForce && !Stopped && vUpdateList.Count < 10 ) {
-				return;
+			if ( vUpdateList.Count > 0 ) {
+				vQuery.UpdateObjects(vUpdateList);
+				vUpdateList.Clear();
 			}
+		}
 
-			LogDebug("TrySendUpdates: "+vUpdateList.Count+" (f="+pForce+", s="+Stopped+")");
-			vQuery.UpdateObjects(vUpdateList);
-			vUpdateList.Clear();
+		/*--------------------------------------------------------------------------------------------*/
+		private void LogInfo(string pText) {
+			LogWith(Log.Info, pText);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void LogDebug(string pText) {
-			string lbl = (vClient.UseDataProviderPerson ?
-				"DataProv" : "User-"+vClient.PersonSession.SessionId);
-			Log.Debug("GEFC["+lbl+"] "+vTimer.Elapsed.TotalSeconds.ToString("0.000")+"s | "+pText);
+			LogWith(Log.Debug, pText);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		private void LogWith(Action<string> pLogFunc, string pText) {
+			string lbl = (vClient.UseDataProviderPerson ? "DataProv" : vClient.PersonSession.SessionId);
+			pLogFunc("GEFC["+lbl+"] "+vTimer.Elapsed.TotalSeconds.ToString("0.000")+"s | "+pText);
 		}
 
 	}

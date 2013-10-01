@@ -26,18 +26,17 @@ namespace PhotoGallery.Daemon.Export {
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual IList<FabricPersonSession> FindUpdatableSessions() {
 			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.QueryOver<FabricPersonSession>()
+				IList<FabricPersonSession> list = sess.QueryOver<FabricPersonSession>()
 					.Where(x => x.TryUpdate)
 					.List();
-			}
-		}
 
-		/*--------------------------------------------------------------------------------------------*/
-		public virtual void TurnOffSessionUpdate(FabricPersonSession pPersonSess) {
-			using ( ISession sess = vSessProv.OpenSession() ) {
-				pPersonSess.TryUpdate = false;
-				sess.Save(pPersonSess);
-				Log.Debug("TurnOffSessionUpdate: "+pPersonSess.SessionId);
+				foreach ( FabricPersonSession fps in list ) {
+					Log.Debug("FindUpdatableSessions: "+fps.SessionId);
+					fps.TryUpdate = false;
+				}
+
+				sess.Flush(); //don't need to call sess.Update()
+				return list;
 			}
 		}
 
@@ -70,7 +69,7 @@ namespace PhotoGallery.Daemon.Export {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual IList<FabricArtifact> GetFabricArtifacts(FabricUser pUser=null) {
+		public virtual IList<FabricArtifact> GetFabricArtifacts(int pCount, FabricUser pUser=null) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
 				var q = sess.QueryOver<FabricArtifact>()
 					.Where(x => x.ArtifactId == null);
@@ -82,12 +81,12 @@ namespace PhotoGallery.Daemon.Export {
 					q = q.Where(x => x.Creator.Id == pUser.Id);
 				}
 
-				return q.Take(10).List();
+				return q.Take(pCount).List();
 			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual IList<FabricFactor> GetFabricFactors(FabricUser pUser=null) {
+		public virtual IList<FabricFactor> GetFabricFactors(int pCount, FabricUser pUser=null) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
 				var q = sess.QueryOver<FabricFactor>()
 					.Where(x => x.FactorId == null);
@@ -102,7 +101,7 @@ namespace PhotoGallery.Daemon.Export {
 				return q
 					.Fetch(x => x.Primary).Eager
 					.Fetch(x => x.Related).Eager
-					.Take(20)
+					.Take(pCount)
 					.List();
 			}
 		}
@@ -112,14 +111,14 @@ namespace PhotoGallery.Daemon.Export {
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual FabricArtifact LoadArtifact(int pId) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.Load<FabricArtifact>(pId);
+				return sess.Get<FabricArtifact>(pId);
 			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual FabricFactor LoadFactor(int pId) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.Load<FabricFactor>(pId);
+				return sess.Get<FabricFactor>(pId);
 			}
 		}
 		

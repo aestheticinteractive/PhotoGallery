@@ -59,7 +59,7 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public bool RefreshTokenIfNecessary() {
-			throw new NotImplementedException();
+			return false;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

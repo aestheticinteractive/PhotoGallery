@@ -42,7 +42,6 @@ namespace PhotoGallery.Daemon.Export {
 		public void Start() {
 			while ( true ) {
 				if ( !vStop ) { //don't exit the loop; the user decides when to finally exit the app
-					Stop();
 					vExpSvc.StartNewExports();
 				}
 
@@ -104,8 +103,6 @@ namespace PhotoGallery.Daemon.Export {
 			Log.Debug("GalleryExport.BuildUserClientList: "+list.Count);
 
 			foreach ( FabricPersonSession fps in list ) {
-				vQuery.TurnOffSessionUpdate(fps);
-
 				IFabricClient fab = vClientProv(new SavedSession(fps));
 				clients.Add(fab);
 			}

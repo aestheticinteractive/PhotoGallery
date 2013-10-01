@@ -11,8 +11,6 @@ namespace PhotoGallery.Services {
 
 		private const string Empty32 = "                                ";
 
-		public bool WriteToConsole { get; set; }
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
@@ -46,10 +44,6 @@ namespace PhotoGallery.Services {
 		private void Output(string pSessionId, string pText, Action<String> pAction) {
 			string str = "FAB["+(pSessionId ?? Empty32)+"]: "+pText;
 			pAction(str);
-
-			if ( WriteToConsole ) {
-				Console.WriteLine(str);
-			}
 		}
 
 	}

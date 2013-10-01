@@ -23,6 +23,7 @@ namespace PhotoGallery.Database.Maps {
 			References(x => x.FabricArtifact).Nullable();
 
 			HasMany(x => x.Albums);
+			HasMany(x => x.FabricPersonSessions);
 		}
 
 	}

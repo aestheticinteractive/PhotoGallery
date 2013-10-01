@@ -133,7 +133,7 @@ namespace PhotoGallery.Services.Account {
 				var up = new PhotoUploader(pServer, u, a, pFilename, pExifData, pImageData);
 				up.SaveFile(s);
 
-				OauthService.AddFabricPersonSession(Fab.PersonSession, s);
+				OauthService.AddFabricPersonSession(Fab.PersonSession, u, s);
 				return up.Result;
 			}
 		}

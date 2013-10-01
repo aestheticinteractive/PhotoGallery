@@ -43,8 +43,11 @@ namespace PhotoGallery.Daemon {
 
 			Log.Debug("**** Program cancelled. Stopping all threads ****");
 			pEventArgs.Cancel = true;
-			GalExp.Stop();
 			Stopped = true;
+
+			if ( GalExp != null ) {
+				GalExp.Stop();
+			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -60,7 +63,7 @@ namespace PhotoGallery.Daemon {
 		/*--------------------------------------------------------------------------------------------*/
 		private static IFabricClient FabClientProv(IFabricPersonSession pPerson){
 			var fab = (pPerson == null ? new FabricClient() : new FabricClient(pPerson));
-			fab.Config.Logger = new LogFabric { WriteToConsole = true };
+			fab.Config.Logger = new LogFabric();
 			return fab;
 		}
 

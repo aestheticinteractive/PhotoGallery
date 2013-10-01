@@ -17,12 +17,12 @@ namespace PhotoGallery.Database.Maps {
 				.Column(name+"Id")
 				.GeneratedBy.Native();
 
-			Map(x => x.SessionId).Length(32);
+			Map(x => x.SessionId).Length(32).Index(name+"_SessionId");
 			Map(x => x.GrantCode).Length(32).Nullable();
 			Map(x => x.BearerToken).Length(32);
 			Map(x => x.RefreshToken).Length(32).Nullable();
 			Map(x => x.Expiration);
-			Map(x => x.TryUpdate).Default("1");
+			Map(x => x.TryUpdate).Update();
 
 			References(x => x.FabricUser);
 		}

@@ -24,17 +24,23 @@ namespace PhotoGallery.Services.Fabric {
 			//Log.Debug("FabricService ActiveUser Cache: Hit? "+
 			//	(fu != null)+" ("+pFab.PersonSession.SessionId+")");
 
-			if ( fu == null ) {
-				fu = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
-				fu.Uri = null;
-				fu.FabType = null;
-
-				var cp = new CacheItemPolicy();
-				cp.SlidingExpiration = new TimeSpan(2, 0, 0);
-
-				ActiveUsers.Add(pFab.PersonSession.SessionId, fu, cp);
+			if ( fu != null ) {
+				return fu;
 			}
 
+			fu = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+
+			if ( fu == null ) {
+				return null;
+			}
+
+			fu.Uri = null;
+			fu.FabType = null;
+
+			var cp = new CacheItemPolicy();
+			cp.SlidingExpiration = new TimeSpan(2, 0, 0);
+
+			ActiveUsers.Add(pFab.PersonSession.SessionId, fu, cp);
 			return fu;
 		}
 

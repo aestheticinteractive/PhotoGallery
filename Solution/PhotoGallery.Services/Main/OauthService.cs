@@ -33,8 +33,8 @@ namespace PhotoGallery.Services.Main {
 			Fab.PersonSession.SaveToCookies(pResponse.Cookies);
 
 			if ( Fab.PersonSession.IsAuthenticated ) {
-				CreateUser();
-				AddFabricPersonSession(Fab.PersonSession, NewSession());
+				FabricUser u = CreateUser();
+				AddFabricPersonSession(Fab.PersonSession, u, NewSession());
 				return true;
 			}
 
@@ -45,7 +45,7 @@ namespace PhotoGallery.Services.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		private void CreateUser() {
+		private FabricUser CreateUser() {
 			using ( ISession sess = NewSession() ) {
 				FabUser fabUser = FabricService.GetActiveUser(Fab);
 
@@ -54,7 +54,7 @@ namespace PhotoGallery.Services.Main {
 					.SingleOrDefault();
 
 				if ( u != null ) {
-					return;
+					return u;
 				}
 
 				var a = new FabricArtifact();
@@ -69,11 +69,14 @@ namespace PhotoGallery.Services.Main {
 				u.Created = DateTime.UtcNow.Ticks;
 				u.FabricArtifact = a;
 				sess.Save(u);
+
+				return u;
 			}
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		internal static void AddFabricPersonSession(IFabricPersonSession pPerson, ISession pSess) {
+		internal static void AddFabricPersonSession(IFabricPersonSession pPerson,
+																	FabricUser pUser, ISession pSess) {
 			FabricPersonSession fps = pSess.QueryOver<FabricPersonSession>()
 				.Where(x => x.SessionId == pPerson.SessionId)
 				.Take(1)
@@ -82,15 +85,18 @@ namespace PhotoGallery.Services.Main {
 
 			if ( fps == null ) {
 				fps = new FabricPersonSession();
+				fps.FabricUser = pUser;
 				fps.SessionId = pPerson.SessionId;
-				fps.GrantCode = pPerson.GrantCode;
-				fps.BearerToken = pPerson.BearerToken;
-				fps.RefreshToken = pPerson.RefreshToken;
-				fps.Expiration = pPerson.Expiration.Ticks;
 			}
 
+			fps.GrantCode = pPerson.GrantCode;
+			fps.BearerToken = pPerson.BearerToken;
+			fps.RefreshToken = pPerson.RefreshToken;
+			fps.Expiration = pPerson.Expiration.Ticks;
 			fps.TryUpdate = true;
+
 			pSess.SaveOrUpdate(fps);
+			pSess.Flush();
 		}
 
 	}
