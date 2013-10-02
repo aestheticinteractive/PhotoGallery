@@ -56,7 +56,7 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public bool FakeFabricRequestMode() {
-			return true;
+			return false;
 		}
 
 

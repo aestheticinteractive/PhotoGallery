@@ -52,12 +52,21 @@ namespace PhotoGallery.Daemon {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private static GalleryExport BuildGalleryExport() {
-			var appId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
-			var appSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
-			var dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
+			
+#if !DEBUG
+			const string prefix = "Prod_";
+#else
+			const string prefix = "Dev_";
+#endif
+			string baseUrl = ConfigurationManager.AppSettings[prefix+"BaseUrl"];
+			long appId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
+			string appSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
+			long dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 
 			var query = new Queries(new SessionProvider());
-			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId);
+			string redir = baseUrl+"/Oauth/FabricRedirect";
+
+			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId, redir);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
