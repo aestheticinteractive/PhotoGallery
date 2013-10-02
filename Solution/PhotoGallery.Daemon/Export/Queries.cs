@@ -31,7 +31,7 @@ namespace PhotoGallery.Daemon.Export {
 					.List();
 
 				foreach ( FabricPersonSession fps in list ) {
-					Log.Debug("FindUpdatableSessions: "+fps.SessionId);
+					Log.Debug("Queries.FindUpdatableSessions: "+fps.SessionId);
 					fps.TryUpdate = false;
 				}
 
@@ -41,11 +41,19 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual IList<FabricPersonSession> FindExpiredSessions() {
+		public virtual int DeleteExpiredSessions() {
 			using ( ISession sess = vSessProv.OpenSession() ) {
-				return sess.QueryOver<FabricPersonSession>()
+				IList<FabricPersonSession> list = sess.QueryOver<FabricPersonSession>()
 					.Where(x => x.Expiration <= DateTime.UtcNow.Ticks)
 					.List();
+
+				foreach ( FabricPersonSession fps in list ) {
+					Log.Debug("Queries.DeleteExpiredSessions: "+fps.SessionId);
+					sess.Delete(fps);
+				}
+
+				sess.Flush(); //forces deletion to occur
+				return list.Count;
 			}
 		}
 
@@ -53,7 +61,7 @@ namespace PhotoGallery.Daemon.Export {
 		public virtual void DeleteSession(FabricPersonSession pPersonSess) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
 				sess.Delete(pPersonSess);
-				Log.Debug("DeleteSession: "+pPersonSess.SessionId);
+				Log.Debug("Queries.DeleteSession: "+pPersonSess.SessionId);
 			}
 		}
 

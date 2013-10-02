@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Daemon;
@@ -64,8 +65,12 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<IFabricClient> GetUserClients() {
-			DeleteExpiredSessions();
-			return BuildUserClientList();
+			vQuery.DeleteExpiredSessions();
+
+			IList<FabricPersonSession> list = vQuery.FindUpdatableSessions();
+			Log.Debug("GalleryExport.GetUserClients: "+list.Count);
+
+			return list.Select(fps => vClientProv(new SavedSession(fps))).ToList();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -81,33 +86,6 @@ namespace PhotoGallery.Daemon.Export {
 		/*--------------------------------------------------------------------------------------------*/
 		public IExportForClient GetExportForClient(IExportForClientDelegate pDelegate) {
 			return new ExportForClient(pDelegate);
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		private void DeleteExpiredSessions() {
-			IList<FabricPersonSession> list = vQuery.FindExpiredSessions();
-			Log.Debug("GalleryExport.DeleteExpiredSessions: "+list.Count);
-
-			foreach ( FabricPersonSession fps in list ) {
-				vQuery.DeleteSession(fps);
-			}
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public IList<IFabricClient> BuildUserClientList() {
-			var clients = new List<IFabricClient>();
-
-			IList<FabricPersonSession> list = vQuery.FindUpdatableSessions();
-			Log.Debug("GalleryExport.BuildUserClientList: "+list.Count);
-
-			foreach ( FabricPersonSession fps in list ) {
-				IFabricClient fab = vClientProv(new SavedSession(fps));
-				clients.Add(fab);
-			}
-
-			return clients;
 		}
 
 	}

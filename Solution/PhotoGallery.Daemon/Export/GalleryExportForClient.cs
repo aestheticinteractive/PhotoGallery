@@ -156,9 +156,8 @@ namespace PhotoGallery.Daemon.Export {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		private void SaveUpdates() {
-			LogDebug("SaveUpdates: "+vUpdateList.Count);
-
 			if ( vUpdateList.Count > 0 ) {
+				LogDebug("SaveUpdates: "+vUpdateList.Count);
 				vQuery.UpdateObjects(vUpdateList);
 			}
 
