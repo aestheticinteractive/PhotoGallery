@@ -318,9 +318,13 @@ namespace PhotoGallery.Services.Account.Tools {
 			if ( key == null ) {
 				return;
 			}
-
+#if DEBUG
+			const string estName = "Eastern Standard Time"; //Windows
+#else
+			const string estName = "US/Eastern"; //Unix
+#endif
 			DateTime val = ImageUtil.ParseMetaDate(vTagMap[key]); //assume EST for now
-			TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById(estName);
 			val = TimeZoneInfo.ConvertTimeToUtc(val, est);
 			vPhoto.Date = val.Ticks;
 
