@@ -25,7 +25,7 @@ namespace PhotoGallery.Services.Account {
 		/*--------------------------------------------------------------------------------------------*/
 		public string GetPersonLoginOpenScript(bool pSwitch) {
 			string url = Fab.PersonSession.GetGrantCodeUrl(pSwitch);
-			return Fab.PersonSession.GetGrantWindowOpenScript(url);
+			return Fab.PersonSession.GetGrantWindowOpenScript(url).TrimEnd(new[] { ';' });
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
@@ -35,11 +35,8 @@ namespace PhotoGallery.Services.Account {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public FabOauthLogout Logout() {
-			if ( !IsPersonAuthenticated() ) {
-				return null;
-			}
-
-			return Fab.PersonSession.Logout();
+			FabricService.RemoveActiveUserFromCache(Fab);
+			return (IsPersonAuthenticated() ? Fab.PersonSession.Logout() : null);
 		}
 
 

@@ -15,7 +15,7 @@ namespace PhotoGallery.Services.Fabric {
 		/*--------------------------------------------------------------------------------------------*/
 		public static FabUser GetActiveUser(IFabricClient pFab) {
 			if ( !pFab.PersonSession.IsAuthenticated ) {
-				ActiveUsers.Remove(pFab.PersonSession.SessionId);
+				RemoveActiveUserFromCache(pFab);
 				return null;
 			}
 
@@ -42,6 +42,11 @@ namespace PhotoGallery.Services.Fabric {
 
 			ActiveUsers.Add(pFab.PersonSession.SessionId, fu, cp);
 			return fu;
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public static void RemoveActiveUserFromCache(IFabricClient pFab) {
+			ActiveUsers.Remove(pFab.PersonSession.SessionId);
 		}
 
 	}

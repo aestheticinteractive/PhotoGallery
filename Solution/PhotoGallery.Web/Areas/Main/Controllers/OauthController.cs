@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using PhotoGallery.Services.Main;
+using PhotoGallery.Web.Areas.Main.Models;
 using PhotoGallery.Web.Controllers;
 
 namespace PhotoGallery.Web.Areas.Main.Controllers {
@@ -20,11 +21,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult FabricRedirect() {
-			if ( vOauth.PersonOauthSuccess(Request, Response) ) {
-				Response.Write(OauthService.CloseWindowScript);
-			}
-
-			return null;
+			var m = new OauthModel();
+			m.LoginSuccess = vOauth.PersonOauthSuccess(Request, Response);
+			return View(m);
 		}
 
 	}

@@ -1,18 +1,12 @@
-﻿@model MainBaseModel
-<div class="row">
-	<div class="nine columns">
-		<h4>
-			Photo Gallery
-		</h4>
-		<p>
-			This is it.
-		</p>
-	</div>
-	<div class="three columns">
-		<div class="hide-for-small calloutBox">
-			<h4>
-				Right column
-			</h4>
-		</div>
-	</div>
-</div>
+﻿@model OauthModel
+
+@if ( !Model.LoginSuccess ) {
+	<p>
+		Fabric login failed.
+	</p>
+	return;
+}
+
+<script type="text/javascript" language="javascript">
+	window.close();
+</script>

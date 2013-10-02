@@ -199,6 +199,7 @@
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />
     <Content Include="Scripts\exif\imageinfo.js" />
+    <Content Include="Scripts\gallery\fabPopup.js" />
     <Content Include="Scripts\gallery\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">

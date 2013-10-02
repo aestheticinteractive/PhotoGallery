@@ -14,12 +14,6 @@ namespace PhotoGallery.Services.Main {
 	/*================================================================================================*/
 	public class OauthService : BaseService {
 
-		public const string CloseWindowScript = 
-			"<script type='text/javascript'>"+
-				"window.opener.location.reload();"+
-				"window.close();"+
-			"</script>";
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
