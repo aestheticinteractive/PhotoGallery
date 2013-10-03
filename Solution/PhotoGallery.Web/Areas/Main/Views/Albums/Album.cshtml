@@ -1,0 +1,29 @@
+﻿@model AlbumModel
+@{
+	WebAlbum a = Model.Album;
+}
+
+<div class="row">
+	<div class="large-4 push-8 columns">
+		<div class="rightTextBox">
+			<h2>
+				@a.Title
+			</h2>
+			<p>
+				Album by <strong>@a.UserName</strong><br/>
+				@a.DateRangeString<br/>
+				@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
+			</p>
+		</div>
+	</div>
+	
+	<div class="show-for-small columns separator"></div>
+	
+	<div class="large-8 pull-4 columns">
+		@foreach ( IWebPhoto p in Model.Photos ) {
+			Html.RenderPartial(MVC.Main.Albums.Views._PhotoThumb, p);
+		}
+	</div>
+</div>
+
+@{ Html.RenderPartial(MVC.Main.Albums.Views._PhotoViewer, Model.Photos); }

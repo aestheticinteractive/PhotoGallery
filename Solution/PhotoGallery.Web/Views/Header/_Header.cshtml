@@ -1,8 +1,26 @@
 ﻿@model HeaderModel
 
-<div class="six mobile-six columns">
-	@Html.ActionLink("The Kinstner Photo Gallery", MVC.Main.Home.Index(), new { @class="logo" })
+<div class="large-6 small-9 columns">
+	<p class="logo">
+		@Html.ActionLink("The Kinstner Photo Gallery", MVC.Main.Albums.Index(null))
+	</p>
 </div>
-<div class="six mobile-six columns">
-	@{ Html.RenderPartial(MVC.Header.Views._Login, Model); }
+<div class="large-6 small-3 columns">
+	@if ( Model.IsPersonAuthenticated ) {
+		<p class="menuItem">
+			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index())
+		</p>
+	}
+	else {
+		<p class="menuItem">
+			<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(false))));"
+				href="#">Login</a>
+		</p>
+	}
+	
+	<p class="menuItem">
+		@Html.ActionLink("Albums", MVC.Main.Albums.Index(null))
+	</p>
 </div>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/gallery/fabPopup.js")"></script>

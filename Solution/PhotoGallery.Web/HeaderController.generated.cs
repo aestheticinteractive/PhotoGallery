@@ -57,14 +57,14 @@ namespace PhotoGallery.Web.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string Data = "Data";
+            public readonly string Full = "Full";
             public readonly string PersonLogout = "PersonLogout";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string Data = "Data";
+            public const string Full = "Full";
             public const string PersonLogout = "PersonLogout";
         }
 
@@ -80,10 +80,8 @@ namespace PhotoGallery.Web.Controllers
             public class _ViewNamesClass
             {
                 public readonly string _Header = "_Header";
-                public readonly string _Login = "_Login";
             }
             public readonly string _Header = "~/Views/Header/_Header.cshtml";
-            public readonly string _Login = "~/Views/Header/_Login.cshtml";
         }
     }
 
@@ -92,12 +90,12 @@ namespace PhotoGallery.Web.Controllers
     {
         public T4MVC_HeaderController() : base(Dummy.Instance) { }
 
-        partial void DataOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+        partial void FullOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
         public override System.Web.Mvc.ActionResult Full()
         {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Data);
-            DataOverride(callInfo);
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Full);
+            FullOverride(callInfo);
             return callInfo;
         }
 

@@ -10,73 +10,20 @@ body {
 
 p, h1, h2, h3, h4, h5, h6, ul, li {
 	font-family: "Droid Serif" , "Georgia" , serif;
-	font-weight: lighter;
-	line-height: 22px;
 	margin: 0;
 	padding: 0;
+	letter-spacing: -0.05em;
 }
 
-h4, h5 {
-	margin-bottom: 12px;
-}
-
-p + p, p + ul, p + table, p + div, p + form, ul + form {
-	margin-top: 12px;
-}
-
-p + h3, p + h4, p + h5, h5 + h4, ul + h3, ul + h4, div + h3, div + h4 {
-	margin-top: 24px;
-}
-
-.row + .row {
-	margin-top: 24px;
-}
-
-.row {
-	width: 100%;
-	max-width: 100%;
-	min-width: 320px;
+h2 {
+	font-size: 30px;
+	font-weight: normal;
+	color: #000;
 }
 
 p, label, li {
 	font-size: 14px;
-	color: #444;
-}
-
-h3 {
-	font-size: 24px;
-	color: #808080;
-	margin-bottom: 16px;
-}
-
-h3 a {
-	color: #808080;
-}
-
-h4 {
-	font-size: 18px;
-	color: #111;
-}
-
-h4 a {
-	font-size: 18px;
-	color: #111;
-}
-
-h4.borderBot {
-	padding-bottom: 4px;
-	margin-bottom: 6px;
-	border-bottom: 1px solid #bbb;
-}
-
-h5 {
-	font-size: 16px;
-	line-height: 32px;
-	color: #16a;
-}
-
-h5 a {
-	color: #555;
+	color: #333;
 }
 
 a {
@@ -91,27 +38,58 @@ ul {
 	margin-left: 20px;
 }
 
+.row {
+	width: 100%;
+	max-width: 100%;
+	min-width: 320px;
+}
+
 
 /*----------------------------------------------------------------------------------------------------*/
 
 
 #Header {
 	background-color: #333;
+	margin-bottom: 20px;
 }
 
-#Header .logo {
-	font-size: 20px;
+#Header .logo a {
+	font-size: 18px;
 	color: #fff;
-	letter-spacing: -0.05em;
 	border-left: 5px solid #000;
-	padding: 3px 0 3px 5px;
-	display: block;
+	padding: 1px 0 0 7px;
+	display: inline-block;
 	margin: 10px 0;
 }
 
-#Header .auth {
-	color: #aaa;
-	text-align: right;
+#Header .logo a:hover {
+	color: #bbb;
+}
+
+#Header .menuItem {
+	background-color: #000;
+	display: inline-block;
+	float: right;
+	margin-top: 12px;
+	padding: 1px 6px 2px 6px;
+	color: #666;
+	margin-left: 5px;
+}
+
+#Header .menuItem a {
+	color: #bbb;
+}
+
+#Header .menuItem a:hover {
+	color: #fff;
+}
+
+@media only screen and (max-width: 768px) {
+	
+	#Header .logo a {
+		font-size: 16px;
+	}
+
 }
 
 
@@ -120,6 +98,15 @@ ul {
 
 #Page {
 	margin-top: 15px;
+}
+
+#Page .separator {
+	height: 20px;
+}
+
+#Page .rightTextBox {
+	border-left: 5px solid #ddd;
+	padding: 0 0 5px 7px;
 }
 
 #Page .thumb {
@@ -141,34 +128,56 @@ ul {
 }
 
 #Page .album {
-	width: 100%;
-	height: 50px;
+	width: 33.1%;
+	height: 240px;
 }
 
 #Page .album .textBox {
 	color: #fff;
 	background-color: rgba(0, 0, 0, 0.5);
 	font-size: 12px;
-	padding: 1px 4px 3px 4px;
+	padding: 3px 4px;
 	margin: 0;
 	line-height: 1.0em;
 	display: inline-block;
 }
 
 #Page .album .title {
-	font-size: 24px;
+	font-size: 18px;
 	margin: 4px;
+	font-style: italic;
 }
 
 #Page .album .details {
 	position: absolute;
-	margin: 4px;
+	margin: 5px;
 	bottom: 0;
 }
 
 #Page .photoSmall {
 	width: 66px;
 	height: 66px;
+}
+
+@media only screen and (max-width: 768px) {
+	
+	#Page .rightTextBox {
+		border-left: 0px solid;
+		padding: 0;
+	}
+	
+	#Page .album {
+		width: 100%;
+	}
+	
+}
+
+@media only screen and (min-width: 1200px) {
+	
+	#Page .album {
+		width: 24.8%;
+	}
+
 }
 
 
@@ -191,7 +200,14 @@ ul {
 	width: 250px;
 	border-left: 10px solid #000;
 	padding: 5px 0 5px 10px;
-	letter-spacing: -0.05em;
+}
+
+#Page .landingLogo a {
+	color: #fff;
+}
+
+#Page .landingLogo a:hover {
+	color: #bbb;
 }
 
 #Page .landingAlbumHold {
@@ -201,8 +217,8 @@ ul {
 }
 
 #Page .landingThumbHold {
-	width:25%;
-	height:25%;
+	width: 33%;
+	height: 33%;
 	padding: 0 1px 1px 0;
 	float: left;
 }
@@ -218,7 +234,6 @@ ul {
 	color: #bbb;
 	margin-bottom: 80px;
 }
-
 
 @media only screen and (max-width: 768px) {
 
@@ -260,6 +275,7 @@ ul {
 	padding: 15px;
 	margin: 0;
 	display: none;
+	z-index: 999;
 }
 
 #PhotoViewer .hold {
@@ -396,6 +412,18 @@ ul {
 	-moz-transition: all 0.15s linear;
 	-o-transition: all 0.15s linear;
 	transition: all 0.15s linear;
+}
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+#Footer p {
+	text-align: center;
+	color: #bbb;
+	padding-top: 20px;
+	margin: 20px 0 60px 0;
+	border-top: 1px #ddd solid;
 }
 
 

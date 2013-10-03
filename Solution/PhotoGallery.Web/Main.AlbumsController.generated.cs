@@ -22,10 +22,10 @@ using System.Web.Routing;
 using T4MVC;
 namespace PhotoGallery.Web.Areas.Main.Controllers
 {
-    public partial class HomeController
+    public partial class AlbumsController
     {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        protected HomeController(Dummy d) { }
+        protected AlbumsController(Dummy d) { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected RedirectToRouteResult RedirectToAction(ActionResult result)
@@ -41,15 +41,21 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult Index()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public HomeController Actions { get { return MVC.Main.Home; } }
+        public AlbumsController Actions { get { return MVC.Main.Albums; } }
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Area = "Main";
         [GeneratedCode("T4MVC", "2.0")]
-        public readonly string Name = "Home";
+        public readonly string Name = "Albums";
         [GeneratedCode("T4MVC", "2.0")]
-        public const string NameConst = "Home";
+        public const string NameConst = "Albums";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -67,6 +73,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         }
 
 
+        static readonly ActionParamsClass_Index s_params_Index = new ActionParamsClass_Index();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Index IndexParams { get { return s_params_Index; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Index
+        {
+            public readonly string id = "id";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -77,23 +91,34 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string _AlbumThumb = "_AlbumThumb";
+                public readonly string _PhotoThumb = "_PhotoThumb";
+                public readonly string _PhotoViewer = "_PhotoViewer";
+                public readonly string Album = "Album";
                 public readonly string Index = "Index";
+                public readonly string Photo = "Photo";
             }
-            public readonly string Index = "~/Areas/Main/Views/Home/Index.cshtml";
+            public readonly string _AlbumThumb = "~/Areas/Main/Views/Albums/_AlbumThumb.cshtml";
+            public readonly string _PhotoThumb = "~/Areas/Main/Views/Albums/_PhotoThumb.cshtml";
+            public readonly string _PhotoViewer = "~/Areas/Main/Views/Albums/_PhotoViewer.cshtml";
+            public readonly string Album = "~/Areas/Main/Views/Albums/Album.cshtml";
+            public readonly string Index = "~/Areas/Main/Views/Albums/Index.cshtml";
+            public readonly string Photo = "~/Areas/Main/Views/Albums/Photo.cshtml";
         }
     }
 
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-    public partial class T4MVC_HomeController : PhotoGallery.Web.Areas.Main.Controllers.HomeController
+    public partial class T4MVC_AlbumsController : PhotoGallery.Web.Areas.Main.Controllers.AlbumsController
     {
-        public T4MVC_HomeController() : base(Dummy.Instance) { }
+        public T4MVC_AlbumsController() : base(Dummy.Instance) { }
 
-        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int? id);
 
-        public override System.Web.Mvc.ActionResult Index()
+        public override System.Web.Mvc.ActionResult Index(int? id)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
-            IndexOverride(callInfo);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            IndexOverride(callInfo, id);
             return callInfo;
         }
 

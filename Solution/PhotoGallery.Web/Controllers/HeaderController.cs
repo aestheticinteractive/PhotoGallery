@@ -20,29 +20,17 @@ namespace PhotoGallery.Web.Controllers {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult Full() {
-			return PartialView(MVC.Header.Views._Header, BuildModel());
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		public virtual ActionResult Login() {
-			return PartialView(MVC.Header.Views._Login, BuildModel());
+			var m = new HeaderModel();
+			m.IsPersonAuthenticated = vAcctHome.IsPersonAuthenticated();
+			m.GetPersonLoginOpenScript = vAcctHome.GetPersonLoginOpenScript;
+			m.User = vAcctHome.GetActiveFabUser();
+			return PartialView(MVC.Header.Views._Header, m);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual RedirectToRouteResult PersonLogout() {
 			vAcctHome.Logout();
 			return RedirectToAction(MVC.Main.Home.Index());
-		}
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		/*--------------------------------------------------------------------------------------------*/
-		private HeaderModel BuildModel() {
-			var m = new HeaderModel();
-			m.IsPersonAuthenticated = vAcctHome.IsPersonAuthenticated();
-			m.GetPersonLoginOpenScript = vAcctHome.GetPersonLoginOpenScript;
-			m.User = vAcctHome.GetActiveFabUser();
-			return m;
 		}
 
 	}

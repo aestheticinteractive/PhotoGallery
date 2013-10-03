@@ -22,7 +22,7 @@ using System.Web.Routing;
 using T4MVC;
 namespace T4MVC
 {
-    public class SharedController
+    public class HomeController
     {
 
         static readonly ViewsClass s_views = new ViewsClass();
@@ -35,15 +35,9 @@ namespace T4MVC
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
-                public readonly string _Base = "_Base";
-                public readonly string _Foundation = "_Foundation";
-                public readonly string _Layout = "_Layout";
-                public readonly string Error = "Error";
+                public readonly string Foundation_Index = "Foundation_Index";
             }
-            public readonly string _Base = "~/Views/Shared/_Base.cshtml";
-            public readonly string _Foundation = "~/Views/Shared/_Foundation.cshtml";
-            public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
-            public readonly string Error = "~/Views/Shared/Error.cshtml";
+            public readonly string Foundation_Index = "~/Views/Home/Foundation_Index.cshtml";
         }
     }
 
