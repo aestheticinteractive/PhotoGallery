@@ -197,9 +197,30 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Areas\Main\Models\MainBaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\foundation\app.css" />
+    <Content Include="Content\foundation\foundation.css" />
+    <Content Include="Content\foundation\foundation.mvc.css" />
+    <Content Include="Content\foundation\normalize.css" />
+    <Content Include="Foundation_readme.txt" />
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />
     <Content Include="Scripts\exif\imageinfo.js" />
+    <Content Include="Scripts\foundation\foundation.abide.js" />
+    <Content Include="Scripts\foundation\foundation.alerts.js" />
+    <Content Include="Scripts\foundation\foundation.clearing.js" />
+    <Content Include="Scripts\foundation\foundation.cookie.js" />
+    <Content Include="Scripts\foundation\foundation.dropdown.js" />
+    <Content Include="Scripts\foundation\foundation.forms.js" />
+    <Content Include="Scripts\foundation\foundation.interchange.js" />
+    <Content Include="Scripts\foundation\foundation.joyride.js" />
+    <Content Include="Scripts\foundation\foundation.js" />
+    <Content Include="Scripts\foundation\foundation.magellan.js" />
+    <Content Include="Scripts\foundation\foundation.orbit.js" />
+    <Content Include="Scripts\foundation\foundation.placeholder.js" />
+    <Content Include="Scripts\foundation\foundation.reveal.js" />
+    <Content Include="Scripts\foundation\foundation.section.js" />
+    <Content Include="Scripts\foundation\foundation.tooltips.js" />
+    <Content Include="Scripts\foundation\foundation.topbar.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
     <Content Include="Scripts\gallery\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
@@ -214,41 +235,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\gallery\Site.css" />
-    <Content Include="Content\foundation\foundation.css" />
-    <Content Include="Content\foundation\foundation.mvc.css" />
-    <Content Include="Content\images\foundation\orbit\bullets.jpg" />
-    <Content Include="Content\images\foundation\orbit\left-arrow-small.png" />
-    <Content Include="Content\images\foundation\orbit\left-arrow.png" />
-    <Content Include="Content\images\foundation\orbit\loading.gif" />
-    <Content Include="Content\images\foundation\orbit\mask-black.png" />
-    <Content Include="Content\images\foundation\orbit\pause-black.png" />
-    <Content Include="Content\images\foundation\orbit\right-arrow-small.png" />
-    <Content Include="Content\images\foundation\orbit\right-arrow.png" />
-    <Content Include="Content\images\foundation\orbit\rotator-black.png" />
-    <Content Include="Content\images\foundation\orbit\timer-black.png" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\foundation\app.js" />
-    <Content Include="Scripts\foundation\foundation.min.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.accordion.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.alerts.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.buttons.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.clearing.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.forms.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.joyride.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.magellan.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.mediaQueryToggle.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.navigation.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.orbit.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.reveal.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.tabs.js" />
-    <Content Include="Scripts\foundation\jquery.foundation.tooltips.js" />
     <Content Include="Scripts\foundation\XXXjquery.foundation.topbar.js" />
-    <Content Include="Scripts\foundation\jquery.placeholder.js" />
-    <Content Include="Scripts\foundation\modernizr.foundation.js" />
     <Content Include="Scripts\jquery-2.0.3-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
@@ -285,6 +277,7 @@
     </None>
     <None Include="T4MVC.tt.hooks.t4" />
     <None Include="T4MVC.tt.settings.xml" />
+    <Content Include="Scripts\zepto.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -299,6 +292,8 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Header\_Header.cshtml" />
     <Content Include="Views\Header\_Login.cshtml" />
+    <Content Include="Views\Shared\_Foundation.cshtml" />
+    <Content Include="Views\Home\Foundation_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
