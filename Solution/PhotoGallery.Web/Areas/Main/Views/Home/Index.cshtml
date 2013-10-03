@@ -8,25 +8,40 @@
 	      rel='stylesheet' type='text/css'>
 }
 
-<div class="row" style="background-color: #333; height: 72px; margin-top: 72px;">
-</div>
+<section id="Page">
+	<div class="row landingRow">
+		
+		<div class="six columns">
+			<p class="landingLogo">
+				The Kinstner Photo Gallery
+			</p>
+		</div>
 
-<div class="row" style="background-color: #333; margin-top: 0; margin-bottom: 0;">
-	<div class="eight columns">
-		<p style="color: #fff; font-size: 72px; line-height: 1em; width: 100px; border-left: 10px solid #000; padding-left: 10px;">
-			The Kinstner Photo Gallery
-		</p>
-	</div>
-	<div class="four columns">
-		<p style="color: #fff;">
-			Experience photography like you never have before. This gallery is powered by
-			<a href="http://www.inTheFabric.com">Fabric</a>, which allows you to give photos meaningful
-			connections, custom ratings, and intelligent tags.<br/>
-			<br/>
-			@{ Html.RenderAction("Login", "Header", new { area="" }); }
-		</p>
-	</div>
-</div>
+		<div class="show-for-small landingSep"></div>
+		
+		<div class="six columns">
+			<div class="landingAlbumHold">
+				@foreach ( WebAlbum a in Model.Albums ) {
+					<div class="landingThumbHold">
+					   <div class="thumb landingAlbum" title="@a.Title" style="background-image: 
+								url(@Url.Content("~"+a.FirstPhoto.ImageUrl));">
+							@Html.ActionLink(" ", MVC.Main.Home.Albums(a.AlbumId))
+						</div>
+					</div>
+				}
+				
+				<div style="clear:left;"></div>
+			</div>
+		</div>
 
-<div class="row" style="background-color: #333; height: 72px; margin-top: 0; margin-bottom: 72px;">
-</div>
+	</div>
+	
+	<div class="row">
+		<div class="twelve columns">
+			<p class="landingFooter">
+				The Kinstner Photo Gallery is powered by 
+				<a href="http://www.inTheFabric.com">Fabric</a>.
+			</p>
+		</div>
+	</div>
+</section>

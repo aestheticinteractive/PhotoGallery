@@ -23,6 +23,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual ActionResult Index() {
 			var m = new HomeModel();
+			m.Albums = vHome.GetAlbums(16);
 			return View(m);
 		}
 
