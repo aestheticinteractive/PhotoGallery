@@ -97,6 +97,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
                 public readonly string _PhotoThumb = "_PhotoThumb";
                 public readonly string _PhotoViewer = "_PhotoViewer";
                 public readonly string Album = "Album";
+                public readonly string Albums = "Albums";
                 public readonly string Index = "Index";
                 public readonly string Photo = "Photo";
             }
@@ -104,6 +105,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public readonly string _PhotoThumb = "~/Areas/Main/Views/Home/_PhotoThumb.cshtml";
             public readonly string _PhotoViewer = "~/Areas/Main/Views/Home/_PhotoViewer.cshtml";
             public readonly string Album = "~/Areas/Main/Views/Home/Album.cshtml";
+            public readonly string Albums = "~/Areas/Main/Views/Home/Albums.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Home/Index.cshtml";
             public readonly string Photo = "~/Areas/Main/Views/Home/Photo.cshtml";
         }

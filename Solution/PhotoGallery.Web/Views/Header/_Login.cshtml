@@ -1,0 +1,20 @@
+﻿@model HeaderModel
+
+<p class="auth">
+	@if ( Model.IsPersonAuthenticated ) {
+		<text>
+			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index())
+			(<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(true))));"
+				href="#">switch</a>, 
+			@Html.ActionLink("logout", MVC.Header.PersonLogout()))
+		</text>
+	}
+	else {
+		<text>
+			<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(false))));"
+				href="#">Login</a>
+		</text>
+	}
+</p>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/gallery/fabPopup.js")"></script>

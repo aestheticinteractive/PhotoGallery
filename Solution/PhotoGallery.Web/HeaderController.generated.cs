@@ -80,8 +80,10 @@ namespace PhotoGallery.Web.Controllers
             public class _ViewNamesClass
             {
                 public readonly string _Header = "_Header";
+                public readonly string _Login = "_Login";
             }
             public readonly string _Header = "~/Views/Header/_Header.cshtml";
+            public readonly string _Login = "~/Views/Header/_Login.cshtml";
         }
     }
 
@@ -92,7 +94,7 @@ namespace PhotoGallery.Web.Controllers
 
         partial void DataOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
-        public override System.Web.Mvc.ActionResult Data()
+        public override System.Web.Mvc.ActionResult Full()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Data);
             DataOverride(callInfo);

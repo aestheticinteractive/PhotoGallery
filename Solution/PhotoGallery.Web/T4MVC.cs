@@ -140,6 +140,7 @@ namespace Links
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string createAlbum_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/createAlbum.min.js") ? Url("createAlbum.min.js") : Url("createAlbum.js");
+            public static readonly string fabPopup_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fabPopup.min.js") ? Url("fabPopup.min.js") : Url("fabPopup.js");
             public static readonly string photoViewer_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/photoViewer.min.js") ? Url("photoViewer.min.js") : Url("photoViewer.js");
         }
     

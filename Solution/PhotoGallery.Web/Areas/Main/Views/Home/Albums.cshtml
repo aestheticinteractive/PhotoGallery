@@ -1,0 +1,28 @@
+﻿@model AlbumsModel
+
+<div class="row">
+	<div class="six columns">
+		<h4 class="borderBot">
+			Latest Albums
+		</h4>
+		@foreach ( WebAlbum a in Model.Albums ) {
+			Html.RenderPartial(MVC.Main.Home.Views._AlbumThumb, a);
+		}
+	</div>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		$(".details").hide();
+
+		$(".album")
+			.mouseenter(function() {
+				$(this).find(".details").stop().fadeIn(400);
+				$(this).stop().animate({ height: "80px" }, 400);
+			})
+			.mouseleave(function() {
+				$(this).find(".details").stop().fadeOut(400);
+				$(this).stop().animate({ height: "50px" }, 400);
+			});
+	</script>
+}

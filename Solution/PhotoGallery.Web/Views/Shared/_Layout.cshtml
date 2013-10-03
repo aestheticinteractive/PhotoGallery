@@ -7,7 +7,7 @@
 <div id="HeaderSpacer" class="hide-for-small"></div>
 
 <header id="Header" class="row">
-	@{ Html.RenderAction("Data", "Header", new { area="" }); }
+	@{ Html.RenderAction("Full", "Header", new { area="" }); }
 </header>
 
 <section id="Page">
@@ -20,7 +20,8 @@
 </footer>
 
 @section head {
-	<link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700italic,400italic,700'
+	      rel='stylesheet' type='text/css'>
 }
 
 @RenderSection("scripts", required: false)

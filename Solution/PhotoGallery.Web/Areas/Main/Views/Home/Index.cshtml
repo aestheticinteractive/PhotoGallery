@@ -1,28 +1,32 @@
 ﻿@model HomeModel
+@{
+    Layout = "~/Views/Shared/_Base.cshtml";
+	ViewBag.Title = Model.HtmlTitle;
+}
+@section head {
+	<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700italic,400italic,700'
+	      rel='stylesheet' type='text/css'>
+}
 
-<div class="row">
-	<div class="six columns">
-		<h4 class="borderBot">
-			Latest Albums
-		</h4>
-		@foreach ( WebAlbum a in Model.Albums ) {
-			Html.RenderPartial(MVC.Main.Home.Views._AlbumThumb, a);
-		}
+<div class="row" style="background-color: #333; height: 72px; margin-top: 72px;">
+</div>
+
+<div class="row" style="background-color: #333; margin-top: 0; margin-bottom: 0;">
+	<div class="eight columns">
+		<p style="color: #fff; font-size: 72px; line-height: 1em; width: 100px; border-left: 10px solid #000; padding-left: 10px;">
+			The Kinstner Photo Gallery
+		</p>
+	</div>
+	<div class="four columns">
+		<p style="color: #fff;">
+			Experience photography like you never have before. This gallery is powered by
+			<a href="http://www.inTheFabric.com">Fabric</a>, which allows you to give photos meaningful
+			connections, custom ratings, and intelligent tags.<br/>
+			<br/>
+			@{ Html.RenderAction("Login", "Header", new { area="" }); }
+		</p>
 	</div>
 </div>
 
-@section scripts {
-	<script type="text/javascript">
-		$(".details").hide();
-
-		$(".album")
-			.mouseenter(function() {
-				$(this).find(".details").stop().fadeIn(400);
-				$(this).stop().animate({ height: "80px" }, 400);
-			})
-			.mouseleave(function() {
-				$(this).find(".details").stop().fadeOut(400);
-				$(this).stop().animate({ height: "50px" }, 400);
-			});
-	</script>
-}
+<div class="row" style="background-color: #333; height: 72px; margin-top: 0; margin-bottom: 72px;">
+</div>
