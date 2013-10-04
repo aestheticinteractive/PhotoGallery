@@ -83,7 +83,7 @@ ul {
 	color: #fff;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
 	
 	#Header .logo a {
 		font-size: 16px;
@@ -145,7 +145,7 @@ ul {
 	background-color: rgba(0, 0, 0, 0.5);
 	font-size: 12px;
 	padding: 3px 4px;
-	margin: 0;
+	margin: 0 0 2px 0;
 	line-height: 1.0em;
 	display: inline-block;
 }
@@ -158,7 +158,7 @@ ul {
 
 #Page .album .details {
 	position: absolute;
-	margin: 5px;
+	margin: 2px 5px;
 	bottom: 0;
 }
 
@@ -167,7 +167,7 @@ ul {
 	height: 66px;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
 	
 	#Page .rightTextBox {
 		border-left: 0px solid;
@@ -176,6 +176,7 @@ ul {
 	
 	#Page .album {
 		width: 100%;
+		height: 160px;
 	}
 	
 }
@@ -191,10 +192,15 @@ ul {
 
 /*----------------------------------------------------------------------------------------------------*/
 
+
+#Page.landingPage {
+	margin: 0;
+}
+
 #Page .landingRow {
 	background-color: #333;
 	margin: 80px 0;
-	padding: 80px 60px;
+	padding: 80px 40px;
 }
 
 #Page .landingSep {
@@ -239,15 +245,15 @@ ul {
 
 #Page .landingFooter {
 	text-align: center;
-	color: #bbb;
+	color: #aaa;
 	margin-bottom: 80px;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
 
 	#Page .landingRow {
 		margin: 40px 0;
-		padding: 40px 30px;
+		padding: 30px 10px;
 	}
 
 	#Page .landingLogo {
@@ -255,7 +261,7 @@ ul {
 	}
 
 	#Page .landingSep {
-		height: 40px;
+		height: 30px;
 	}
 
 	#Page .landingAlbum {
@@ -265,7 +271,23 @@ ul {
 	#Page .landingAlbumHold {
 		height: inherit;
 		clear: left;
-	}	
+	}
+
+}
+
+@media only screen and (max-width: 480px) {
+
+	#Page .landingRow {
+		margin: 0 0 30px 0;
+	}
+
+	#Page .landingLogo {
+		font-size: 48px;
+	}
+
+	#Page .landingFooter {
+		margin-bottom: 30px;
+	}
 
 }
 
@@ -409,7 +431,7 @@ ul {
 
 #Footer p {
 	text-align: center;
-	color: #bbb;
+	color: #aaa;
 	padding-top: 20px;
 	margin: 20px 0 60px 0;
 	border-top: 1px #ddd solid;
