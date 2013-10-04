@@ -44,16 +44,81 @@ ul {
 	min-width: 320px;
 }
 
+@media only screen and (max-width: 767px) {
+
+	.columns {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+}
+
 
 /*----------------------------------------------------------------------------------------------------*/
 
 
-#Header {
+.top-bar {
 	background-color: #333;
 	margin-bottom: 20px;
+	height: 50px;
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	width: 100%;
 }
 
-#Header .logo a {
+.top-bar .title-area {
+	height: 50px;
+}
+
+.top-bar.expanded .title-area {
+	background-color: #333;
+	height: 50px;
+}
+
+.top-bar .title-area .name {
+	margin-left: 16px;
+}
+
+.top-bar-section {
+	padding-right: 16px;
+}
+
+.top-bar-section ul {
+	background: none;
+}
+
+.top-bar-section li {
+	background: none;
+	padding: 0;
+}
+
+.top-bar-section li a {
+	color: #fff;
+}
+
+.top-bar-section li a:not(.button) {
+	background: none;
+	line-height: 50px;
+	font-weight: normal;
+	font-size: 14px;
+	padding: 0 10px;
+}
+
+.top-bar-section li a:hover {
+	color: #bbb;
+}
+
+.top-bar-section .divider {
+	display: none;
+}
+
+.top-bar-section li .login a {
+	background-color: #000;
+	padding: 4px 8px;
+}
+
+.top-bar .logo a {
 	font-size: 18px;
 	color: #fff;
 	border-left: 5px solid #000;
@@ -62,31 +127,37 @@ ul {
 	margin: 10px 0;
 }
 
-#Header .logo a:hover {
+.top-bar .logo a:hover {
 	color: #bbb;
-}
-
-#Header .menuItem {
-	display: inline-block;
-	float: right;
-	margin-top: 12px;
-	padding: 1px 6px 2px 6px;
-	color: #666;
-	margin-left: 5px;
-}
-
-#Header .menuItem a {
-	color: #bbb;
-}
-
-#Header .menuItem a:hover {
-	color: #fff;
 }
 
 @media only screen and (max-width: 767px) {
-	
-	#Header .logo a {
-		font-size: 16px;
+
+	.top-bar {
+		margin: 0;
+	}
+
+	.top-bar .title-area .name {
+		margin-left: 12px;
+	}
+
+	.top-bar-section {
+		padding: 0;
+	}
+
+	.top-bar-section li {
+		background-color: #404040;
+		padding: 0 0 0 12px;
+	}
+
+	.top-bar-section li a:not(.button) {
+		line-height: 36px;
+	}
+
+	.top-bar-section .divider {
+		border: 0 solid;
+		background-color: #333;
+		display: inherit;
 	}
 
 }
@@ -96,7 +167,7 @@ ul {
 
 
 #Page {
-	margin-top: 15px;
+	margin-top: 70px;
 }
 
 #Page .separator {
@@ -168,21 +239,25 @@ ul {
 }
 
 @media only screen and (max-width: 767px) {
-	
+
+	#Page {
+		margin-top: 60px;
+	}
+
 	#Page .rightTextBox {
 		border-left: 0px solid;
 		padding: 0;
 	}
-	
+
 	#Page .album {
 		width: 100%;
 		height: 160px;
 	}
-	
+
 }
 
 @media only screen and (min-width: 1200px) {
-	
+
 	#Page .album {
 		width: 24.8%;
 	}
@@ -267,7 +342,7 @@ ul {
 	#Page .landingAlbum {
 		height: 100px;
 	}
-	
+
 	#Page .landingAlbumHold {
 		height: inherit;
 		clear: left;
@@ -346,7 +421,7 @@ ul {
 }
 
 @media only screen and (max-width: 1024px) {
-	
+
 	#PhotoViewer {
 		background-color: #000;
 	}

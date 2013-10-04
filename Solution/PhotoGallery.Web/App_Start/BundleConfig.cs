@@ -33,8 +33,8 @@ namespace PhotoGallery.Web {
 					   "~/Content/foundation/app.css"));
 
 			pBundles.Add(new ScriptBundle("~/bundles/foundation").Include(
-					  "~/Scripts/foundation/jquery.*",
-					  "~/Scripts/foundation/app.js"));
+					  "~/Scripts/foundation/foundation.js",
+					  "~/Scripts/foundation/foundation.topbar.js"));
 			#endregion
 		}
 

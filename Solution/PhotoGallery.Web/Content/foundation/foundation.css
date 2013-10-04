@@ -2993,13 +2993,13 @@ label.error {
       font-size: 0.625em; }
 
 .top-bar-js-breakpoint {
-  width: 58.75em !important;
+  width: 767px !important; /* ZK */
   visibility: hidden; }
 
 .js-generated {
   display: block; }
 
-@media only screen and (min-width: 58.75em) {
+@media only screen and (min-width: 767px) { /* ZK */
   .top-bar {
     background: #111111;
     *zoom: 1;

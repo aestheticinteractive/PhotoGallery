@@ -19,8 +19,27 @@
 	@Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+	
 	@RenderBody()
-	@Scripts.Render("~/bundles/foundation")
+	
+	<script type="text/javascript">
+		document.write(
+			'<script src='+
+				'@Url.Content("~/Scripts/jquery.js")'+
+			'><\/script>'
+		);
+    </script>
+
+	@*Scripts.Render("~/bundles/foundation")*@
+	<script src="@Url.Content("~/Scripts/foundation/foundation.js")"></script>
+	<script src="@Url.Content("~/Scripts/foundation/foundation.topbar.js")"></script>
 	@RenderSection("scripts", required: false)
+
+	<script type="text/javascript">
+		$(function () {
+			$(document).foundation();
+		});
+	</script>
+
 </body>
 </html>

@@ -1,26 +1,38 @@
 ﻿@model HeaderModel
 
-<div class="large-6 small-9 columns">
-	<p class="logo">
-		@Html.ActionLink("The Kinstner Photo Gallery", MVC.Main.Albums.Index(null))
-	</p>
-</div>
-<div class="large-6 small-3 columns">
-	@if ( Model.IsPersonAuthenticated ) {
-		<p class="menuItem" style="background-color: #000;">
-			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index())
-		</p>
-	}
-	else {
-		<p class="menuItem" style="background-color: #000;">
-			<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(false))));"
-				href="#">Login</a>
-		</p>
-	}
-	
-	<p class="menuItem">
-		@Html.ActionLink("Albums", MVC.Main.Albums.Index(null))
-	</p>
-</div>
+<nav class="top-bar">
+		
+	<ul class="title-area">
+		<li class="name">
+			<p class="logo">
+				@Html.ActionLink("The Kinstner Photo Gallery", MVC.Main.Albums.Index(null))
+			</p>
+		</li>
+		<li class="toggle-topbar menu-icon">
+			<a href="#"><span></span></a>
+		</li>
+	</ul>
+		
+	<section class="top-bar-section">
+		<ul class="right">
+			<li>
+				@Html.ActionLink("Albums", MVC.Main.Albums.Index(null))
+			</li>
+			<li class="divider"></li>
+			<li>
+				<div class="login">
+					@if ( Model.IsPersonAuthenticated ) {
+						@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index());
+					}
+					else {
+						<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(false))));" 
+							href="#">Login</a>
+					}
+				</div>
+			</li>
+		</ul>
+	</section>
+
+</nav>
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/gallery/fabPopup.js")"></script>

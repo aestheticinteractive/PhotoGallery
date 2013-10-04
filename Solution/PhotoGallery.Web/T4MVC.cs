@@ -133,7 +133,6 @@ namespace Links
             public static readonly string foundation_section_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/foundation.section.min.js") ? Url("foundation.section.min.js") : Url("foundation.section.js");
             public static readonly string foundation_tooltips_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/foundation.tooltips.min.js") ? Url("foundation.tooltips.min.js") : Url("foundation.tooltips.js");
             public static readonly string foundation_topbar_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/foundation.topbar.min.js") ? Url("foundation.topbar.min.js") : Url("foundation.topbar.js");
-            public static readonly string XXXjquery_foundation_topbar_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/XXXjquery.foundation.topbar.min.js") ? Url("XXXjquery.foundation.topbar.min.js") : Url("XXXjquery.foundation.topbar.js");
         }
     
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]

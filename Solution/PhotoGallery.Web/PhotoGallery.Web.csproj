@@ -211,7 +211,6 @@
     <Content Include="Content\foundation\foundation.css" />
     <Content Include="Content\foundation\foundation.mvc.css" />
     <Content Include="Content\foundation\normalize.css" />
-    <Content Include="Foundation_readme.txt" />
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />
     <Content Include="Scripts\exif\imageinfo.js" />
@@ -223,14 +222,18 @@
     <Content Include="Scripts\foundation\foundation.forms.js" />
     <Content Include="Scripts\foundation\foundation.interchange.js" />
     <Content Include="Scripts\foundation\foundation.joyride.js" />
-    <Content Include="Scripts\foundation\foundation.js" />
+    <Content Include="Scripts\foundation\foundation.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\foundation\foundation.magellan.js" />
     <Content Include="Scripts\foundation\foundation.orbit.js" />
     <Content Include="Scripts\foundation\foundation.placeholder.js" />
     <Content Include="Scripts\foundation\foundation.reveal.js" />
     <Content Include="Scripts\foundation\foundation.section.js" />
     <Content Include="Scripts\foundation\foundation.tooltips.js" />
-    <Content Include="Scripts\foundation\foundation.topbar.js" />
+    <Content Include="Scripts\foundation\foundation.topbar.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\gallery\fabPopup.js" />
     <Content Include="Scripts\gallery\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
@@ -246,7 +249,6 @@
   <ItemGroup>
     <Content Include="Content\gallery\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\foundation\XXXjquery.foundation.topbar.js" />
     <Content Include="Scripts\jquery-2.0.3-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
