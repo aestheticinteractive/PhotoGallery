@@ -4,8 +4,8 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: "Droid Serif" , "Georgia" , serif;
-	font-weight: lighter;
 	overflow-y: scroll;
+	letter-spacing: -0.05em;
 }
 
 p, h1, h2, h3, h4, h5, h6, ul, li {

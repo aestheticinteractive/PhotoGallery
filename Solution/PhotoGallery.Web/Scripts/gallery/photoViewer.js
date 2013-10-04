@@ -28,7 +28,7 @@ function initPhotoView() {
 		}
 	});
 
-	$("#PhotoViewer").click(null, nextPhoto);
+	$("#PhotoViewer .photo").click(null, nextPhoto);
 }
 
 /*--------------------------------------------------------------------------------------------*/
