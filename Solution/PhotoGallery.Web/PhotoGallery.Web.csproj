@@ -181,6 +181,9 @@
     <Compile Include="Main.OauthController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Main.SharedController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\HeaderModel.cs" />
     <Compile Include="Models\IBaseModel.cs" />
     <Compile Include="Models\IMvcLink.cs" />
@@ -273,9 +276,9 @@
     <Content Include="Areas\Account\Views\Albums\Index.cshtml" />
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Album.cshtml" />
-    <Content Include="Areas\Main\Views\Albums\_PhotoThumb.cshtml" />
+    <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Photo.cshtml" />
-    <Content Include="Areas\Main\Views\Albums\_PhotoViewer.cshtml" />
+    <Content Include="Areas\Main\Views\Shared\_PhotoViewer.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">

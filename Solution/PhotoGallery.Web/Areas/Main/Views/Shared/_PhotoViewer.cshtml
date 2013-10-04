@@ -1,0 +1,31 @@
+﻿@model IList<IWebPhoto>
+
+<div id="PhotoViewer">
+		<div class="photo"></div>
+	<div class="bottomBar">
+		<p class="details"></p>
+		<div class="buttons">
+			<input type="submit" id="prev" class="button" value="&lt;"
+				onclick="prevPhoto(); return false;" />
+			<input type="submit" id="next" class="button" value="&gt;"
+				onclick="nextPhoto(); return false;" />
+			<input type="submit" id="close" class="button" value="X"
+				onclick="closePhoto(); return false;" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/gallery/photoViewer.js")"></script>
+
+<script type="text/javascript">
+	initPhotoView();
+
+	@foreach ( IWebPhoto p in Model ) {
+		string url = Url.Content("~"+p.ImageUrl);
+		<text>
+			registerPhoto(@p.PhotoId, '@p.ImgName', '@url', '@p.Created', @p.AlbumId);
+		</text>
+	}
+
+	//viewPhoto(5565);
+</script>

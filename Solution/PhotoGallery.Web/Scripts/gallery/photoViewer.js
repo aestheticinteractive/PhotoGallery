@@ -27,6 +27,8 @@ function initPhotoView() {
 				break;
 		}
 	});
+
+	$("#PhotoViewer").click(null, nextPhoto);
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -53,30 +55,28 @@ function viewPhoto(photoId) {
 
 	var det = pv.find('.details');
 	det.html(pho.name+"<br/>"+pho.created);
-
-	var prev = pv.find('#prev');
-	prev.attr('disabled', (pho.index <= 0));
-	
-	var next = pv.find('#next');
-	next.attr('disabled', (pho.index >= phoData.idList.length-1));
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function prevPhoto() {
 	var i = phoData.idMap[phoData.activePhotoId].index;
 	
-	if ( i > 0 ) {
-		viewPhoto(phoData.idList[i-1]);
+	if ( i <= 0 ) {
+		i = phoData.idList.length;
 	}
+
+	viewPhoto(phoData.idList[i-1]);
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function nextPhoto() {
 	var i = phoData.idMap[phoData.activePhotoId].index;
 	
-	if ( i < phoData.idList.length-1 ) {
-		viewPhoto(phoData.idList[i+1]);
+	if ( i >= phoData.idList.length-1 ) {
+		i = -1;
 	}
+
+	viewPhoto(phoData.idList[i+1]);
 }
 
 /*--------------------------------------------------------------------------------------------*/

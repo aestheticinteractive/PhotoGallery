@@ -67,7 +67,6 @@ ul {
 }
 
 #Header .menuItem {
-	background-color: #000;
 	display: inline-block;
 	float: right;
 	margin-top: 12px;
@@ -112,11 +111,13 @@ ul {
 #Page .thumb {
 	height: 200px;
 	width: 200px;
+	background-color: #ccc;
 	background-size: cover;
 	background-position: 50% 25%;
 	float: left;
 	margin: 0 0 1px 1px;
 	position: relative;
+	cursor: pointer;
 }
 
 #Page .thumb a {
@@ -125,6 +126,13 @@ ul {
 	left: 0;
 	width: 100%;
 	height: 100%;
+}
+
+#Page .thumb .border {
+	width: 100%;
+	height: 100%;
+	border: 3px solid #000;
+	display: none;
 }
 
 #Page .album {
@@ -266,41 +274,17 @@ ul {
 
 
 #PhotoViewer {
-	background-color: rgba(100, 100, 100, 0.75);
+	background-color: #000;
+	background-color: rgba(0, 0, 0, 0.9);
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	padding: 15px;
+	padding: 0;
 	margin: 0;
 	display: none;
 	z-index: 999;
-}
-
-#PhotoViewer .hold {
-	background-color: #fff;
-	width: 100%;
-	height: 100%;
-}
-
-#PhotoViewer .photoHold {
-	width: 74%;
-	height: 100%;
-	padding: 5px;
-	float: left;
-}
-
-#PhotoViewer .detailsHold {
-	padding: 5px 5px 5px 0;
-	height: 100%;
-	float: left;
-}
-
-#PhotoViewer .border {
-	border-left: 1px solid #ccc;
-	padding-left: 5px;
-	height: 100%;
 }
 
 #PhotoViewer .photo {
@@ -311,37 +295,42 @@ ul {
 	background-position: center;
 }
 
+#PhotoViewer .bottomBar {
+	float: left;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+#PhotoViewer .bottomBar p {
+	color: #fff;
+	float: left;
+	padding: 10px;
+	line-height: 1.3em;
+	font-size: 12px;
+}
+
+#PhotoViewer .buttons {
+	float: right;
+	padding: 10px;
+}
+
 #PhotoViewer .button {
 	padding: 2px 5px;
+	width: 30px;
+	height: 30px;
 }
 
 @media only screen and (max-width: 1024px) {
+	
 	#PhotoViewer {
-		padding: 0;
 		background-color: #000;
 	}
 
-	#PhotoViewer .hold {
-		background-color: #000;
-		width: 100%;
-		height: 100%;
-	}
-
-	#PhotoViewer .photoHold {
-		width: 100%;
-		padding: 0;
-	}
-
-	#PhotoViewer .detailsHold {
-		position: fixed;
-		bottom: 0;
-		height: auto;
-		width: 100%;
-		background-color: rgba(0, 0, 0, 0.2);
-	}
-
-	#PhotoViewer .detailsHold p {
-		color: #fff;
+	#PhotoViewer .button {
+		width: inherit;
 	}
 }
 

@@ -49,6 +49,7 @@ namespace T4MVC
         public PhotoGallery.Web.Areas.Main.Controllers.AlbumsController Albums = new PhotoGallery.Web.Areas.Main.Controllers.T4MVC_AlbumsController();
         public PhotoGallery.Web.Areas.Main.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Main.Controllers.T4MVC_HomeController();
         public PhotoGallery.Web.Areas.Main.Controllers.OauthController Oauth = new PhotoGallery.Web.Areas.Main.Controllers.T4MVC_OauthController();
+        public T4MVC.Main.SharedController Shared = new T4MVC.Main.SharedController();
     }
 }
 

@@ -14,12 +14,10 @@
 
 		$(".album")
 			.mouseenter(function() {
-				$(this).find(".details").stop().fadeIn(400);
-				//$(this).stop().animate({ height: "80px" }, 400);
+				$(this).find(".details").stop().show();
 			})
 			.mouseleave(function() {
-				$(this).find(".details").stop().fadeOut(400);
-				//$(this).stop().animate({ height: "50px" }, 400);
+				$(this).find(".details").stop().fadeOut(200);
 			});
 	</script>
 }

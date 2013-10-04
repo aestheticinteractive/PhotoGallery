@@ -7,12 +7,12 @@
 </div>
 <div class="large-6 small-3 columns">
 	@if ( Model.IsPersonAuthenticated ) {
-		<p class="menuItem">
+		<p class="menuItem" style="background-color: #000;">
 			@Html.ActionLink(Model.User.Name, MVC.Account.Home.Index())
 		</p>
 	}
 	else {
-		<p class="menuItem">
+		<p class="menuItem" style="background-color: #000;">
 			<a onclick="openFabPop(@(Html.Raw(Model.GetPersonLoginOpenScript(false))));"
 				href="#">Login</a>
 		</p>

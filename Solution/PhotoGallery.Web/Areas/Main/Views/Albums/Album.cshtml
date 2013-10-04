@@ -21,9 +21,23 @@
 	
 	<div class="large-8 pull-4 columns">
 		@foreach ( IWebPhoto p in Model.Photos ) {
-			Html.RenderPartial(MVC.Main.Albums.Views._PhotoThumb, p);
+			Html.RenderPartial(MVC.Main.Shared.Views._PhotoThumb, p);
 		}
 	</div>
 </div>
 
-@{ Html.RenderPartial(MVC.Main.Albums.Views._PhotoViewer, Model.Photos); }
+@{ Html.RenderPartial(MVC.Main.Shared.Views._PhotoViewer, Model.Photos); }
+
+@section scripts {
+	<script type="text/javascript">
+		$(".border").hide();
+
+		$(".thumb")
+			.mouseenter(function () {
+				$(this).find(".border").stop().show();
+			})
+			.mouseleave(function () {
+				$(this).find(".border").stop().fadeOut(200);
+			});
+	</script>
+}
