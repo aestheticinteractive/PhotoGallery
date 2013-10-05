@@ -4,23 +4,25 @@
 	ViewBag.Title = Model.HtmlTitle;
 }
 
-<div id="HeaderSpacer" class="hide-for-small"></div>
-
-<header id="Header">
-	@{ Html.RenderAction("Full", "Header", new { area="" }); }
-</header>
-
-<section id="Page">
-	@RenderBody()
-</section>
+<div id="Site">
 	
-<footer id="Footer" class="row">
-	<div class="large-12 columns">
-		<p>
-			This site is powered by <a href="http://www.inTheFabric.com">Fabric</a>.
-		</p>
-	</div>
-</footer>
+	<header id="Header">
+		@{ Html.RenderAction("Full", "Header", new { area="" }); }
+	</header>
+
+	<section id="Page">
+		@RenderBody()
+	</section>
+	
+	<footer id="Footer" class="row">
+		<div class="large-12 columns">
+			<p>
+				This site is powered by <a href="http://www.inTheFabric.com">Fabric</a>.
+			</p>
+		</div>
+	</footer>
+
+</div>
 
 @section head {
 	<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700italic,400italic,700'

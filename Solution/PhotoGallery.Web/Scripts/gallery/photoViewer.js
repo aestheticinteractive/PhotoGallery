@@ -11,8 +11,6 @@ var phoData = {
 /*--------------------------------------------------------------------------------------------*/
 function initPhotoView() {
 	$(document).keyup(function(e) {
-		console.log(e.which);
-
 		switch ( e.which ) {
 			case 27: //Escape key
 				closePhoto();
@@ -28,7 +26,12 @@ function initPhotoView() {
 		}
 	});
 
-	$("#PhotoViewer .photo").click(null, nextPhoto);
+	$('body').prepend($('#PhotoViewerPadding')).prepend($('#PhotoViewer'));
+	phoData.origBg = $('body').css('background-color');
+	phoData.origOy = $('body').css('overflow-y');
+
+	$('#PhotoViewer .photo').click(null, nextPhoto);
+	closePhoto();
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -48,13 +51,15 @@ function registerPhoto(photoId, name, url, created, albumId) {
 function viewPhoto(photoId) {
 	phoData.activePhotoId = photoId;
 	var pho = phoData.idMap[photoId];
-	var pv = $("#PhotoViewer").show();
+	
+	$("#PhotoViewer").show();
+	$('#PhotoViewerPadding').show();
+	$("#Site").hide();
 
-	var img = pv.find('.photo');
-	img.css('background-image', 'url('+pho.url+')');
+	$('#PhotoViewer .photo').css('background-image', 'url('+pho.url+')');
+	$('#PhotoViewer .details').html(pho.name + "<br/>" + pho.created);
+	$('body').css('background-color', '#000').css('overflow-y', 'hidden');
 
-	var det = pv.find('.details');
-	det.html(pho.name+"<br/>"+pho.created);
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -81,5 +86,8 @@ function nextPhoto() {
 
 /*--------------------------------------------------------------------------------------------*/
 function closePhoto() {
-	$("#PhotoViewer").hide();
+	$('#PhotoViewer').hide();
+	$('#PhotoViewerPadding').hide();
+	$('#Site').show();
+	$('body').css('background-color', phoData.origBg).css('overflow-y', phoData.origOy);
 }
