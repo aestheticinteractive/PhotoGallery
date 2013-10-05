@@ -32,12 +32,14 @@
 	<script type="text/javascript">
 		$(".border").hide();
 
-		$(".thumb")
-			.mouseenter(function () {
-				$(this).find(".border").stop().show();
-			})
-			.mouseleave(function () {
-				$(this).find(".border").stop().fadeOut(200);
-			});
+		if ( !isTouch() ) {
+			$(".thumb")
+				.mouseenter(function () {
+					$(this).find(".border").stop().show();
+				})
+				.mouseleave(function () {
+					$(this).find(".border").stop().fadeOut(200);
+				});
+		}
 	</script>
 }

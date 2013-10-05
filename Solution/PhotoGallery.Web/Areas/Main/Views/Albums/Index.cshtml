@@ -10,14 +10,16 @@
 
 @section scripts {
 	<script type="text/javascript">
-		$(".details").hide();
+		if (!isTouch()) {
+			$(".details").hide();
 
-		$(".album")
-			.mouseenter(function() {
-				$(this).find(".details").stop().show();
-			})
-			.mouseleave(function() {
-				$(this).find(".details").stop().fadeOut(200);
-			});
+			$(".album")
+				.mouseenter(function() {
+					$(this).find(".details").stop().show();
+				})
+				.mouseleave(function() {
+					$(this).find(".details").stop().fadeOut(200);
+				});
+		}
 	</script>
 }
