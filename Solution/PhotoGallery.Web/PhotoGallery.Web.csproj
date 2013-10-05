@@ -211,6 +211,9 @@
     <Content Include="Content\foundation\foundation.css" />
     <Content Include="Content\foundation\foundation.mvc.css" />
     <Content Include="Content\foundation\normalize.css" />
+    <Content Include="Content\gallery\arrow-left.png" />
+    <Content Include="Content\gallery\arrow-right.png" />
+    <Content Include="Content\gallery\close.png" />
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />
     <Content Include="Scripts\exif\imageinfo.js" />
@@ -280,7 +283,6 @@
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Album.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
-    <Content Include="Areas\Main\Views\Albums\Photo.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoViewer.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />

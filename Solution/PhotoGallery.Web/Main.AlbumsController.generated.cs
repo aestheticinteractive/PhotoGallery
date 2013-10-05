@@ -94,12 +94,10 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
                 public readonly string _AlbumThumb = "_AlbumThumb";
                 public readonly string Album = "Album";
                 public readonly string Index = "Index";
-                public readonly string Photo = "Photo";
             }
             public readonly string _AlbumThumb = "~/Areas/Main/Views/Albums/_AlbumThumb.cshtml";
             public readonly string Album = "~/Areas/Main/Views/Albums/Album.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Albums/Index.cshtml";
-            public readonly string Photo = "~/Areas/Main/Views/Albums/Photo.cshtml";
         }
     }
 
