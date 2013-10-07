@@ -21,12 +21,13 @@ namespace PhotoGallery.Services.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<WebAlbum> GetAlbums(int pLimit) {
+		public IList<WebAlbum> GetAlbums(int pOffset, int pLimit) {
 			using ( ISession s = NewSession() ) {
 				Photo phoAlias = null;
 
 				return GetAlbumQuery(s)
 					.OrderBy(Projections.Max(() => phoAlias.Date)).Desc
+					.Skip(pOffset)
 					.Take(pLimit == 0 ? 9999 : pLimit)
 					.List<WebAlbum>();
 			};
@@ -53,6 +54,13 @@ namespace PhotoGallery.Services.Main {
 					.SelectMax(() => phoAlias.Date).WithAlias(() => dto.EndDateTicks)
 				)
 				.TransformUsing(Transformers.AliasToBean<WebAlbum>());
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		public int GetAlbumCount() {
+			using ( ISession s = NewSession() ) {
+				return s.QueryOver<Album>().RowCount();
+			};
 		}
 
 

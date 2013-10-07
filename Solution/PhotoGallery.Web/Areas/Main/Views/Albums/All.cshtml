@@ -1,0 +1,16 @@
+﻿@model AllAlbumsModel
+
+<div class="row">
+	<div class="large-12 columns">
+		<h2>
+			All Albums
+		</h2>
+		@{ Html.RenderAction(MVC.Main.Albums.AllPage(Model.StartItemIndex)); }
+	</div>
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		
+	</script>
+}

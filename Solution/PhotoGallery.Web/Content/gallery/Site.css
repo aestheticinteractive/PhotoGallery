@@ -60,6 +60,14 @@ ul {
 	
 }
 
+@media only screen and (max-width: 479px) {
+
+	.hide-for-tiny {
+		display: none;
+	}
+	
+}
+
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -545,7 +553,6 @@ table {
 table thead {
 	font-weight: bold;
 	background-color: #d8d8d8;
-	background-color: rgba(0,0,0,0.1);
 }
 
 table thead tr th, table tbody tr td {
@@ -564,7 +571,7 @@ table tbody {
 
 table tbody tr:nth-child(even) {
 	background-color: #eee;
-	background-color: rgba(0,0,0,0.045);
+	background-color: rgba(0,0,0,0.02);
 }
 
 table tbody tr:nth-child(odd) {
@@ -601,4 +608,12 @@ table tbody tr td.title {
 
 table tbody tr td.vertTop {
 	vertical-align: top;
+}
+
+@media only screen and (max-width: 767px) {
+
+	table {
+		font-size: 90%;
+	}
+	
 }

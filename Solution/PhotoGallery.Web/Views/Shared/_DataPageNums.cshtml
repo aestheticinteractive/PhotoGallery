@@ -1,0 +1,62 @@
+﻿@model DataPage
+@{
+	int selectedPageNum;
+	IList<int> pageNums = Model.GetNearestPageNumbers(8, true, out selectedPageNum);
+
+	Func<int, string> getOnClick = (i => 
+		"pagingLoad('"+Url.Action(Model.GetActionForPageIndex(i))+"'); return false;"
+	);
+}
+
+<div class="pagination-centered">
+	<ul class="pagination">
+		@if ( Model.HasPrevPage() ) {
+			<li class="arrow">
+				<a href="#" onclick="@getOnClick(Model.GetIndexForPrevPage())">&laquo;</a>
+			</li>
+		}
+		else {
+			<li class="arrow unavailable">
+				<a href="">&laquo;</a>
+			</li>
+		}
+		
+		@for ( int i = 0 ; i < pageNums.Count ; ++i ) {
+			int pn = pageNums[i];
+
+			if ( pn == -1 ) {
+				<li class="unavailable">
+					<a href="">&hellip;</a>
+				</li>
+				continue;
+			}
+	  
+			<li class="@(i == selectedPageNum ? "current" : "")">
+				<a href="#" onclick="@getOnClick(Model.GetIndexForPageNumber(pn))">@(pn+1)</a>
+			</li>
+		}
+		
+		@if ( Model.HasNextPage() ) {
+			<li class="arrow">
+				<a href="#" onclick="@getOnClick(Model.GetIndexForNextPage())">&raquo;</a>
+			</li>
+		}
+		else {
+			<li class="arrow unavailable">
+				<a href="">&raquo;</a>
+			</li>
+		}
+
+	</ul>
+</div>
+
+<script type="text/javascript">
+	function pagingLoad(url) {
+		jQuery.get(
+			url,
+			function(data) {
+				$('#DataPage').html(data);
+			}
+		);
+	}
+</script>

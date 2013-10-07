@@ -69,9 +69,25 @@ namespace PhotoGallery.Services.Main.Dto {
 		/*--------------------------------------------------------------------------------------------*/
 		public string DateRangeString {
 			get {
-				string start = Convert.ToDateTime(StartDate).ToString("MMM d");
-				string end = Convert.ToDateTime(EndDate).ToString("MMM d, yyyy");
-				return start+" - "+end;
+				const string monthFmt = "MMM d";
+				const string fullFmt = "MMM d, yyyy";
+
+				if ( StartDate.Year != EndDate.Year ) {
+					return Convert.ToDateTime(StartDate).ToString(fullFmt)+" - "+
+						Convert.ToDateTime(EndDate).ToString(fullFmt);
+				}
+
+				if ( StartDate.Month != EndDate.Month ) {
+					return Convert.ToDateTime(StartDate).ToString(monthFmt)+" - "+
+						Convert.ToDateTime(EndDate).ToString(fullFmt);
+				}
+				
+				if ( StartDate.Date != EndDate.Date ) {
+					return Convert.ToDateTime(StartDate).ToString(monthFmt)+" - "+
+						Convert.ToDateTime(EndDate).ToString("d, yyyy");
+				}
+
+				return Convert.ToDateTime(EndDate).ToString(fullFmt);
 			}
 		}
 

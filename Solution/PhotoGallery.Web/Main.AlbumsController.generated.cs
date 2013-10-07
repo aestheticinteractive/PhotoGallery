@@ -43,6 +43,18 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult All()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.All);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.PartialViewResult AllPage()
+        {
+            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.AllPage);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.ActionResult Photos()
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Photos);
@@ -64,6 +76,8 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string All = "All";
+            public readonly string AllPage = "AllPage";
             public readonly string Photos = "Photos";
         }
 
@@ -71,10 +85,28 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string All = "All";
+            public const string AllPage = "AllPage";
             public const string Photos = "Photos";
         }
 
 
+        static readonly ActionParamsClass_All s_params_All = new ActionParamsClass_All();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_All AllParams { get { return s_params_All; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_All
+        {
+            public readonly string i = "i";
+        }
+        static readonly ActionParamsClass_AllPage s_params_AllPage = new ActionParamsClass_AllPage();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_AllPage AllPageParams { get { return s_params_AllPage; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_AllPage
+        {
+            public readonly string i = "i";
+        }
         static readonly ActionParamsClass_Photos s_params_Photos = new ActionParamsClass_Photos();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_Photos PhotosParams { get { return s_params_Photos; } }
@@ -94,10 +126,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public class _ViewNamesClass
             {
                 public readonly string _AlbumThumb = "_AlbumThumb";
+                public readonly string _AllPage = "_AllPage";
+                public readonly string All = "All";
                 public readonly string Index = "Index";
                 public readonly string Photos = "Photos";
             }
             public readonly string _AlbumThumb = "~/Areas/Main/Views/Albums/_AlbumThumb.cshtml";
+            public readonly string _AllPage = "~/Areas/Main/Views/Albums/_AllPage.cshtml";
+            public readonly string All = "~/Areas/Main/Views/Albums/All.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Albums/Index.cshtml";
             public readonly string Photos = "~/Areas/Main/Views/Albums/Photos.cshtml";
         }
@@ -114,6 +150,26 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
+            return callInfo;
+        }
+
+        partial void AllOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int? i);
+
+        public override System.Web.Mvc.ActionResult All(int? i)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.All);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "i", i);
+            AllOverride(callInfo, i);
+            return callInfo;
+        }
+
+        partial void AllPageOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, int i);
+
+        public override System.Web.Mvc.PartialViewResult AllPage(int i)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.AllPage);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "i", i);
+            AllPageOverride(callInfo, i);
             return callInfo;
         }
 
