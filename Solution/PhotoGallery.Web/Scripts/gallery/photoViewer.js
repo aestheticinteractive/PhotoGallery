@@ -60,6 +60,14 @@ function viewPhoto(photoId) {
 	$('#PhotoViewer .details').html(pho.name + "<br/>" + pho.created);
 	$('body').css('background-color', '#000').css('overflow-y', 'hidden');
 
+	_gaq.push(['_trackPageview', '/Photos/'+photoId]);
+
+	// preload next image
+
+	photoId = phoData.idList[nextPhotoIndex()];
+	pho = phoData.idMap[photoId];
+	var img = new Image();
+	img.src = pho.url;
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -75,13 +83,18 @@ function prevPhoto() {
 
 /*--------------------------------------------------------------------------------------------*/
 function nextPhoto() {
+	viewPhoto(phoData.idList[nextPhotoIndex()]);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function nextPhotoIndex() {
 	var i = phoData.idMap[phoData.activePhotoId].index;
-	
+
 	if ( i >= phoData.idList.length-1 ) {
 		i = -1;
 	}
 
-	viewPhoto(phoData.idList[i+1]);
+	return i+1;
 }
 
 /*--------------------------------------------------------------------------------------------*/
