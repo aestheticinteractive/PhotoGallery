@@ -52,7 +52,6 @@
     <Content Include="Content\foundation\foundation.css" />
     <Content Include="Content\foundation\foundation.mvc.css" />
     <Content Include="Content\foundation\normalize.css" />
-    <Content Include="Foundation_readme.txt" />
     <Content Include="Scripts\foundation\foundation.abide.js" />
     <Content Include="Scripts\foundation\foundation.alerts.js" />
     <Content Include="Scripts\foundation\foundation.clearing.js" />
@@ -73,7 +72,6 @@
     <Content Include="Scripts\zepto.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Views\Home\Foundation_Index.cshtml" />
     <None Include="Views\Shared\_Foundation.cshtml" />
   </ItemGroup>
