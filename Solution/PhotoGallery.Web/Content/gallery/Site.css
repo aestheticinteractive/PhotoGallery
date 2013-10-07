@@ -57,7 +57,7 @@ ul {
 		padding-left: 10px;
 		padding-right: 10px;
 	}
-	
+
 }
 
 @media only screen and (max-width: 479px) {
@@ -65,7 +65,7 @@ ul {
 	.hide-for-tiny {
 		display: none;
 	}
-	
+
 }
 
 
@@ -394,7 +394,8 @@ ul {
 	display: none;
 }
 
-#PhotoViewerPadding { /* allows you to scroll on iOS to remove the address bar */
+#PhotoViewerPadding {
+	/* allows you to scroll on iOS to remove the address bar */
 	position: absolute;
 	height: 100%;
 	width: 10px;
@@ -615,5 +616,28 @@ table tbody tr td.vertTop {
 	table {
 		font-size: 90%;
 	}
-	
+
+}
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+#DataPage {
+	position: relative;
+}
+
+#DataPage .wait {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.666);
+	background-image: url("wait.gif");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	vertical-align: middle;
+	display: none;
 }

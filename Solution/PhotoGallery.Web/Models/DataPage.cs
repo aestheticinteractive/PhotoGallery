@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using PhotoGallery.Infrastructure;
 
 namespace PhotoGallery.Web.Models {
 
@@ -70,7 +69,6 @@ namespace PhotoGallery.Web.Models {
 			var list = new List<int>();
 			int size = Size;
 			int up = GetCurrentPageNumber();
-			Log.Debug("---- curr: "+up);
 			int dn = GetCurrentPageNumber();
 
 			list.Add(up);
