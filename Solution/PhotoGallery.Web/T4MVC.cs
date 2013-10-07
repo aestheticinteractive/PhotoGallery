@@ -187,6 +187,9 @@ namespace Links
             private const string URLPATH = "~/Content/gallery";
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string arrow_left_png = Url("arrow-left.png");
+            public static readonly string arrow_right_png = Url("arrow-right.png");
+            public static readonly string close_png = Url("close.png");
             public static readonly string Site_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Site.min.css") ? Url("Site.min.css") : Url("Site.css");
                  
         }

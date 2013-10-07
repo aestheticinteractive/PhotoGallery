@@ -35,10 +35,10 @@
 		if ( !isTouch() ) {
 			$(".thumb")
 				.mouseenter(function () {
-					$(this).find(".border").stop().show();
+					$(this).find(".border").show();
 				})
 				.mouseleave(function () {
-					$(this).find(".border").stop().fadeOut(200);
+					$(this).find(".border").hide();
 				});
 		}
 	</script>

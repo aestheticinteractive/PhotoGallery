@@ -281,7 +281,7 @@
     <Content Include="Areas\Account\Views\Home\Login.cshtml" />
     <Content Include="Areas\Account\Views\Albums\Index.cshtml" />
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
-    <Content Include="Areas\Main\Views\Albums\Album.cshtml" />
+    <Content Include="Areas\Main\Views\Albums\Photos.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoViewer.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />

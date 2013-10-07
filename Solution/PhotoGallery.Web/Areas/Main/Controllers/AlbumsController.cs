@@ -21,15 +21,16 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual ActionResult Index(int? id) {
-			if ( id == null ) {
-				var hm = new AlbumsModel();
-				hm.Albums = vHome.GetAlbums(24);
-				return View(hm);
-			}
-
+		public virtual ActionResult Index() {
+			var m = new AlbumsModel();
+			m.Albums = vHome.GetAlbums(24);
+			return View(m);
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		public virtual ActionResult Photos(int id) {
 			var m = new AlbumModel();
-			m.Album = vHome.GetAlbum((int)id);
+			m.Album = vHome.GetAlbum(id);
 
 			if ( m.Album != null ) {
 				var gs = new GallerySession(Session);
@@ -37,7 +38,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 				m.Photos = gs.PhotoSet.GetAll();
 			}
 
-			return View(MVC.Main.Albums.Views.Album, m);
+			return View(m);
 		}
 
 	}

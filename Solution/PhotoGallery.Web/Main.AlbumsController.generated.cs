@@ -43,9 +43,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.ActionResult Index()
+        public virtual System.Web.Mvc.ActionResult Photos()
         {
-            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Photos);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -64,20 +64,22 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string Photos = "Photos";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string Photos = "Photos";
         }
 
 
-        static readonly ActionParamsClass_Index s_params_Index = new ActionParamsClass_Index();
+        static readonly ActionParamsClass_Photos s_params_Photos = new ActionParamsClass_Photos();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Index IndexParams { get { return s_params_Index; } }
+        public ActionParamsClass_Photos PhotosParams { get { return s_params_Photos; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Index
+        public class ActionParamsClass_Photos
         {
             public readonly string id = "id";
         }
@@ -92,12 +94,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public class _ViewNamesClass
             {
                 public readonly string _AlbumThumb = "_AlbumThumb";
-                public readonly string Album = "Album";
                 public readonly string Index = "Index";
+                public readonly string Photos = "Photos";
             }
             public readonly string _AlbumThumb = "~/Areas/Main/Views/Albums/_AlbumThumb.cshtml";
-            public readonly string Album = "~/Areas/Main/Views/Albums/Album.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Albums/Index.cshtml";
+            public readonly string Photos = "~/Areas/Main/Views/Albums/Photos.cshtml";
         }
     }
 
@@ -106,13 +108,22 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
     {
         public T4MVC_AlbumsController() : base(Dummy.Instance) { }
 
-        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int? id);
+        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
-        public override System.Web.Mvc.ActionResult Index(int? id)
+        public override System.Web.Mvc.ActionResult Index()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
+            IndexOverride(callInfo);
+            return callInfo;
+        }
+
+        partial void PhotosOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int id);
+
+        public override System.Web.Mvc.ActionResult Photos(int id)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Photos);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
-            IndexOverride(callInfo, id);
+            PhotosOverride(callInfo, id);
             return callInfo;
         }
 

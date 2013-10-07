@@ -16,8 +16,8 @@ namespace PhotoGallery.Web.Areas.Main {
 		public override void RegisterArea(AreaRegistrationContext pContext) {
 			pContext.MapRoute(
 				name: "Main_Albums",
-				url: "Albums/{id}",
-				defaults: new { controller = "Albums", action = "Index", id = UrlParameter.Optional },
+				url: "Albums/{id}/{action}",
+				defaults: new { controller = "Albums", action = "Photos" },
 				namespaces: new[] { "PhotoGallery.Web.Areas.Main.Controllers" }
 			);
 
