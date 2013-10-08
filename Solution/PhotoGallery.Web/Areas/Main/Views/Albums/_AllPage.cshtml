@@ -1,41 +1,34 @@
-﻿@model AllAlbumsModel
+﻿@model DataPage<WebAlbum>
 
-<div id="DataPage">
-	<table>
-		<thead>
-			<th style="width: 25%;">Album</th>
-			<th></th>
-			<th>Dates</th>
-			<th class="hide-for-tiny" style="width: 9%;">Photos</th>
-		</thead>
-		<tbody>
-			@foreach ( WebAlbum a in Model.AlbumPage.Items ) {
-				<tr>
-					<td>
-						<div class="thumb album" style="width: 100%; height: 40px;
-								background-image: url(@Url.Content("~"+a.FirstPhoto.ImageUrl));">
-							@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
-						</div>
-					</td>
-					<td>
-						<span style="font-size: 1.2em;">
-							@Html.ActionLink(a.Title, MVC.Main.Albums.Photos(a.AlbumId))
-						</span><br/>
-						by @a.UserName
-					</td>
-					<td>
-						@a.DateRangeString
-					</td>
-					<td class="hide-for-tiny">
-						@a.NumPhotos
-					</td>
-				</tr>
-	  }
-		</tbody>
-	</table>
-
-	@{ Html.RenderPartial(MVC.Shared.Views._DataPageNums, Model.AlbumPage); }
-	
-	<div class="wait">
-	</div>
-</div>
+<table>
+	<thead>
+		<th style="width: 25%;">Album</th>
+		<th style="width: 45%;"></th>
+		<th>Dates</th>
+		<th class="hide-for-tiny" style="width: 9%;">Photos</th>
+	</thead>
+	<tbody>
+		@foreach ( WebAlbum a in Model.Items ) {
+			<tr>
+				<td style="padding: 0 4px 0 0;">
+					<div class="thumb album" style="width: 100%; height: 60px;
+							background-image: url(@Url.Content("~"+a.FirstPhoto.ImageUrl));">
+						@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+					</div>
+				</td>
+				<td>
+					<span style="font-size: 1.2em;">
+						@Html.ActionLink(a.Title, MVC.Main.Albums.Photos(a.AlbumId))
+					</span><br/>
+					by @a.UserName
+				</td>
+				<td>
+					@a.DateRangeString
+				</td>
+				<td class="hide-for-tiny">
+					@a.NumPhotos
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

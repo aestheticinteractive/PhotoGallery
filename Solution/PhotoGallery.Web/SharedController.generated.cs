@@ -36,12 +36,14 @@ namespace T4MVC
             public class _ViewNamesClass
             {
                 public readonly string _Base = "_Base";
+                public readonly string _DataPage = "_DataPage";
                 public readonly string _DataPageNums = "_DataPageNums";
                 public readonly string _Foundation = "_Foundation";
                 public readonly string _Layout = "_Layout";
                 public readonly string Error = "Error";
             }
             public readonly string _Base = "~/Views/Shared/_Base.cshtml";
+            public readonly string _DataPage = "~/Views/Shared/_DataPage.cshtml";
             public readonly string _DataPageNums = "~/Views/Shared/_DataPageNums.cshtml";
             public readonly string _Foundation = "~/Views/Shared/_Foundation.cshtml";
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";

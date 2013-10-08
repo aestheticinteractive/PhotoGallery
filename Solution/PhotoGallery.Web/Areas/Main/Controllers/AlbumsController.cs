@@ -38,10 +38,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual PartialViewResult AllPage(int i) {
-			var m = new AllAlbumsModel();
-			m.AlbumPage = new DataPage<WebAlbum>(i, 10, vHome.GetAlbums(i, 10), vHome.GetAlbumCount(),
-				x => MVC.Main.Albums.AllPage(x));
-			return PartialView(MVC.Main.Albums.Views._AllPage, m);
+			var p = new DataPage<WebAlbum>(i, 10, vHome.GetAlbums(i, 10), vHome.GetAlbumCount(),
+				x => MVC.Main.Albums.AllPage(x), MVC.Main.Albums.Views._AllPage);
+			return PartialView(MVC.Shared.Views._DataPage, p);
 		}
 
 

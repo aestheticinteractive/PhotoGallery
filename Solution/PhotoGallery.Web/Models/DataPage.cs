@@ -11,16 +11,18 @@ namespace PhotoGallery.Web.Models {
 		public int Size { get; private set; }
 		public int TotalItems { get; private set; }
 		public Func<int, ActionResult> GetActionForPageIndex { get; private set; }
+		public string ContentView { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public DataPage(int pItemIndex, int pSize, int pTotalItems, 
-													Func<int, ActionResult> pGetActionForPageIndex) {
+								Func<int, ActionResult> pGetActionForPageIndex, string pContentView) {
 			ItemIndex = pItemIndex;
 			Size = pSize;
 			TotalItems = pTotalItems;
 			GetActionForPageIndex = pGetActionForPageIndex;
+			ContentView = pContentView;
 		}
 
 
@@ -130,8 +132,8 @@ namespace PhotoGallery.Web.Models {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public DataPage(int pItemIndex, int pSize, IList<T> pItems, int pTotalItems,
-										Func<int, ActionResult> pGetActionForPageIndex) :
-										base(pItemIndex, pSize, pTotalItems, pGetActionForPageIndex) {
+							Func<int, ActionResult> pGetActionForPageIndex, string pContentView) :
+							base(pItemIndex, pSize, pTotalItems, pGetActionForPageIndex, pContentView) {
 			Items = pItems;
 		}
 

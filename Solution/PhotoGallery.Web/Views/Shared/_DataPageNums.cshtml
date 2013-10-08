@@ -17,7 +17,7 @@
 		}
 		else {
 			<li class="arrow unavailable">
-				<a href="">&laquo;</a>
+				<a>&laquo;</a>
 			</li>
 		}
 		
@@ -26,12 +26,19 @@
 
 			if ( pn == -1 ) {
 				<li class="unavailable">
-					<a href="">&hellip;</a>
+					<a>&hellip;</a>
+				</li>
+				continue;
+			}
+			
+			if ( i == selectedPageNum ) {
+				<li class="current">
+					<a>@(pn+1)</a>
 				</li>
 				continue;
 			}
 	  
-			<li class="@(i == selectedPageNum ? "current" : "")">
+			<li>
 				<a href="#" onclick="@getOnClick(Model.GetIndexForPageNumber(pn))">@(pn+1)</a>
 			</li>
 		}
@@ -43,22 +50,9 @@
 		}
 		else {
 			<li class="arrow unavailable">
-				<a href="">&raquo;</a>
+				<a>&raquo;</a>
 			</li>
 		}
 
 	</ul>
 </div>
-
-<script type="text/javascript">
-	function pagingLoad(url) {
-		jQuery.get(
-			url,
-			function(data) {
-				$('#DataPage').html(data);
-			}
-		);
-
-		$('#DataPage .wait').show();
-	}
-</script>

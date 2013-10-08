@@ -83,7 +83,7 @@ namespace PhotoGallery.Services.Main.Dto {
 				}
 				
 				if ( StartDate.Date != EndDate.Date ) {
-					return Convert.ToDateTime(StartDate).ToString(monthFmt)+" - "+
+					return Convert.ToDateTime(StartDate).ToString(monthFmt)+"-"+
 						Convert.ToDateTime(EndDate).ToString("d, yyyy");
 				}
 

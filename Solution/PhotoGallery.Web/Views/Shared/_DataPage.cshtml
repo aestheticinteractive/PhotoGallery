@@ -1,0 +1,14 @@
+﻿@model DataPage
+
+<div id="DataPage">
+	<div class="dataHold">
+		@{ Html.RenderPartial(Model.ContentView, Model); }
+	</div>
+	
+	<div class="paging">
+		@{ Html.RenderPartial(MVC.Shared.Views._DataPageNums, Model); }
+	</div>
+
+	<div class="wait">
+	</div>
+</div>

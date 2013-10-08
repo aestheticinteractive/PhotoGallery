@@ -314,6 +314,7 @@
     <Content Include="Views\Shared\_Foundation.cshtml" />
     <Content Include="Views\Home\Foundation_Index.cshtml" />
     <Content Include="Views\Shared\_DataPageNums.cshtml" />
+    <Content Include="Views\Shared\_DataPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
