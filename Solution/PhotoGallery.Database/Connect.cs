@@ -31,7 +31,6 @@ namespace PhotoGallery.Database {
 
 			IPersistenceConfigurer conn = MySQLConfiguration
 				.Standard
-				//.DefaultSchema("kpg")
 				.Dialect<NHibernate.Dialect.MySQL5Dialect>()
 				.Provider<NHibernate.Connection.DriverConnectionProvider>()
 				.Driver<NHibernate.Driver.MySqlDataDriver>()

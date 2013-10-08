@@ -57,6 +57,7 @@
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
     <Compile Include="Fabric\FabricService.cs" />
+    <Compile Include="Main\Dto\WebAlbumStats.cs" />
     <Compile Include="Main\Dto\IWebPhoto.cs" />
     <Compile Include="Main\Dto\WebPhotoSet.cs" />
     <Compile Include="OneTimeService.cs" />

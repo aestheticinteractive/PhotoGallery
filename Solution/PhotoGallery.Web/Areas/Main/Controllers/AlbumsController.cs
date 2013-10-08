@@ -49,6 +49,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		public virtual ActionResult Photos(int id) {
 			var m = new AlbumModel();
 			m.Album = vHome.GetAlbum(id);
+			m.Stats = vHome.GetAlbumStats(id);
 
 			if ( m.Album != null ) {
 				var gs = new GallerySession(Session);

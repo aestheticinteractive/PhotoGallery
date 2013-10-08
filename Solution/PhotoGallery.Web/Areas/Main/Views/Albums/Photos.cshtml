@@ -1,6 +1,7 @@
 ﻿@model AlbumModel
 @{
 	WebAlbum a = Model.Album;
+	WebAlbumStats stat = Model.Stats;
 }
 
 <div class="row">
@@ -13,6 +14,13 @@
 				Album by <strong>@a.UserName</strong><br/>
 				@a.DateRangeString<br/>
 				@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
+			</p>
+			<p style="margin-top: 20px;">
+				<strong>AvgFNum:</strong> @stat.GetAvgFNumString()<br/>
+				<strong>AvgIso:</strong> @stat.AvgIso<br/>
+				<strong>AvgExpTime:</strong> @stat.AvgExpTime<br/>
+				<strong>AvgFocalLen:</strong> @stat.AvgFocalLen<br/>
+				<strong>Flash usage:</strong> @stat.GetFlashPercentString()
 			</p>
 		</div>
 	</div>

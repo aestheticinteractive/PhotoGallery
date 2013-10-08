@@ -96,6 +96,33 @@ namespace PhotoGallery.Services.Main {
 			return wps;
 		}
 
+		/*--------------------------------------------------------------------------------------------*/
+		public WebAlbumStats GetAlbumStats(int pAlbumId) {
+			using ( ISession s = NewSession() ) {
+				WebAlbumStats dto = null;
+
+				return s.QueryOver<Photo>()
+					.Where(x => x.Album.Id == pAlbumId)
+					.SelectList(list => list
+						.SelectGroup(x => x.Album.Id)
+						.SelectCount(x => x.Id).WithAlias(() => dto.PhotoCount)
+						.SelectAvg(x => x.FNum).WithAlias(() => dto.AvgFNum)
+						.SelectAvg(x => x.Iso).WithAlias(() => dto.AvgIso)
+						.SelectAvg(x => x.ExpTime).WithAlias(() => dto.AvgExpTime)
+						.SelectAvg(x => x.FocalLen).WithAlias(() => dto.AvgFocalLen)
+						.SelectSubQuery(
+							QueryOver.Of<Photo>()
+							.Where(x => x.Album.Id == pAlbumId && x.Flash == true)
+							.ToRowCountQuery()
+						).WithAlias(() => dto.FlashCount)
+
+					)
+					.TransformUsing(Transformers.AliasToBean<WebAlbumStats>())
+					.List<WebAlbumStats>()
+					.FirstOrDefault(); //linq
+			};
+		}
+
 	}
 
 }

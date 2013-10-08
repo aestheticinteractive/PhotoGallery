@@ -8,6 +8,7 @@ namespace PhotoGallery.Web.Areas.Main.Models {
 
 		public WebAlbum Album { get; set; }
 		public IList<IWebPhoto> Photos { get; set; }
+		public WebAlbumStats Stats { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
