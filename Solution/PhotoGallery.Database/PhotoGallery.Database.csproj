@@ -69,8 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Views\Home\Foundation_Index.cshtml" />
-    <None Include="Views\Shared\_Foundation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PhotoGallery.Domain\PhotoGallery.Domain.csproj">
@@ -81,30 +79,6 @@
       <Project>{3B75DE81-F8E2-4BE9-ABF2-C3D83BFE2874}</Project>
       <Name>PhotoGallery.Infrastructure</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\foundation\app.css" />
-    <Content Include="Content\foundation\foundation.css" />
-    <Content Include="Content\foundation\foundation.mvc.css" />
-    <Content Include="Content\foundation\normalize.css" />
-    <Content Include="Scripts\foundation\foundation.abide.js" />
-    <Content Include="Scripts\foundation\foundation.alerts.js" />
-    <Content Include="Scripts\foundation\foundation.clearing.js" />
-    <Content Include="Scripts\foundation\foundation.cookie.js" />
-    <Content Include="Scripts\foundation\foundation.dropdown.js" />
-    <Content Include="Scripts\foundation\foundation.forms.js" />
-    <Content Include="Scripts\foundation\foundation.interchange.js" />
-    <Content Include="Scripts\foundation\foundation.joyride.js" />
-    <Content Include="Scripts\foundation\foundation.js" />
-    <Content Include="Scripts\foundation\foundation.magellan.js" />
-    <Content Include="Scripts\foundation\foundation.orbit.js" />
-    <Content Include="Scripts\foundation\foundation.placeholder.js" />
-    <Content Include="Scripts\foundation\foundation.reveal.js" />
-    <Content Include="Scripts\foundation\foundation.section.js" />
-    <Content Include="Scripts\foundation\foundation.tooltips.js" />
-    <Content Include="Scripts\foundation\foundation.topbar.js" />
-    <Content Include="Scripts\jquery.js" />
-    <Content Include="Scripts\zepto.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,14 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using Fabric.Clients.Cs;
-using Moq;
-using NHibernate;
-using NUnit.Framework;
-using PhotoGallery.Daemon.Export;
-using PhotoGallery.Database;
-using PhotoGallery.Domain;
-
-namespace PhotoGallery.Test.Daemon {
+﻿namespace PhotoGallery.Test.Daemon {
 
 	/*================================================================================================*/
 	//[TestFixture]
