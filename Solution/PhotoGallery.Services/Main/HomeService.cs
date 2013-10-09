@@ -97,31 +97,32 @@ namespace PhotoGallery.Services.Main {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebAlbumStats GetAlbumStats(int pAlbumId) {
+		public WebAlbumMeta GetAlbumMeta(int pAlbumId) {
 			using ( ISession s = NewSession() ) {
-				WebAlbumStats dto = null;
 
-				return s.QueryOver<Photo>()
+				IList<WebPhotoMeta> metas = GetPhotoMetaQuery(s)
 					.Where(x => x.Album.Id == pAlbumId)
-					.SelectList(list => list
-						.SelectGroup(x => x.Album.Id)
-						.SelectCount(x => x.Id).WithAlias(() => dto.PhotoCount)
-						.SelectAvg(x => x.FNum).WithAlias(() => dto.AvgFNum)
-						.SelectAvg(x => x.Iso).WithAlias(() => dto.AvgIso)
-						.SelectAvg(x => x.ExpTime).WithAlias(() => dto.AvgExpTime)
-						.SelectAvg(x => x.FocalLen).WithAlias(() => dto.AvgFocalLen)
-						.SelectSubQuery(
-							QueryOver.Of<Photo>()
-							.Where(x => x.Album.Id == pAlbumId && x.Flash == true)
-							.ToRowCountQuery()
-						).WithAlias(() => dto.FlashCount)
+					.List<WebPhotoMeta>();
 
-					)
-					.TransformUsing(Transformers.AliasToBean<WebAlbumStats>())
-					.List<WebAlbumStats>()
-					.FirstOrDefault(); //linq
+				return new WebAlbumMeta(pAlbumId, metas);
 			};
 		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		internal static IQueryOver<Photo, Photo> GetPhotoMetaQuery(ISession pSession) {
+			WebPhotoMeta dto = null;
+
+			return pSession.QueryOver<Photo>()
+				.SelectList(list => list
+					.Select(x => x.FNum).WithAlias(() => dto.OrigFNumber)
+					.Select(x => x.Iso).WithAlias(() => dto.OrigIsoSpeed)
+					.Select(x => x.ExpTime).WithAlias(() => dto.OrigExposure)
+					.Select(x => x.FocalLen).WithAlias(() => dto.OrigFocalLen)
+					.Select(x => x.Flash).WithAlias(() => dto.OrigUsesFlash)
+				)
+				.TransformUsing(Transformers.AliasToBean<WebPhotoMeta>());
+		}
+		
 
 	}
 

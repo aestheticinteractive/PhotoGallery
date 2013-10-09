@@ -59,6 +59,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Photos);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.PartialViewResult Metas()
+        {
+            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Metas);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AlbumsController Actions { get { return MVC.Main.Albums; } }
@@ -79,6 +85,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public readonly string All = "All";
             public readonly string AllPage = "AllPage";
             public readonly string Photos = "Photos";
+            public readonly string Metas = "Metas";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -88,6 +95,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public const string All = "All";
             public const string AllPage = "AllPage";
             public const string Photos = "Photos";
+            public const string Metas = "Metas";
         }
 
 
@@ -115,6 +123,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             public readonly string id = "id";
         }
+        static readonly ActionParamsClass_Metas s_params_Metas = new ActionParamsClass_Metas();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Metas MetasParams { get { return s_params_Metas; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Metas
+        {
+            public readonly string id = "id";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -127,12 +143,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             {
                 public readonly string _AlbumThumb = "_AlbumThumb";
                 public readonly string _AllPage = "_AllPage";
+                public readonly string _PhotoMetas = "_PhotoMetas";
                 public readonly string All = "All";
                 public readonly string Index = "Index";
                 public readonly string Photos = "Photos";
             }
             public readonly string _AlbumThumb = "~/Areas/Main/Views/Albums/_AlbumThumb.cshtml";
             public readonly string _AllPage = "~/Areas/Main/Views/Albums/_AllPage.cshtml";
+            public readonly string _PhotoMetas = "~/Areas/Main/Views/Albums/_PhotoMetas.cshtml";
             public readonly string All = "~/Areas/Main/Views/Albums/All.cshtml";
             public readonly string Index = "~/Areas/Main/Views/Albums/Index.cshtml";
             public readonly string Photos = "~/Areas/Main/Views/Albums/Photos.cshtml";
@@ -180,6 +198,16 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Photos);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
             PhotosOverride(callInfo, id);
+            return callInfo;
+        }
+
+        partial void MetasOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, int id);
+
+        public override System.Web.Mvc.PartialViewResult Metas(int id)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Metas);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            MetasOverride(callInfo, id);
             return callInfo;
         }
 

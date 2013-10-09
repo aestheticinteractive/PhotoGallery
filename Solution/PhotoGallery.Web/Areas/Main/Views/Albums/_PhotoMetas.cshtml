@@ -1,0 +1,38 @@
+﻿@model WebAlbumMeta
+
+<table style="width: auto;">
+	<tbody>
+		<tr>
+			<td><strong>Avg. Exposure</strong></td>
+			<td style="padding-left:15px;">@Model.GetAveragExposureString()</td>
+			<td id="expGraph" style="text-align: right; padding-left:20px;"></td>
+		</tr>
+		<tr>
+			<td><strong>Avg. FNumber</strong></td>
+			<td style="padding-left:15px;">@Model.GetAverageFNumberString()</td>
+			<td id="fnGraph" style="text-align: right;"></td>
+		</tr>
+		<tr>
+			<td><strong>Avg. Focal Length</strong></td>
+			<td style="padding-left:15px;">@Model.GetAverageFocalLengthString()</td>
+			<td id="flGraph" style="text-align: right;"></td>
+		</tr>
+		<tr>
+			<td><strong>Avg. ISO Speed</strong></td>
+			<td style="padding-left:15px;">@Model.GetAverageIsoSpeedString()</td>
+			<td id="isoGraph" style="text-align: right;"></td>
+		</tr>
+		<tr>
+			<td><strong>Flash Use</strong></td>
+			<td style="padding-left:15px;">@Model.GetFlashUsageString()</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+	drawMiniHistogram("#expGraph", [@Model.GetValuesString(WebAlbumMeta.Metric.Exposure)]);
+	drawMiniHistogram("#fnGraph", [@Model.GetValuesString(WebAlbumMeta.Metric.FNumber)]);
+	drawMiniHistogram("#flGraph", [@Model.GetValuesString(WebAlbumMeta.Metric.FocalLength)]);
+	drawMiniHistogram("#isoGraph", [@Model.GetValuesString(WebAlbumMeta.Metric.IsoSpeed)]);
+</script>

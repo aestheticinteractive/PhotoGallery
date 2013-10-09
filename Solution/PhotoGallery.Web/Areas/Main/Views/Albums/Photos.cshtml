@@ -1,7 +1,6 @@
 ﻿@model AlbumModel
 @{
 	WebAlbum a = Model.Album;
-	WebAlbumStats stat = Model.Stats;
 }
 
 <div class="row">
@@ -15,12 +14,8 @@
 				@a.DateRangeString<br/>
 				@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
 			</p>
-			<p style="margin-top: 20px;">
-				<strong>AvgFNum:</strong> @stat.GetAvgFNumString()<br/>
-				<strong>AvgIso:</strong> @stat.AvgIso<br/>
-				<strong>AvgExpTime:</strong> @stat.AvgExpTime<br/>
-				<strong>AvgFocalLen:</strong> @stat.AvgFocalLen<br/>
-				<strong>Flash usage:</strong> @stat.GetFlashPercentString()
+			<p id="Metas" style="margin-top: 20px;">
+				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
 			</p>
 		</div>
 	</div>
@@ -49,5 +44,12 @@
 					$(this).find(".border").hide();
 				});
 		}
+
+		jQuery.get('@(Url.Action(MVC.Main.Albums.Metas(a.AlbumId)))', null, onMetaLoad);
+
+		function onMetaLoad(data) {
+			$('#Metas').html(data);
+		}
+
 	</script>
 }

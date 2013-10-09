@@ -650,3 +650,17 @@ table tbody tr td.vertTop {
 	left: 0;
 	display: none;
 }
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+.miniHistBar rect {
+	fill: #38c;
+	
+}
+	
+.miniHistXAxis path {
+	stroke: #333;
+}
+

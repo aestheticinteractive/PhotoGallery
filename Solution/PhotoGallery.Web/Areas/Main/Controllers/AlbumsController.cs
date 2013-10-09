@@ -49,7 +49,6 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		public virtual ActionResult Photos(int id) {
 			var m = new AlbumModel();
 			m.Album = vHome.GetAlbum(id);
-			m.Stats = vHome.GetAlbumStats(id);
 
 			if ( m.Album != null ) {
 				var gs = new GallerySession(Session);
@@ -58,6 +57,11 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 			}
 
 			return View(m);
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		public virtual PartialViewResult Metas(int id) {
+			return PartialView(MVC.Main.Albums.Views._PhotoMetas, vHome.GetAlbumMeta(id));
 		}
 
 	}

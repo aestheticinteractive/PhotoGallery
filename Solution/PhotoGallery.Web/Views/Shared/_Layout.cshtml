@@ -1,6 +1,6 @@
 ﻿@model BaseModel
 @{
-    Layout = "~/Views/Shared/_Base.cshtml";
+	Layout = "~/Views/Shared/_Base.cshtml";
 	ViewBag.Title = Model.HtmlTitle;
 }
 
@@ -29,6 +29,7 @@
 	      rel='stylesheet' type='text/css'>
 }
 
+<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
 <script src="@Url.Content("~/Scripts/gallery/gallery.js")"></script>
 @RenderSection("scripts", required: false)
 
