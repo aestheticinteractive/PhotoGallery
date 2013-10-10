@@ -23,7 +23,11 @@ namespace PhotoGallery.Services.Account.Tools {
 		Height = 55433968330211328,
 		FocalLength = 55435397586485248,
 		ComputerFile = 55435461735219200,
-		Upload = 55437908941733888
+		Upload = 55437908941733888,
+
+		Person = 55429859899342848,
+		MalePerson = 55429865850011648,
+		FemalePerson = 55429868074041344
 	};
 
 
@@ -52,7 +56,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
 
 		public FabEnumsData.EventorTypeId? EveType { get; private set; }
-		public long EveYear { get; private set; }
+		public long? EveYear { get; private set; }
 		public byte? EveMonth { get; private set; }
 		public byte? EveDay { get; private set; }
 		public byte? EveHour { get; private set; }
@@ -70,7 +74,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabEnumsData.VectorTypeId? VecType { get; private set; }
 		public FabEnumsData.VectorUnitId? VecUnit { get; private set; }
 		public FabEnumsData.VectorUnitPrefixId? VecUnitPrefix { get; private set; }
-		public long VecValue { get; private set; }
+		public long? VecValue { get; private set; }
 		public LiveArtifactId? VecAxisArtifactId { get; private set; }
 
 

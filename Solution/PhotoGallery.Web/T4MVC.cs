@@ -49,6 +49,7 @@ namespace T4MVC
     {
         public readonly string Name = "Admin";
         public PhotoGallery.Web.Areas.Admin.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Admin.Controllers.T4MVC_HomeController();
+        public PhotoGallery.Web.Areas.Admin.Controllers.PeopleController People = new PhotoGallery.Web.Areas.Admin.Controllers.T4MVC_PeopleController();
     }
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public class MainClass

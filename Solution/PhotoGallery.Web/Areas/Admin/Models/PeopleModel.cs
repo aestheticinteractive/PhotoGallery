@@ -1,14 +1,17 @@
-﻿using Fabric.Clients.Cs;
+﻿using System.Collections.Generic;
+using PhotoGallery.Services.Admin.Dto;
 
-namespace PhotoGallery.Services.Admin {
-	
+namespace PhotoGallery.Web.Areas.Admin.Models {
+
 	/*================================================================================================*/
-	public class HomeService : BaseService {
+	public class PeopleModel : AdminBaseModel {
+
+		public IList<WebPersonTag> PersonTags { get; set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public HomeService(IFabricClient pFab) : base(pFab) {}
+		protected override string PageTitle { get { return "People"; } }
 
 	}
 

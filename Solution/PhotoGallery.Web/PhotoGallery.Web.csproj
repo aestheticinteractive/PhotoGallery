@@ -152,6 +152,9 @@
     <Compile Include="Admin.HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Admin.PeopleController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Application\AdminAuthorizeAttribute.cs" />
     <Compile Include="Application\GallerySession.cs" />
     <Compile Include="Application\FabricAuthorizeAttribute.cs" />
@@ -163,7 +166,10 @@
     <Compile Include="Areas\Account\Models\HomeModel.cs" />
     <Compile Include="Areas\Account\Models\AccountBaseModel.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\PeopleController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Models\AdminBaseModel.cs" />
+    <Compile Include="Areas\Admin\Models\PeopleModel.cs" />
     <Compile Include="Areas\Admin\Models\HomeModel.cs" />
     <Compile Include="Areas\Main\Controllers\AlbumsController.cs" />
     <Compile Include="Areas\Main\Controllers\OauthController.cs" />
@@ -301,6 +307,7 @@
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\People\Index.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

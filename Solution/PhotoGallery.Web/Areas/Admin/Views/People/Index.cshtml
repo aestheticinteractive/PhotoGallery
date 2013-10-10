@@ -1,0 +1,39 @@
+﻿@model PeopleModel
+
+<div class="row">
+	<div class="12 columns">
+		<h2>
+			Admin: People
+		</h2>
+		<p>
+			Here's the list...
+		</p>
+		
+		<table>
+			<thead>
+				<th>TagId</th>
+				<th>Name</th>
+				<th>Disamb</th>
+				<th>Artifact</th>
+			</thead>
+			<tbody>
+				@foreach ( WebPersonTag pt in Model.PersonTags ) {
+					<tr>
+						<td>@pt.TagId</td>
+						<td>@pt.Name</td>
+						<td>@pt.Disamb</td>
+						<td>
+							@if ( pt.ArtifactId != null ) {
+								<a href="http://inthefabric.com/explore/instances/@pt.ArtifactId"
+									target="_blank">@pt.ArtifactId</a>
+							}
+							else {
+								<text>---</text>
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

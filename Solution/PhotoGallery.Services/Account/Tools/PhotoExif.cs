@@ -166,7 +166,8 @@ namespace PhotoGallery.Services.Account.Tools {
 				makeArt.Note = "A make or brand of photographic cameras.";
 				pSess.Save(makeArt);
 
-				Tag makeTag = new Tag();
+				var makeTag = new Tag();
+				makeTag.Type = (byte)Tag.TagType.CameraMake;
 				makeTag.Name = makeArt.Name;
 				makeTag.FabricArtifact = makeArt;
 				pSess.Save(makeTag);
@@ -236,6 +237,7 @@ namespace PhotoGallery.Services.Account.Tools {
 			pSess.Save(modelArt);
 
 			var modelTag = new Tag();
+			modelTag.Type = (byte)Tag.TagType.CameraModel;
 			modelTag.Name = modelArt.Name;
 			modelTag.FabricArtifact = modelArt;
 			pSess.Save(modelTag);
