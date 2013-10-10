@@ -23,17 +23,22 @@ namespace PhotoGallery.Web.Areas.Admin.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		[AdminAuthorize]
 		public virtual ActionResult Index() {
-			/*vPeople.AddPersonTag("Zach Kinstner", PeopleService.Gender.Male);
-			vPeople.AddPersonTag("Melissa Kinstner", PeopleService.Gender.Female);
-			vPeople.AddPersonTag("Elliot Kinstner", PeopleService.Gender.Female);
-			vPeople.AddPersonTag("Penelope Kinstner", PeopleService.Gender.Female);*/
-
-			/*vPeople.AddPersonTag("Rick Kinstner", PeopleService.Gender.Male);
-			vPeople.AddPersonTag("Sue Kinstner", PeopleService.Gender.Female);*/
-
 			var m = new PeopleModel();
 			m.PersonTags = vPeople.GetPersonTags();
 			return View(m);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		[AdminAuthorize]
+		[HttpPost]
+		public virtual ActionResult Index(PeopleModel pModel) {
+			if ( ModelState.IsValid ) {
+				var g = (pModel.AddIsMale ? PeopleService.Gender.Male : PeopleService.Gender.Female);
+				vPeople.AddPersonTag(pModel.AddName, g);
+				return RedirectToAction(MVC.Admin.People.Index());
+			}
+
+			return View(pModel);
 		}
 
 	}

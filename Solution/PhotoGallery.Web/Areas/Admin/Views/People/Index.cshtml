@@ -6,8 +6,23 @@
 			Admin: People
 		</h2>
 		<p>
-			Here's the list...
+			<strong>Create a person tag:</strong>
 		</p>
+		
+		@using ( Html.BeginForm() ) {
+			@Html.ValidationSummary(true)
+			<fieldset>
+					@Html.LabelFor(model => model.AddName)
+					@Html.TextBoxFor(model => model.AddName)
+					@Html.ValidationMessageFor(model => model.AddName)
+
+					@Html.LabelFor(model => model.AddIsMale)
+					@Html.CheckBoxFor(model => model.AddIsMale)
+					@Html.ValidationMessageFor(model => model.AddIsMale)
+				<br/>
+				<input type="submit" value="Create Person" />
+			</fieldset>
+		}
 		
 		<table>
 			<thead>
