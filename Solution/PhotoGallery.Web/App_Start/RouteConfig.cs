@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using PhotoGallery.Web.Areas.Account;
+using PhotoGallery.Web.Areas.Admin;
 using PhotoGallery.Web.Areas.Main;
 
 namespace PhotoGallery.Web {
@@ -21,6 +22,7 @@ namespace PhotoGallery.Web {
 				namespaces: new[] { "PhotoGallery.Web.Controllers" }
 			);
 
+			RegisterArea(new AdminAreaRegistration());
 			RegisterArea(new AccountAreaRegistration());
 			RegisterArea(new MainAreaRegistration()); //Must be last
 		}

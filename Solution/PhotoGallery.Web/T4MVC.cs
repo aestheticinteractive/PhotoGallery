@@ -26,6 +26,8 @@ public static class MVC
 {
     static readonly AccountClass s_Account = new AccountClass();
     public static AccountClass Account { get { return s_Account; } }
+    static readonly AdminClass s_Admin = new AdminClass();
+    public static AdminClass Admin { get { return s_Admin; } }
     static readonly MainClass s_Main = new MainClass();
     public static MainClass Main { get { return s_Main; } }
     public static PhotoGallery.Web.Controllers.HeaderController Header = new PhotoGallery.Web.Controllers.T4MVC_HeaderController();
@@ -41,6 +43,12 @@ namespace T4MVC
         public readonly string Name = "Account";
         public PhotoGallery.Web.Areas.Account.Controllers.AlbumsController Albums = new PhotoGallery.Web.Areas.Account.Controllers.T4MVC_AlbumsController();
         public PhotoGallery.Web.Areas.Account.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Account.Controllers.T4MVC_HomeController();
+    }
+    [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+    public class AdminClass
+    {
+        public readonly string Name = "Admin";
+        public PhotoGallery.Web.Areas.Admin.Controllers.HomeController Home = new PhotoGallery.Web.Areas.Admin.Controllers.T4MVC_HomeController();
     }
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public class MainClass
