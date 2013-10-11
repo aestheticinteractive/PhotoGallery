@@ -35,9 +35,7 @@ namespace T4MVC
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
-                public readonly string Foundation_Index = "Foundation_Index";
             }
-            public readonly string Foundation_Index = "~/Views/Home/Foundation_Index.cshtml";
         }
     }
 

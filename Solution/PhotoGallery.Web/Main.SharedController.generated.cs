@@ -37,9 +37,11 @@ namespace T4MVC.Main
             {
                 public readonly string _PhotoThumb = "_PhotoThumb";
                 public readonly string _PhotoViewer = "_PhotoViewer";
+                public readonly string _TagPanel = "_TagPanel";
             }
             public readonly string _PhotoThumb = "~/Areas/Main/Views/Shared/_PhotoThumb.cshtml";
             public readonly string _PhotoViewer = "~/Areas/Main/Views/Shared/_PhotoViewer.cshtml";
+            public readonly string _TagPanel = "~/Areas/Main/Views/Shared/_TagPanel.cshtml";
         }
     }
 

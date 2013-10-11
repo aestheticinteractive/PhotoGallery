@@ -7,6 +7,9 @@
 	<div class="bottomBar">
 		<p class="details"></p>
 		<div class="buttons">
+			<a href="#" title="Tag Mode" onclick="toggleTagMode(); return false;">
+				Tag Mode
+			</a>
 			<a href="#" title="Previous Photo" onclick="prevPhoto(); return false;">
 				<img src="@Url.Content("~/Content/gallery/arrow-left.png")"/>
 			</a>
@@ -18,8 +21,15 @@
 			</a>
 		</div>
 	</div>
+	<div class="tagLayer">
+		<div class="spot">
+			
+		</div>
+		<div class="inputPanel">
+			@{ Html.RenderPartial(MVC.Main.Shared.Views._TagPanel); }
+		</div>
+	</div>
 </div>
-
 <script type="text/javascript" src="@Url.Content("~/Scripts/gallery/photoViewer.js")"></script>
 
 <script type="text/javascript">
@@ -32,5 +42,5 @@
 		</text>
 	}
 
-	//viewPhoto(5565);
+	//viewPhoto(6554);
 </script>

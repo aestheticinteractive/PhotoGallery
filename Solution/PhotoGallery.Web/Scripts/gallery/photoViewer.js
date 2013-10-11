@@ -3,7 +3,8 @@
 var phoData = {
 	idList: [],
 	idMap: {},
-	activePhotoId: 0
+	activePhotoId: 0,
+	tagMode: false
 };
 
 
@@ -30,7 +31,7 @@ function initPhotoView() {
 	phoData.origBg = $('body').css('background-color');
 	phoData.origOy = $('body').css('overflow-y');
 
-	$('#PhotoViewer .photo').click(null, nextPhoto);
+	$('#PhotoViewer .photo').click(null, onPhotoClick);
 	closePhoto();
 }
 
@@ -103,4 +104,26 @@ function closePhoto() {
 	$('#PhotoViewerPadding').hide();
 	$('#Site').show();
 	$('body').css('background-color', phoData.origBg).css('overflow-y', phoData.origOy);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function onPhotoClick() {
+	if ( !phoData.tagMode ) {
+		nextPhoto();
+		return;
+	}
+
+	showTagDialog();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+function toggleTagMode() {
+	phoData.tagMode = !phoData.tagMode;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function showTagDialog() {
+	
 }
