@@ -15,7 +15,7 @@ body {
 	letter-spacing: -0.05em;
 }
 
-p, h1, h2, h3, h4, h5, h6, ul, li {
+p, h1, h2, h3, h4, h5, h6, ul, li, input {
 	font-family: "Droid Serif" , "Georgia" , serif;
 	margin: 0;
 	padding: 0;
@@ -463,10 +463,49 @@ ul {
 	width: 300px;
 	height: 300px;
 	top: 100px;
-	border: 1px solid #ccc;
-	border: 1px solid rgba(255, 255, 255, 0.666);
 	color: #fff;
-	overflow: hidden;
+}
+
+#PhotoViewer .inputPanel .tagSearch {
+	background-color: transparent;
+	color: #fff;
+	font-size: 14px;
+	height: 30px;
+	box-shadow: 0px 0px 0px 0px;
+	margin: 0;
+}
+
+#PhotoViewer .resultScroll {
+	height: 270px;
+	overflow-y: auto;
+}
+
+#PhotoViewer table {
+	border: 0 solid;
+	font-size: 100%;
+	margin: 0;
+}
+
+#PhotoViewer tr:nth-child(even) {
+	background-color: #222;
+	background-color: rgba(255,255,255,0.075);
+}
+
+#PhotoViewer tr:nth-child(odd) {
+	background-color: #444;
+	background-color: rgba(255,255,255,0.15);
+}
+
+#PhotoViewer table td {
+	color: #fff;
+	font-size: 14px;
+	padding: 6px;
+}
+
+#PhotoViewer .disamb {
+	font-size: 12px;
+	color: #888;
+	color: rgba(255, 255, 255, 0.4);
 }
 
 @media only screen and (max-width: 1024px) {

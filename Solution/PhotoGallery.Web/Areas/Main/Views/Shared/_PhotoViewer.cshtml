@@ -21,19 +21,17 @@
 			</a>
 		</div>
 	</div>
-	<div class="tagLayer">
-		<div class="spot">
-			
-		</div>
-		<div class="inputPanel">
-			@{ Html.RenderPartial(MVC.Main.Shared.Views._TagPanel); }
-		</div>
-	</div>
+	@{ Html.RenderPartial(MVC.Main.Shared.Views._TagLayer); }
 </div>
 <script type="text/javascript" src="@Url.Content("~/Scripts/gallery/photoViewer.js")"></script>
 
 <script type="text/javascript">
 	initPhotoView();
+
+	initTagSearch(
+		'@Url.Action(MVC.Main.Photos.LocalTags(""))/',
+		'@Url.Action(MVC.Main.Photos.FabricTags(""))/'
+	);
 
 	@foreach ( IWebPhoto p in Model ) {
 		string url = Url.Content("~"+p.ImageUrl);
@@ -42,5 +40,5 @@
 		</text>
 	}
 
-	//viewPhoto(6554);
+	viewPhoto(6554);
 </script>

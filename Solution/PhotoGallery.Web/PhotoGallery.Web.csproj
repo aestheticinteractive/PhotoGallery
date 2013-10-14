@@ -58,9 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Packages\Castle.Windsor.3.2.1\lib\net40\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Packages\FabricClient.0.2.4.4\lib\Fabric.Clients.Cs.dll</HintPath>
+      <HintPath>..\..\Packages\FabricClient.0.2.4.5\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -172,6 +172,7 @@
     <Compile Include="Areas\Admin\Models\PeopleModel.cs" />
     <Compile Include="Areas\Admin\Models\HomeModel.cs" />
     <Compile Include="Areas\Main\Controllers\AlbumsController.cs" />
+    <Compile Include="Areas\Main\Controllers\PhotosController.cs" />
     <Compile Include="Areas\Main\Controllers\OauthController.cs" />
     <Compile Include="Areas\Main\Models\AlbumModel.cs" />
     <Compile Include="Areas\Main\Models\AllAlbumsModel.cs" />
@@ -193,6 +194,9 @@
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="Main.OauthController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Main.PhotosController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="Main.SharedController.generated.cs">
@@ -308,7 +312,7 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\People\Index.cshtml" />
-    <Content Include="Areas\Main\Views\Shared\_TagPanel.cshtml" />
+    <Content Include="Areas\Main\Views\Shared\_TagLayer.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

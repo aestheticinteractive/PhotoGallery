@@ -3,8 +3,16 @@
 var phoData = {
 	idList: [],
 	idMap: {},
-	activePhotoId: 0,
-	tagMode: false
+	activePhotoId: 0
+};
+
+var tagData = {
+	tagMode: false,
+	localUrl: null,
+	fabUrl: null,
+	timer: 0,
+	name: null,
+	list: []
 };
 
 
@@ -108,7 +116,7 @@ function closePhoto() {
 
 /*--------------------------------------------------------------------------------------------*/
 function onPhotoClick() {
-	if ( !phoData.tagMode ) {
+	if ( !tagData.tagMode ) {
 		nextPhoto();
 		return;
 	}
@@ -119,11 +127,92 @@ function onPhotoClick() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
+function initTagSearch(localUrl, fabUrl) {
+	tagData.localUrl = localUrl;
+	tagData.fabUrl = fabUrl;
+	
+	$('#TagSearch').keyup(function () {
+		clearTimeout(tagData.timer);
+		tagData.timer = setTimeout(onSearchKeyup, 250);
+	});
+}
+
+/*--------------------------------------------------------------------------------------------*/
 function toggleTagMode() {
-	phoData.tagMode = !phoData.tagMode;
+	tagData.tagMode = !tagData.tagMode;
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function showTagDialog() {
-	
+
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function onSearchKeyup() {
+	$('#TagSearchRows').hide();
+
+	var asyncName = tagData.name = $('#TagSearch').val();
+	tagData.list = [];
+
+	jQuery.post(tagData.localUrl+asyncName, null, function(localData) {
+		if (tagData.name != asyncName) {
+			return;
+		}
+
+		tagData.list = tagData.list.concat(localData);
+		onSearchData();
+	});
+
+	jQuery.post(tagData.fabUrl+asyncName, null, function(fabData) {
+		if ( tagData.name != asyncName ) {
+			return;
+		}
+
+		tagData.list = tagData.list.concat(fabData);
+		onSearchData();
+	});
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function onSearchData() {
+	tagData.list.sort(function(a, b) {
+		var name = tagData.name.toLowerCase();
+		var an = a.Name.toLowerCase();
+		var bn = b.Name.toLowerCase();
+
+		if ( an == name ) {
+			return -1;
+		}
+
+		if ( bn == name ) {
+			return 1;
+		}
+
+		if ( an == bn ) {
+			var ad = a.Disamb.toLowerCase();
+			var bd = b.Disamb.toLowerCase();
+			return (ad > bd);
+		}
+
+		return (an > bn);
+	});
+
+	var rows = "";
+	var n = tagData.list.length;
+	var dup = {};
+
+	for ( var i = 0 ; i < n ; ++i ) {
+		var item = tagData.list[i];
+
+		if ( dup[item.ArtifactId] ) {
+			continue;
+		}
+
+		dup[item.ArtifactId] = true;
+		rows += '<tr><td title="['+item.ArtifactId+']'+(item.Note ? ' '+item.Note : '')+'">' +
+			item.Name +(item.Disamb ? '<br/><span class="disamb">'+item.Disamb+'</span>' : '')+
+			'</td></tr>';
+	}
+
+	$('#TagSearchRows').html(rows).show();
 }

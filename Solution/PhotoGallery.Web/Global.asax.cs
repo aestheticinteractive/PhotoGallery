@@ -17,6 +17,8 @@ namespace PhotoGallery.Web {
 	/*================================================================================================*/
 	public class FabricWebApplication : HttpApplication {
 
+		public const string DataProvConfigKey = "dataProv";
+
 		private static IWindsorContainer WindsorContainer;
 
 		private static string BaseUrl;
@@ -25,7 +27,6 @@ namespace PhotoGallery.Web {
 		private static long FabricDataProvId;
 
 		private static IFabricSessionContainer FabricDataProvSess;
-		private static IFabricClient FabricDataProvClient;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,13 +84,11 @@ namespace PhotoGallery.Web {
 			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
 				FabricAppId, FabricAppSecret, FabricDataProvId, redir, FabricSessProv);
 
-			var dataProvConfig = new FabricClientConfig("dataProv", "http://api.inthefabric.com",
+			var dataProvConfig = new FabricClientConfig(DataProvConfigKey, "http://api.inthefabric.com",
 				FabricAppId, FabricAppSecret, FabricDataProvId, redir, (k => FabricDataProvSess));
 
 			FabricClient.InitOnce(config);
 			FabricClient.AddConfig(dataProvConfig);
-
-			FabricDataProvClient = new FabricClient("dataProv");
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
