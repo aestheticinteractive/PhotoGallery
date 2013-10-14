@@ -35,22 +35,24 @@ function initPhotoView() {
 		}
 	});
 
+	$(window).resize(resizePhoto);
+
 	$('body').prepend($('#PhotoViewerPadding')).prepend($('#PhotoViewer'));
 	phoData.origBg = $('body').css('background-color');
 	phoData.origOy = $('body').css('overflow-y');
 
-	$('#PhotoViewer .photo').click(null, onPhotoClick);
+	$('#PhotoViewer .photo').click(null, nextPhoto);
 	closePhoto();
 }
 
 /*--------------------------------------------------------------------------------------------*/
-function registerPhoto(photoId, name, url, created, albumId) {
+function registerPhoto(photoId, name, url, created, ratio) {
 	phoData.idMap[photoId] = {
 		index: phoData.idList.length,
 		name: name,
 		url: url,
 		created: created,
-		albumId: albumId
+		ratio: ratio
 	};
 
 	phoData.idList.push(photoId);
@@ -65,7 +67,9 @@ function viewPhoto(photoId) {
 	$('#PhotoViewerPadding').show();
 	$("#Site").hide();
 
-	$('#PhotoViewer .photo').css('background-image', 'url('+pho.url+')');
+	$('#PhotoViewer .photo').attr('src', pho.url);
+	resizePhoto();
+
 	$('#PhotoViewer .details').html(pho.name + "<br/>" + pho.created);
 	$('body').css('background-color', '#000').css('overflow-y', 'hidden');
 
@@ -77,6 +81,25 @@ function viewPhoto(photoId) {
 	pho = phoData.idMap[photoId];
 	var img = new Image();
 	img.src = pho.url;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function resizePhoto() {
+	var pho = phoData.idMap[phoData.activePhotoId];
+	var img = $('#PhotoViewer .photo');
+	var pv = $("#PhotoViewer");
+	var pvW = pv.width();
+	var pvH = pv.height();
+	var pvRatio = pvW/pvH;
+
+	if ( pvRatio > pho.ratio ) {
+		var imgW = pho.ratio*pvH;
+		img.css('height', '100%').css('width', 'auto').css('margin', '0 0 0 '+(pvW-imgW)/2+'px');
+	}
+	else {
+		var imgH = pvW/pho.ratio;
+		img.css('width', '100%').css('height', 'auto').css('margin', (pvH-imgH)/2+'px 0 0 0');
+	}
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -114,16 +137,6 @@ function closePhoto() {
 	$('body').css('background-color', phoData.origBg).css('overflow-y', phoData.origOy);
 }
 
-/*--------------------------------------------------------------------------------------------*/
-function onPhotoClick() {
-	if ( !tagData.tagMode ) {
-		nextPhoto();
-		return;
-	}
-
-	showTagDialog();
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
@@ -135,33 +148,58 @@ function initTagSearch(localUrl, fabUrl) {
 		clearTimeout(tagData.timer);
 		tagData.timer = setTimeout(onSearchKeyup, 250);
 	});
+
+	$('#TagLayer').click(null, onTagLayerClick);
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function toggleTagMode() {
 	tagData.tagMode = !tagData.tagMode;
+	$('#TagLayer').toggle();
+	$('#PhotoViewer .bottomBar').toggle();
+	$('#TagSearch').val('');
+	$('#TagLayer .spot').hide();
+	$('#TagLayer .inputPanel').hide();
 }
 
 /*--------------------------------------------------------------------------------------------*/
-function showTagDialog() {
+function onTagLayerClick(event) {
+	var spot = $('#TagLayer .spot').show();
+	var panel = $('#TagLayer .inputPanel').show();
+	var pho = $('#PhotoViewer .photo');
+	var pos = pho.offset();
 
+	var x = Math.max(pos.left, Math.min(pos.left+pho.width(), event.pageX));
+	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), event.pageY));
+	var relX = (x-pos.left)/pho.width();
+	var relY = (y-pos.top)/pho.height();
+	console.log(relX+" / "+relY);
+
+	spot.css('left', x+'px').css('top', y+'px');
+	panel.css('left', x+'px').css('top', (y+40)+'px');
+	$('#TagSearch').focus();
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onSearchKeyup() {
-	$('#TagSearchRows').hide();
-
 	var asyncName = tagData.name = $('#TagSearch').val();
 	tagData.list = [];
 
-	jQuery.post(tagData.localUrl+asyncName, null, function(localData) {
+	if ( asyncName == "" ) {
+		$('#TagSearchRows').html('');
+		return;
+	}
+
+	$('#TagSearchRows').html('<tr><td><span class="disamb">Loading...</span></tr></td>');
+
+	/*jQuery.post(tagData.localUrl+asyncName, null, function(localData) {
 		if (tagData.name != asyncName) {
 			return;
 		}
 
 		tagData.list = tagData.list.concat(localData);
 		onSearchData();
-	});
+	});*/
 
 	jQuery.post(tagData.fabUrl+asyncName, null, function(fabData) {
 		if ( tagData.name != asyncName ) {
@@ -214,5 +252,5 @@ function onSearchData() {
 			'</td></tr>';
 	}
 
-	$('#TagSearchRows').html(rows).show();
+	$('#TagSearchRows').html(rows);
 }

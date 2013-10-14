@@ -404,11 +404,6 @@ ul {
 }
 
 #PhotoViewer .photo {
-	width: 100%;
-	height: 100%;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center;
 }
 
 #PhotoViewer .bottomBar {
@@ -441,73 +436,6 @@ ul {
 	height: 40px;
 }
 
-#PhotoViewer .tagLayer {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	background-color: #333;
-	background-color: rgba(0, 0, 0, 0.666);
-}
-
-#PhotoViewer .spot {
-	position: absolute;
-	width: 90px;
-	height: 90px;
-	border: 5px solid #ccc;
-	border: 5px solid rgba(255, 255, 255, 0.666);
-}
-
-#PhotoViewer .inputPanel {
-	position: absolute;
-	width: 300px;
-	height: 300px;
-	top: 100px;
-	color: #fff;
-}
-
-#PhotoViewer .inputPanel .tagSearch {
-	background-color: transparent;
-	color: #fff;
-	font-size: 14px;
-	height: 30px;
-	box-shadow: 0px 0px 0px 0px;
-	margin: 0;
-}
-
-#PhotoViewer .resultScroll {
-	height: 270px;
-	overflow-y: auto;
-}
-
-#PhotoViewer table {
-	border: 0 solid;
-	font-size: 100%;
-	margin: 0;
-}
-
-#PhotoViewer tr:nth-child(even) {
-	background-color: #222;
-	background-color: rgba(255,255,255,0.075);
-}
-
-#PhotoViewer tr:nth-child(odd) {
-	background-color: #444;
-	background-color: rgba(255,255,255,0.15);
-}
-
-#PhotoViewer table td {
-	color: #fff;
-	font-size: 14px;
-	padding: 6px;
-}
-
-#PhotoViewer .disamb {
-	font-size: 12px;
-	color: #888;
-	color: rgba(255, 255, 255, 0.4);
-}
-
 @media only screen and (max-width: 1024px) {
 
 	#PhotoViewer {
@@ -517,6 +445,102 @@ ul {
 	#PhotoViewer .button {
 		width: inherit;
 	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+#TagLayer {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	/*background-color: #333;
+	background-color: rgba(0, 0, 0, 0.0);*/
+	display: none;
+}
+
+#TagLayer .spot {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	margin-left: -30px;
+	margin-top: -30px;
+	border: 4px solid #ccc;
+	border: 4px solid rgba(255, 255, 255, 0.666);
+}
+
+#TagLayer .spotInner {
+	width: 100%;
+	height: 100%;
+	border: 4px solid #333;
+	border: 4px solid rgba(0, 0, 0, 0.666);
+}
+
+#TagLayer .inputPanel {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	margin-left: -150px;
+	top: 100px;
+	color: #fff;
+}
+
+#TagLayer .inputPanel .tagSearch {
+	background-color: #000;
+	background-color: rgba(0,0,0,0.95);
+	color: #fff;
+	font-size: 14px;
+	height: 35px;
+	box-shadow: 0px 0px 0px 0px;
+	margin: 0;
+}
+
+#TagLayer .resultScroll {
+	height: 265px;
+	overflow-y: auto;
+}
+
+#TagLayer table {
+	border: 0 solid;
+	font-size: 100%;
+	margin: 0;
+}
+
+#TagLayer table tr:nth-child(even) {
+	background-color: #222;
+	background-color: rgba(0,0,0,0.8);
+}
+
+#TagLayer table tr:nth-child(odd) {
+	background-color: #444;
+	background-color: rgba(0,0,0,0.7);
+}
+
+#TagLayer table tr:hover {
+	background-color: #000;
+}
+
+#TagLayer table tr {
+	cursor: pointer;
+}
+
+#TagLayer table td {
+	color: #fff;
+	font-size: 14px;
+	padding: 6px;
+}
+
+#TagLayer table td:hover {
+	color: #38c;
+	padding: 5px;
+	border: 1px solid #38c;
+}
+
+#TagLayer table td .disamb {
+	font-size: 12px;
+	color: #999;
+	color: rgba(255, 255, 255, 0.5);
 }
 
 
