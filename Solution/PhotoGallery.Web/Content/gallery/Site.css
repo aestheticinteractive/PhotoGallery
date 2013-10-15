@@ -436,6 +436,12 @@ ul {
 	height: 40px;
 }
 
+#PhotoViewer .tagBar {
+	height: 30px;
+	text-align: right;
+	padding: 8px;
+}
+
 @media only screen and (max-width: 1024px) {
 
 	#PhotoViewer {
@@ -466,15 +472,15 @@ ul {
 	height: 60px;
 	margin-left: -30px;
 	margin-top: -30px;
-	border: 4px solid #ccc;
-	border: 4px solid rgba(255, 255, 255, 0.666);
+	border: 4px solid #fff;
+	border: 4px solid rgba(255, 255, 255, 0.9);
 }
 
 #TagLayer .spotInner {
 	width: 100%;
 	height: 100%;
-	border: 4px solid #333;
-	border: 4px solid rgba(0, 0, 0, 0.666);
+	border: 4px solid #000;
+	border: 4px solid rgba(0, 0, 0, 0.9);
 }
 
 #TagLayer .inputPanel {
@@ -491,9 +497,27 @@ ul {
 	background-color: rgba(0,0,0,0.95);
 	color: #fff;
 	font-size: 14px;
+	padding-right: 35px;
 	height: 35px;
 	box-shadow: 0px 0px 0px 0px;
 	margin: 0;
+}
+
+#TagLayer .inputPanel .cancel {
+	width: 21px;
+	height: 21px;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	background-color: #800;
+	position: absolute;
+	top: 7px;
+	right: 7px;
+	cursor: pointer;
+}
+
+#TagLayer .inputPanel .cancel:hover {
+	background-color: #a00;
 }
 
 #TagLayer .resultScroll {

@@ -12,7 +12,11 @@ var tagData = {
 	fabUrl: null,
 	timer: 0,
 	name: null,
-	list: []
+	list: [],
+	spotRelX: 0,
+	spotRelY: 0,
+	showSearch: true,
+	cancelClick: false
 };
 
 
@@ -22,7 +26,7 @@ function initPhotoView() {
 	$(document).keyup(function(e) {
 		switch ( e.which ) {
 			case 27: //Escape key
-				closePhoto();
+				onEscapeKey();
 				break;
 
 			case 37: //Left Arrow key
@@ -36,6 +40,7 @@ function initPhotoView() {
 	});
 
 	$(window).resize(resizePhoto);
+	$(window).resize(resizeTagLayer);
 
 	$('body').prepend($('#PhotoViewerPadding')).prepend($('#PhotoViewer'));
 	phoData.origBg = $('body').css('background-color');
@@ -45,6 +50,23 @@ function initPhotoView() {
 	closePhoto();
 }
 
+/*--------------------------------------------------------------------------------------------*/
+function onEscapeKey() {
+	if ( !tagData.tagMode ) {
+		closePhoto();
+		return;
+	}
+
+	if ( tagData.showSearch ) {
+		cancelTagSearch(true);
+		return;
+	}
+
+	toggleTagMode();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 function registerPhoto(photoId, name, url, created, ratio) {
 	phoData.idMap[photoId] = {
@@ -150,22 +172,63 @@ function initTagSearch(localUrl, fabUrl) {
 	});
 
 	$('#TagLayer').click(null, onTagLayerClick);
+	$('#TagSearchCancel').click(null, cancelTagSearch);
+	$('#TagModeBar').hide();
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function toggleTagMode() {
 	tagData.tagMode = !tagData.tagMode;
 	$('#TagLayer').toggle();
-	$('#PhotoViewer .bottomBar').toggle();
+	$('#PhotoViewBar').toggle();
+	$('#TagModeBar').toggle();
 	$('#TagSearch').val('');
+	$('#TagLayer .spot').hide();
+	$('#TagLayer .inputPanel').hide();
+	tagData.showSearch = false;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function cancelTagSearch(fromEscKey) {
+	tagData.cancelClick = (fromEscKey != true);
+	tagData.showSearch = false;
 	$('#TagLayer .spot').hide();
 	$('#TagLayer .inputPanel').hide();
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onTagLayerClick(event) {
+	if ( tagData.showSearch || tagData.cancelClick ) {
+		tagData.cancelClick = false;
+		return;
+	}
+
+	tagData.showSearch = true;
+
 	var spot = $('#TagLayer .spot').show();
 	var panel = $('#TagLayer .inputPanel').show();
+	var pho = $('#PhotoViewer .photo');
+	var pos = pho.offset();
+
+	var x = Math.max(pos.left, Math.min(pos.left+pho.width(), event.pageX));
+	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), event.pageY));
+	var relX = (x-pos.left)/pho.width();
+	var relY = (y-pos.top)/pho.height();
+	console.log(relX+" / "+relY);
+
+	spot.css('left', x+'px').css('top', y+'px');
+	panel.css('left', x+'px').css('top', (y+40)+'px');
+	$('#TagSearch').focus();
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function resizeTagLayer() {
+	if ( !tagData.showSearch ) {
+		return;
+	}
+
+	var spot = $('#TagLayer .spot');
+	var panel = $('#TagLayer .inputPanel');
 	var pho = $('#PhotoViewer .photo');
 	var pos = pho.offset();
 
