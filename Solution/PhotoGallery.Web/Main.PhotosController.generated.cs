@@ -43,15 +43,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.JsonResult LocalTags()
+        public virtual System.Web.Mvc.JsonResult Tags()
         {
-            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.LocalTags);
-        }
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.JsonResult FabricTags()
-        {
-            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.FabricTags);
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -69,33 +63,24 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string LocalTags = "LocalTags";
-            public readonly string FabricTags = "FabricTags";
+            public readonly string Tags = "Tags";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string LocalTags = "LocalTags";
-            public const string FabricTags = "FabricTags";
+            public const string Tags = "Tags";
         }
 
 
-        static readonly ActionParamsClass_LocalTags s_params_LocalTags = new ActionParamsClass_LocalTags();
+        static readonly ActionParamsClass_Tags s_params_Tags = new ActionParamsClass_Tags();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_LocalTags LocalTagsParams { get { return s_params_LocalTags; } }
+        public ActionParamsClass_Tags TagsParams { get { return s_params_Tags; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_LocalTags
+        public class ActionParamsClass_Tags
         {
             public readonly string id = "id";
-        }
-        static readonly ActionParamsClass_FabricTags s_params_FabricTags = new ActionParamsClass_FabricTags();
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_FabricTags FabricTagsParams { get { return s_params_FabricTags; } }
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_FabricTags
-        {
-            public readonly string id = "id";
+            public readonly string first = "first";
         }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -116,23 +101,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
     {
         public T4MVC_PhotosController() : base(Dummy.Instance) { }
 
-        partial void LocalTagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id);
+        partial void TagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id, bool? first);
 
-        public override System.Web.Mvc.JsonResult LocalTags(string id)
+        public override System.Web.Mvc.JsonResult Tags(string id, bool? first)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.LocalTags);
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
-            LocalTagsOverride(callInfo, id);
-            return callInfo;
-        }
-
-        partial void FabricTagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id);
-
-        public override System.Web.Mvc.JsonResult FabricTags(string id)
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.FabricTags);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
-            FabricTagsOverride(callInfo, id);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "first", first);
+            TagsOverride(callInfo, id, first);
             return callInfo;
         }
 

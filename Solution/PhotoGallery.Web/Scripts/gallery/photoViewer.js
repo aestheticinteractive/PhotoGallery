@@ -8,8 +8,7 @@ var phoData = {
 
 var tagData = {
 	tagMode: false,
-	localUrl: null,
-	fabUrl: null,
+	tagUrl: null,
 	timer: 0,
 	name: null,
 	list: [],
@@ -161,9 +160,8 @@ function closePhoto() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function initTagSearch(localUrl, fabUrl) {
-	tagData.localUrl = localUrl;
-	tagData.fabUrl = fabUrl;
+function initTagSearch(tagUrl) {
+	tagData.tagUrl = tagUrl;
 	
 	$('#TagSearch').keyup(function () {
 		clearTimeout(tagData.timer);
@@ -264,23 +262,24 @@ function onSearchKeyup() {
 	}
 
 	$('#TagSearchRows').html('<tr><td><span class="disamb">Loading...</span></tr></td>');
+	findTagsAsync(asyncName, true);
+}
 
-	/*jQuery.post(tagData.localUrl+asyncName, null, function(localData) {
-		if (tagData.name != asyncName) {
-			return;
-		}
+/*--------------------------------------------------------------------------------------------*/
+function findTagsAsync(asyncName, first) {
+	var url = tagData.tagUrl+asyncName+(first ? '?first=true' : '');
 
-		tagData.list = tagData.list.concat(localData);
-		onSearchData();
-	});*/
-
-	jQuery.post(tagData.fabUrl+asyncName, null, function(fabData) {
+	jQuery.post(url, null, function(data) {
 		if ( tagData.name != asyncName ) {
 			return;
 		}
 
-		tagData.list = tagData.list.concat(fabData);
+		tagData.list = tagData.list.concat(data);
 		onSearchData();
+		
+		if ( data && data.length > 0 ) {
+			findTagsAsync(asyncName, false);
+		}
 	});
 }
 

@@ -228,6 +228,7 @@ namespace Links
             public static readonly string close_png = Url("close.png");
             public static readonly string Site_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Site.min.css") ? Url("Site.min.css") : Url("Site.css");
                  
+            public static readonly string tag_png = Url("tag.png");
             public static readonly string wait_gif = Url("wait.gif");
         }
     

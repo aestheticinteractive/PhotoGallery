@@ -59,6 +59,7 @@
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
     <Compile Include="Fabric\FabricService.cs" />
+    <Compile Include="Main\Dto\WebSearchTagState.cs" />
     <Compile Include="Main\Dto\WebSearchTag.cs" />
     <Compile Include="Main\SearchService.cs" />
     <Compile Include="Main\Dto\WebAlbumMeta.cs" />

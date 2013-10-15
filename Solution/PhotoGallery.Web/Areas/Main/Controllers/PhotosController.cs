@@ -22,14 +22,8 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		[HttpPost]
-		public virtual JsonResult LocalTags(string id) {
-			return Json(vSearch.FindLocalTags(id));
-		}
-
-		/*--------------------------------------------------------------------------------------------*/
-		[HttpPost]
-		public virtual JsonResult FabricTags(string id) {
-			return Json(vSearch.FindFabricTags(id));
+		public virtual JsonResult Tags(string id, bool? first) {
+			return Json(vSearch.FindTags(id, (first ?? false)));
 		}
 
 	}
