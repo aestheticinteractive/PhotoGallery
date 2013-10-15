@@ -68,10 +68,9 @@ function onEscapeKey() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function registerPhoto(photoId, name, url, created, ratio) {
+function registerPhoto(photoId, url, created, ratio) {
 	phoData.idMap[photoId] = {
 		index: phoData.idList.length,
-		name: name,
 		url: url,
 		created: created,
 		ratio: ratio
@@ -92,7 +91,7 @@ function viewPhoto(photoId) {
 	$('#PhotoViewer .photo').attr('src', pho.url);
 	resizePhoto();
 
-	$('#PhotoViewer .details').html(pho.name + "<br/>" + pho.created);
+	$('#PhotoViewer .details').html(pho.created.replace(' ', '<br/>'));
 	$('body').css('background-color', '#000').css('overflow-y', 'hidden');
 
 	_gaq.push(['_trackPageview', '/Photos/'+photoId]);
@@ -203,22 +202,20 @@ function onTagLayerClick(event) {
 		return;
 	}
 
+	$('#TagLayer .spot').show();
+	$('#TagLayer .inputPanel').show();
+	$('#TagSearch').focus();
 	tagData.showSearch = true;
 
-	var spot = $('#TagLayer .spot').show();
-	var panel = $('#TagLayer .inputPanel').show();
 	var pho = $('#PhotoViewer .photo');
 	var pos = pho.offset();
-
 	var x = Math.max(pos.left, Math.min(pos.left+pho.width(), event.pageX));
 	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), event.pageY));
-	var relX = (x-pos.left)/pho.width();
-	var relY = (y-pos.top)/pho.height();
-	console.log(relX+" / "+relY);
+	tagData.spotRelX = (x-pos.left)/pho.width();
+	tagData.spotRelY = (y-pos.top)/pho.height();
+	//console.log(tagData.spotRelX+" / "+tagData.spotRelY);
 
-	spot.css('left', x+'px').css('top', y+'px');
-	panel.css('left', x+'px').css('top', (y+40)+'px');
-	$('#TagSearch').focus();
+	resizeTagLayer();
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -231,16 +228,29 @@ function resizeTagLayer() {
 	var panel = $('#TagLayer .inputPanel');
 	var pho = $('#PhotoViewer .photo');
 	var pos = pho.offset();
+	var winW = $(window).width();
+	var winH = $(window).height();
+	var x = pos.left+pho.width()*tagData.spotRelX;
+	var y = pos.top+pho.height()*tagData.spotRelY;
+	var boxW = 300;
+	var boxH = 300;
+	var boxX = x;
+	var boxY = y+40;
+	var pad = 10;
 
-	var x = Math.max(pos.left, Math.min(pos.left+pho.width(), event.pageX));
-	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), event.pageY));
-	var relX = (x-pos.left)/pho.width();
-	var relY = (y-pos.top)/pho.height();
-	console.log(relX+" / "+relY);
+	if ( boxX-boxW/2-pad < 0 ) {
+		boxX = boxW/2+pad;
+	}
+	else if ( boxX+boxW/2+pad > winW ) {
+		boxX = winW-boxW/2-pad;
+	}
+
+	if ( boxY+boxH+pad > winH ) {
+		boxY = winH-boxH-pad;
+	}
 
 	spot.css('left', x+'px').css('top', y+'px');
-	panel.css('left', x+'px').css('top', (y+40)+'px');
-	$('#TagSearch').focus();
+	panel.css('left', boxX+'px').css('top', boxY+'px');
 }
 
 /*--------------------------------------------------------------------------------------------*/

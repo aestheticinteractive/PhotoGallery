@@ -233,6 +233,7 @@
     <Content Include="Content\gallery\arrow-left.png" />
     <Content Include="Content\gallery\arrow-right.png" />
     <Content Include="Content\gallery\close.png" />
+    <Content Include="Content\gallery\tag.png" />
     <Content Include="Content\gallery\wait.gif" />
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />

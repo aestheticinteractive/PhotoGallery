@@ -8,7 +8,7 @@
 		<p class="details"></p>
 		<div class="buttons">
 			<a href="#" title="Tag Mode" onclick="toggleTagMode(); return false;">
-				Tag Mode
+				<img src="@Url.Content("~/Content/gallery/tag.png")"/>
 			</a>
 			<a href="#" title="Previous Photo" onclick="prevPhoto(); return false;">
 				<img src="@Url.Content("~/Content/gallery/arrow-left.png")"/>
@@ -26,7 +26,7 @@
 
 	<div class="bottomBar tagBar" id="TagModeBar">
 		<a href="#" title="Tag Mode" onclick="toggleTagMode(); return false;">
-			Exit Tag Mode
+			Done
 		</a>
 	</div>
 </div>
@@ -41,10 +41,8 @@
 	);
 
 	@foreach ( IWebPhoto p in Model ) {
-	 string url = Url.Content("~"+p.ImageUrl);
-		<text>
-			registerPhoto(@p.PhotoId, '@p.ImgName', '@url', '@p.Created', @p.Ratio);
-		</text>
+		string url = Url.Content("~"+p.ImageUrl);
+		<text>registerPhoto(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
 	}
 
 	viewPhoto(6554);
