@@ -179,10 +179,7 @@ function toggleTagMode() {
 	$('#TagLayer').toggle();
 	$('#PhotoViewBar').toggle();
 	$('#TagModeBar').toggle();
-	$('#TagSearch').val('');
-	$('#TagLayer .spot').hide();
-	$('#TagLayer .inputPanel').hide();
-	tagData.showSearch = false;
+	cancelTagSearch(true);
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -191,6 +188,8 @@ function cancelTagSearch(fromEscKey) {
 	tagData.showSearch = false;
 	$('#TagLayer .spot').hide();
 	$('#TagLayer .inputPanel').hide();
+	$('#TagSearch').val('');
+	onSearchKeyup();
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -319,10 +318,17 @@ function onSearchData() {
 		}
 
 		dup[item.ArtifactId] = true;
-		rows += '<tr><td title="['+item.ArtifactId+']'+(item.Note ? ' '+item.Note : '')+'">' +
+		rows += '<tr><td onclick="onTagClick('+item.ArtifactId+'); return false;" '+
+			'title="['+item.ArtifactId+']'+(item.Note ? ' '+item.Note : '')+'">' +
 			item.Name +(item.Disamb ? '<br/><span class="disamb">'+item.Disamb+'</span>' : '')+
 			'</td></tr>';
 	}
 
 	$('#TagSearchRows').html(rows);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function onTagClick(pArtId) {
+	console.log("CLICK: artifact="+pArtId+" at (x="+tagData.spotRelX+", y="+tagData.spotRelY+")");
+	cancelTagSearch();
 }
