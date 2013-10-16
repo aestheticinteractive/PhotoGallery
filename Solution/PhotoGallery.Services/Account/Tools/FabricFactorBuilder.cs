@@ -37,9 +37,9 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabricArtifact CreatorUserArtifact { get; private set; }
 
 		public FabricArtifact PrimaryArtifact { get; private set; }
-		public LiveArtifactId PrimaryArtifactId { get; private set; }
+		public long PrimaryArtifactId { get; private set; }
 		public FabricArtifact RelatedArtifact { get; private set; }
-		public LiveArtifactId RelatedArtifactId { get; private set; }
+		public long RelatedArtifactId { get; private set; }
 
 		public FabEnumsData.FactorAssertionId FactorAssertion { get; private set; }
 		public bool IsDefining { get; private set; }
@@ -105,6 +105,12 @@ namespace PhotoGallery.Services.Account.Tools {
 		/*--------------------------------------------------------------------------------------------*/
 		public void Init(FabricArtifact pPrimary, FabEnumsData.DescriptorTypeId pDesType,
 						LiveArtifactId pRelatedId, FabEnumsData.FactorAssertionId pAsrt, bool pIsDef) {
+			Init(pPrimary, pDesType, (long)pRelatedId, pAsrt, pIsDef);
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public void Init(FabricArtifact pPrimary, FabEnumsData.DescriptorTypeId pDesType,
+						long pRelatedId, FabEnumsData.FactorAssertionId pAsrt, bool pIsDef) {
 			PrimaryArtifact = pPrimary;
 			DesType = pDesType;
 			RelatedArtifactId = pRelatedId;
@@ -164,9 +170,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			ff.Creator = CreatorUserArtifact;
 
 			ff.Primary = PrimaryArtifact;
-			ff.PrimaryArtifactId = (long)PrimaryArtifactId;
+			ff.PrimaryArtifactId = PrimaryArtifactId;
 			ff.Related = RelatedArtifact;
-			ff.RelatedArtifactId = (long)RelatedArtifactId;
+			ff.RelatedArtifactId = RelatedArtifactId;
 
 			ff.FactorAssertionId = (byte)FactorAssertion;
 			ff.IsDefining = IsDefining;
