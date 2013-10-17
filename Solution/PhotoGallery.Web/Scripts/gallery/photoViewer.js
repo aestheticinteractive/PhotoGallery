@@ -440,7 +440,12 @@ function onTagClick(pArtId, pFromKey) {
 		PosY: tagData.spotRelY
 	};
 	
-	$.post(tagData.addUrl, data, function() {
+	$.post(tagData.addUrl, data, function(response) {
+		if ( response.success == false ) {
+			alert('Tag failed. Please log into Fabric!');
+			return;
+		}
+
 		console.log("Tag Added: pho="+phoData.activePhotoId+", art="+pArtId+
 			" at (x="+tagData.spotRelX+", y="+tagData.spotRelY+")");
 	});
