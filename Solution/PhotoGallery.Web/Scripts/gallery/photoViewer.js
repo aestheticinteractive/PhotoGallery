@@ -346,7 +346,7 @@ function onSearchData() {
 
 		tagData.idToIndex[item.ArtifactId] = i;
 		rows += '<tr><td data-id="'+item.ArtifactId+'" '+
-			'onclick="onTagClick('+item.ArtifactId+'); return false;" '+
+			'onclick="onTagClick(\''+item.ArtifactId+'\'); return false;" '+
 			'title="['+item.ArtifactId+']'+(item.Note ? ' '+item.Note : '')+'">' +
 			item.Name +(item.Disamb ? '<br/><span class="disamb">'+item.Disamb+'</span>' : '')+
 			'</td></tr>';
@@ -435,7 +435,7 @@ function onTagClick(pArtId, pFromKey) {
 
 	var data = {
 		PhotoId: phoData.activePhotoId,
-		ArtifactId: pArtId+"",
+		ArtifactId: pArtId,
 		PosX: tagData.spotRelX,
 		PosY: tagData.spotRelY
 	};

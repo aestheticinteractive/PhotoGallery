@@ -3,9 +3,8 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Tools;
-using PhotoGallery.Services.Fabric;
 
-namespace PhotoGallery.Services.Main {
+namespace PhotoGallery.Services.Account {
 
 	/*================================================================================================*/
 	public class PhotosService : BaseService {
@@ -25,17 +24,17 @@ namespace PhotoGallery.Services.Main {
 					.Fetch(x => x.FabricArtifact).Eager
 					.SingleOrDefault();
 				
-				var fabUser = FabricService.GetActiveUser(Fab);
+				FabricUser u = HomeService.GetCurrentUser(Fab, s);
 
-				if ( fabUser == null ) {
+				if ( u == null ) {
 					return false;
 				}
 				
 				Fab.PersonSession.RefreshTokenIfNecessary();
+				var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);
 
-				var userArt = s.Load<FabricArtifact>(fabUser.ArtifactId);
 				var fb = new FabricFactorBuilder(userArt, "<photo "+pPhotoId+"> refers to ('depict') "+
-						"<artifact "+pArtifactId+"> [loc 2d "+pPosX+", "+pPosY+"]");
+						"<artifact> [loc 2d "+pPosX+", "+pPosY+"]");
 				fb.Init(
 					p.FabricArtifact,
 					FabEnumsData.DescriptorTypeId.RefersTo,

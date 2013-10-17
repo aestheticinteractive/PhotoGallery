@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Fabric.Clients.Cs;
+using PhotoGallery.Services.Account;
 using PhotoGallery.Services.Main;
 using PhotoGallery.Web.Areas.Main.Models;
 using PhotoGallery.Web.Controllers;
