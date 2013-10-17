@@ -140,7 +140,12 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void OnFactorExport(FabBatchResult pFactor) {
-			LogInfo("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId);
+			LogInfo("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId+
+				(pFactor.Error == null ? "" : " ["+pFactor.Error+"]"));
+
+			if ( pFactor.Error != null ) {
+				return;
+			}
 
 			FabricFactor fac = vFactorMap[(int)pFactor.BatchId];
 			fac.FactorId = pFactor.ResultId;
