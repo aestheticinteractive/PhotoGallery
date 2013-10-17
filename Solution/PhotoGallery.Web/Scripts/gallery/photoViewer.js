@@ -6,6 +6,7 @@ var LEFT_ARROW = 37;
 var UP_ARROW = 38;
 var RIGHT_ARROW = 39;
 var DOWN_ARROW = 40;
+var T_KEY = 84;
 
 var phoData = {
 	idList: [],
@@ -54,6 +55,7 @@ function onKeyUp(event) {
 
 	if ( !tagData.tagMode ) {
 		switch ( key ) {
+			case T_KEY: toggleTagMode(); break;
 			case ESCAPE_KEY: closePhoto(); break;
 			case LEFT_ARROW: prevPhoto(); break;
 			case RIGHT_ARROW: nextPhoto(); break;
@@ -64,7 +66,7 @@ function onKeyUp(event) {
 
 	if ( tagData.showSearch ) {
 		switch ( key ) {
-			case ENTER: onTagClick(tagData.activeId); break;
+			case ENTER: onTagClick(tagData.activeId, true); break;
 			case ESCAPE_KEY: cancelTagSearch(true); break;
 			case UP_ARROW: onTagSearchHighlightKey(-1); break;
 			case DOWN_ARROW: onTagSearchHighlightKey(1); break;
@@ -180,7 +182,7 @@ function initTagSearch(tagUrl, addUrl) {
 	
 	$('#TagSearch').keyup(function() {
 		clearTimeout(tagData.timer);
-		tagData.timer = setTimeout(onSearchKeyup, 250);
+		tagData.timer = setTimeout(onSearchKeyup, 500);
 	});
 
 	$('#TagLayer').click(null, onTagLayerClick);
@@ -424,12 +426,12 @@ function setTagSearchHighlight(pArtId, pFromKey) {
 }
 
 /*--------------------------------------------------------------------------------------------*/
-function onTagClick(pArtId) {
+function onTagClick(pArtId, pFromKey) {
 	if ( pArtId == null ) {
 		return;
 	}
 
-	cancelTagSearch();
+	cancelTagSearch(pFromKey);
 
 	var data = {
 		PhotoId: phoData.activePhotoId,
