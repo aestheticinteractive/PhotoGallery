@@ -19,7 +19,7 @@ namespace PhotoGallery.Services.Main.Dto {
 		public int SearchSize { get; private set; }
 		public IList<WebSearchTag> List { get; private set; }
 		public IList<WebSearchTag> LatestList { get; private set; }
-		public HashSet<long> ArtifactIdMap { get; private set; }
+		public HashSet<string> ArtifactIdMap { get; private set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace PhotoGallery.Services.Main.Dto {
 			SearchIndex = 0;
 			SearchSize = 20;
 			List = new List<WebSearchTag>();
-			ArtifactIdMap = new HashSet<long>();
+			ArtifactIdMap = new HashSet<string>();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

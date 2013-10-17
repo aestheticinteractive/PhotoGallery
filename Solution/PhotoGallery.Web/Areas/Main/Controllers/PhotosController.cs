@@ -35,7 +35,8 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 			bool res = false;
 
 			if ( ModelState.IsValid ) {
-				res = vPhotos.AddTag(pModel.PhotoId, pModel.ArtifactId, pModel.PosX, pModel.PosY);
+				long artId = long.Parse(pModel.ArtifactId);
+				res = vPhotos.AddTag(pModel.PhotoId, artId, pModel.PosX, pModel.PosY);
 			}
 
 			return Json(new { success = res });

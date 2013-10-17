@@ -7,7 +7,9 @@ namespace PhotoGallery.Services.Main.Dto {
 	/*================================================================================================*/
 	public class WebSearchTag {
 
-		public long ArtifactId { get; internal set; }
+		//use string for ArtifactId because Javascript chokes on 64-bit integers
+
+		public string ArtifactId { get; internal set; }
 		public string Name { get; internal set; }
 		public string Disamb { get; internal set; }
 		public string Note { get; internal set; }
@@ -22,7 +24,7 @@ namespace PhotoGallery.Services.Main.Dto {
 				throw new Exception("Null FabricArtifact.ArtifactId.");
 			}
 
-			ArtifactId = (long)fa.ArtifactId;
+			ArtifactId = fa.ArtifactId+"";
 			Name = fa.Name;
 			Disamb = fa.Disamb;
 			Note = fa.Note;
@@ -30,7 +32,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public WebSearchTag(FabClass pClass) {
-			ArtifactId = pClass.ArtifactId;
+			ArtifactId = pClass.ArtifactId+"";
 			Name = pClass.Name;
 			Disamb = pClass.Disamb;
 			Note = pClass.Note;
@@ -38,7 +40,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public WebSearchTag(FabInstance pInst) {
-			ArtifactId = pInst.ArtifactId;
+			ArtifactId = pInst.ArtifactId+"";
 			Name = pInst.Name;
 			Disamb = pInst.Disamb;
 			Note = pInst.Note;

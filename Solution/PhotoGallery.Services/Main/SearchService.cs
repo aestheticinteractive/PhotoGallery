@@ -25,21 +25,22 @@ namespace PhotoGallery.Services.Main {
 		/*--------------------------------------------------------------------------------------------*/
 		public IList<WebSearchTag> FindTags(string pName, bool pFirst) {
 			WebSearchTagState state;
+			string name = pName.ToLower();
 
-			if ( TagCache.Contains(pName) ) {
-				state = (WebSearchTagState)TagCache[pName];
+			if ( TagCache.Contains(name) ) {
+				state = (WebSearchTagState)TagCache[name];
 
 				if ( pFirst ) {
 					return state.List;
 				}
 			}
 			else {
-				state = new WebSearchTagState(pName);
+				state = new WebSearchTagState(name);
 				state.SetMode(WebSearchTagState.Mode.Local, 0, 20);
 
 				var pol = new CacheItemPolicy();
 				pol.AbsoluteExpiration = new DateTimeOffset(DateTime.UtcNow.AddHours(1));
-				TagCache.Add(pName, state, pol);
+				TagCache.Add(name, state, pol);
 			}
 
 			switch ( state.SearchMode ) {
@@ -69,7 +70,7 @@ namespace PhotoGallery.Services.Main {
 
 			if ( state.LatestList.Count == 0 ) {
 				return (state.SearchMode == WebSearchTagState.Mode.Done ?
-					new List<WebSearchTag>() : FindTags(pName, false));
+					new List<WebSearchTag>() : FindTags(name, false));
 			}
 
 			return state.LatestList;

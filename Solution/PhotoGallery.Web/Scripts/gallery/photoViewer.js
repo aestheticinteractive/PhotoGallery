@@ -1,5 +1,12 @@
 ﻿/// <reference path="~/Scripts/jquery-2.0.3-vsdoc.js" />
 
+var ENTER = 13;
+var ESCAPE_KEY = 27;
+var LEFT_ARROW = 37;
+var UP_ARROW = 38;
+var RIGHT_ARROW = 39;
+var DOWN_ARROW = 40;
+
 var phoData = {
 	idList: [],
 	idMap: {},
@@ -13,6 +20,8 @@ var tagData = {
 	timer: 0,
 	name: null,
 	list: [],
+	idToIndex: {},
+	activeId: null,
 	spotRelX: 0,
 	spotRelY: 0,
 	showSearch: true,
@@ -23,22 +32,7 @@ var tagData = {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 function initPhotoView() {
-	$(document).keyup(function(e) {
-		switch ( e.which ) {
-			case 27: //Escape key
-				onEscapeKey();
-				break;
-
-			case 37: //Left Arrow key
-				prevPhoto();
-				break;
-
-			case 39: //Right Arrow key
-				nextPhoto();
-				break;
-		}
-	});
-
+	$(document).keyup(onKeyUp);
 	$(window).resize(resizePhoto);
 	$(window).resize(resizeTagLayer);
 
@@ -51,18 +45,37 @@ function initPhotoView() {
 }
 
 /*--------------------------------------------------------------------------------------------*/
-function onEscapeKey() {
+function onKeyUp(event) {
+	if ( !$('#PhotoViewer').is(':visible') ) {
+		return;
+	}
+
+	var key = event.which;
+
 	if ( !tagData.tagMode ) {
-		closePhoto();
+		switch ( key ) {
+			case ESCAPE_KEY: closePhoto(); break;
+			case LEFT_ARROW: prevPhoto(); break;
+			case RIGHT_ARROW: nextPhoto(); break;
+		}
+
 		return;
 	}
 
 	if ( tagData.showSearch ) {
-		cancelTagSearch(true);
+		switch ( key ) {
+			case ENTER: onTagClick(tagData.activeId); break;
+			case ESCAPE_KEY: cancelTagSearch(true); break;
+			case UP_ARROW: onTagSearchHighlightKey(-1); break;
+			case DOWN_ARROW: onTagSearchHighlightKey(1); break;
+		}
+
 		return;
 	}
 
-	toggleTagMode();
+	switch ( key ) {
+		case ESCAPE_KEY: toggleTagMode(); break;
+	}
 }
 
 
@@ -165,7 +178,7 @@ function initTagSearch(tagUrl, addUrl) {
 	tagData.tagUrl = tagUrl;
 	tagData.addUrl = addUrl;
 	
-	$('#TagSearch').keyup(function () {
+	$('#TagSearch').keyup(function() {
 		clearTimeout(tagData.timer);
 		tagData.timer = setTimeout(onSearchKeyup, 250);
 	});
@@ -188,6 +201,10 @@ function toggleTagMode() {
 function cancelTagSearch(fromEscKey) {
 	tagData.cancelClick = (fromEscKey != true);
 	tagData.showSearch = false;
+	tagData.list = [];
+	tagData.idToIndex = {};
+	tagData.activeId = null;
+
 	$('#TagLayer .spot').hide();
 	$('#TagLayer .inputPanel').hide();
 	$('#TagSearch').val('');
@@ -212,7 +229,6 @@ function onTagLayerClick(event) {
 	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), event.pageY));
 	tagData.spotRelX = (x-pos.left)/pho.width();
 	tagData.spotRelY = (y-pos.top)/pho.height();
-	//console.log(tagData.spotRelX+" / "+tagData.spotRelY);
 
 	resizeTagLayer();
 }
@@ -254,8 +270,15 @@ function resizeTagLayer() {
 
 /*--------------------------------------------------------------------------------------------*/
 function onSearchKeyup() {
-	var asyncName = tagData.name = $('#TagSearch').val();
+	var asyncName = $('#TagSearch').val();
+
+	if ( asyncName == tagData.name ) {
+		return;
+	}
+
+	tagData.name = asyncName;
 	tagData.list = [];
+	tagData.activeId = null;
 
 	if ( asyncName == "" ) {
 		$('#TagSearchRows').html('');
@@ -310,32 +333,107 @@ function onSearchData() {
 
 	var rows = "";
 	var n = tagData.list.length;
-	var dup = {};
+	tagData.idToIndex = {};
 
 	for ( var i = 0 ; i < n ; ++i ) {
 		var item = tagData.list[i];
 
-		if ( dup[item.ArtifactId] ) {
+		if ( tagData.idToIndex[item.ArtifactId] ) {
 			continue;
 		}
 
-		dup[item.ArtifactId] = true;
-		rows += '<tr><td onclick="onTagClick('+item.ArtifactId+'); return false;" '+
+		tagData.idToIndex[item.ArtifactId] = i;
+		rows += '<tr><td data-id="'+item.ArtifactId+'" '+
+			'onclick="onTagClick('+item.ArtifactId+'); return false;" '+
 			'title="['+item.ArtifactId+']'+(item.Note ? ' '+item.Note : '')+'">' +
 			item.Name +(item.Disamb ? '<br/><span class="disamb">'+item.Disamb+'</span>' : '')+
 			'</td></tr>';
 	}
 
 	$('#TagSearchRows').html(rows);
+
+	$('#TagSearchRows td').mouseenter(function () {
+		setTagSearchHighlight($(this).attr('data-id'));
+	});
+
+	$('#TagLayer .resultScroll').scrollTop(0);
+	setTagSearchHighlight(tagData.activeId);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function onTagSearchHighlightKey(pDir) {
+	if ( tagData.list.length == 0 ) {
+		return;
+	}
+
+	var tagI = 0;
+
+	if ( tagData.activeId == null ) {
+		tagData.activeId = tagData.list[0].ArtifactId;
+	}
+	else {
+		tagI = tagData.idToIndex[tagData.activeId]+pDir;
+	}
+
+	if ( tagI < 0 || tagI >= tagData.list.length ) {
+		return;
+	}
+
+	tagData.activeId = tagData.list[tagI].ArtifactId;
+	setTagSearchHighlight(tagData.activeId, true);
+}
+
+/*--------------------------------------------------------------------------------------------*/
+function setTagSearchHighlight(pArtId, pFromKey) {
+	if ( pArtId == null ) {
+		return;
+	}
+
+	tagData.activeId = pArtId;
+	var activeTd = null;
+
+	$('#TagSearchRows td').each(function() {
+		var td = $(this);
+		var act = (td.attr('data-id') == pArtId);
+		td.attr('class', (act ? 'active' : ''));
+		td.parent().attr('class', (act ? 'active' : ''));
+
+		if ( act ) {
+			activeTd = td;
+		}
+	});
+
+	if ( activeTd == null || !pFromKey ) {
+		return;
+	}
+
+	var rs = $('#TagLayer .resultScroll');
+	var rsH = rs.height();
+	var rsS = rs.scrollTop();
+
+	var tr = activeTd.parent();
+	var tdH = tr.height();
+	var tdY = tr.offset().top-rs.offset().top;
+
+	if ( tdY < 0 ) {
+		rs.scrollTop(rsS+tdY);
+	}
+	else if ( tdY+tdH > rsH ) {
+		rs.scrollTop(rsS+tdY-rsH+tdH);
+	}
 }
 
 /*--------------------------------------------------------------------------------------------*/
 function onTagClick(pArtId) {
+	if ( pArtId == null ) {
+		return;
+	}
+
 	cancelTagSearch();
 
 	var data = {
 		PhotoId: phoData.activePhotoId,
-		ArtifactId: pArtId,
+		ArtifactId: pArtId+"",
 		PosX: tagData.spotRelX,
 		PosY: tagData.spotRelY
 	};

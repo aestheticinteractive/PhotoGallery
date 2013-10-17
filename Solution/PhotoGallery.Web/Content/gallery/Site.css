@@ -543,7 +543,7 @@ ul {
 	background-color: rgba(0, 0, 0, 0.65);
 }
 
-#TagLayer table tr:hover {
+#TagLayer table tr.active {
 	background-color: #000;
 	background-color: rgba(0, 0, 0, 0.9);
 }
@@ -558,7 +558,7 @@ ul {
 	padding: 6px;
 }
 
-#TagLayer table td:hover {
+#TagLayer table td.active {
 	color: #38c;
 	padding: 5px;
 	border: 1px solid #38c;
