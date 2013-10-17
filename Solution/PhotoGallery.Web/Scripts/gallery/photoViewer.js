@@ -9,6 +9,7 @@ var phoData = {
 var tagData = {
 	tagMode: false,
 	tagUrl: null,
+	addUrl: null,
 	timer: 0,
 	name: null,
 	list: [],
@@ -160,8 +161,9 @@ function closePhoto() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function initTagSearch(tagUrl) {
+function initTagSearch(tagUrl, addUrl) {
 	tagData.tagUrl = tagUrl;
+	tagData.addUrl = addUrl;
 	
 	$('#TagSearch').keyup(function () {
 		clearTimeout(tagData.timer);
@@ -329,6 +331,17 @@ function onSearchData() {
 
 /*--------------------------------------------------------------------------------------------*/
 function onTagClick(pArtId) {
-	console.log("CLICK: artifact="+pArtId+" at (x="+tagData.spotRelX+", y="+tagData.spotRelY+")");
 	cancelTagSearch();
+
+	var data = {
+		PhotoId: phoData.activePhotoId,
+		ArtifactId: pArtId,
+		PosX: tagData.spotRelX,
+		PosY: tagData.spotRelY
+	};
+	
+	$.post(tagData.addUrl, data, function() {
+		console.log("Tag Added: pho="+phoData.activePhotoId+", art="+pArtId+
+			" at (x="+tagData.spotRelX+", y="+tagData.spotRelY+")");
+	});
 }

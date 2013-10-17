@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Fabric.Clients.Cs;
+﻿using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Tools;
-using PhotoGallery.Services.Main.Dto;
 
 namespace PhotoGallery.Services.Main {
 
@@ -19,14 +17,14 @@ namespace PhotoGallery.Services.Main {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<WebAlbum> AddTag(long pPhotoId, long pArtifactId, double pPosX, double pPosY) {
+		public bool AddTag(long pPhotoId, long pArtifactId, double pPosX, double pPosY) {
 			using ( ISession s = NewSession() ) {
 				Photo p = s.QueryOver<Photo>()
 					.Where(x => x.Id == pPhotoId)
 					.Fetch(x => x.FabricArtifact).Eager
 					.SingleOrDefault();
 
-				var fb = new FabricFactorBuilder(null, "<photo "+pPhotoId+"> refers to "+
+				var fb = new FabricFactorBuilder(null, "<photo "+pPhotoId+"> refers to ('depict') "+
 						"<artifact "+pArtifactId+"> [loc 2d "+pPosX+", "+pPosY+"]");
 				fb.Init(
 					p.FabricArtifact,
@@ -41,9 +39,10 @@ namespace PhotoGallery.Services.Main {
 					pPosY,
 					0
 				);
-				fb.DesRelatedArtifactRefineId = LiveArtifactId.PhotographAlbum;
+				fb.DesTypeRefineId = LiveArtifactId.Depict;
 				s.Save(fb.ToFactor());
 
+				return true;
 			};
 		}
 

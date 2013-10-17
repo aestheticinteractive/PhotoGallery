@@ -36,7 +36,8 @@
 	initPhotoView();
 
 	initTagSearch(
-		'@Url.Action(MVC.Main.Photos.Tags("", null))/'
+		'@Url.Action(MVC.Main.Photos.Tags("", null))/',
+		'@Url.Action(MVC.Main.Photos.AddTag())/'
 	);
 
 	@foreach ( IWebPhoto p in Model ) {

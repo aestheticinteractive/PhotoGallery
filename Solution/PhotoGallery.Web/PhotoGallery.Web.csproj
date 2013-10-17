@@ -176,6 +176,7 @@
     <Compile Include="Areas\Main\Controllers\OauthController.cs" />
     <Compile Include="Areas\Main\Models\AlbumModel.cs" />
     <Compile Include="Areas\Main\Models\AllAlbumsModel.cs" />
+    <Compile Include="Areas\Main\Models\PhotoAddTagModel.cs" />
     <Compile Include="Areas\Main\Models\HomeModel.cs" />
     <Compile Include="Areas\Main\Models\PhotoModel.cs" />
     <Compile Include="Areas\Main\Models\OauthModel.cs" />

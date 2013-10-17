@@ -47,6 +47,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.JsonResult AddTag()
+        {
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.AddTag);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public PhotosController Actions { get { return MVC.Main.Photos; } }
@@ -64,12 +70,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         public class ActionNamesClass
         {
             public readonly string Tags = "Tags";
+            public readonly string AddTag = "AddTag";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Tags = "Tags";
+            public const string AddTag = "AddTag";
         }
 
 
@@ -81,6 +89,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             public readonly string id = "id";
             public readonly string first = "first";
+        }
+        static readonly ActionParamsClass_AddTag s_params_AddTag = new ActionParamsClass_AddTag();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_AddTag AddTagParams { get { return s_params_AddTag; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_AddTag
+        {
+            public readonly string pModel = "pModel";
         }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -109,6 +125,16 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "first", first);
             TagsOverride(callInfo, id, first);
+            return callInfo;
+        }
+
+        partial void AddTagOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, PhotoGallery.Web.Areas.Main.Models.PhotoAddTagModel pModel);
+
+        public override System.Web.Mvc.JsonResult AddTag(PhotoGallery.Web.Areas.Main.Models.PhotoAddTagModel pModel)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.AddTag);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "pModel", pModel);
+            AddTagOverride(callInfo, pModel);
             return callInfo;
         }
 

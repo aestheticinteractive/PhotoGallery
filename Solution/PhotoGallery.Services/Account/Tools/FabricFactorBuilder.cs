@@ -27,7 +27,9 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		Person = 55429859899342848,
 		MalePerson = 55429865850011648,
-		FemalePerson = 55429868074041344
+		FemalePerson = 55429868074041344,
+
+		Depict = 55437768435695617
 	};
 
 
