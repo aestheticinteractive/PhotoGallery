@@ -26,10 +26,10 @@ namespace PhotoGallery.Daemon.Routines {
 		/*--------------------------------------------------------------------------------------------*/
 		public void Start() {
 			//LoadAndSaveArtifacts();
-			UpdateFactors();
+			//UpdateFactors();
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		private void LoadAndSaveArtifacts() {
 			using ( ISession s = vSessProv.OpenSession() ) {
 				IList<long> artIds = s.QueryOver<FabricFactor>()
@@ -90,7 +90,7 @@ namespace PhotoGallery.Daemon.Routines {
 			}
 		}
 
-		/*--------------------------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------------------------* /
 		private void UpdateFactors() {
 			using ( ISession s = vSessProv.OpenSession() ) {
 				IList<long> artIds = s.QueryOver<FabricFactor>()
@@ -152,7 +152,7 @@ namespace PhotoGallery.Daemon.Routines {
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 

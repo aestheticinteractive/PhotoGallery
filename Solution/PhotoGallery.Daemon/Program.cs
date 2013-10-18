@@ -3,7 +3,6 @@ using System.Configuration;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Session;
 using PhotoGallery.Daemon.Export;
-using PhotoGallery.Daemon.Routines;
 using PhotoGallery.Database;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services;
@@ -31,11 +30,7 @@ namespace PhotoGallery.Daemon {
 
 			Log.Debug("Initializing Fabric Client...");
 			GalExp = BuildGalleryExport();
-			//GalExp.Start();
-
-			var fc = new FabricClient { UseDataProviderPerson = true };
-			var r = new FixFactorReferences(new SessionProvider(), fc);
-			r.Start();
+			GalExp.Start();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
