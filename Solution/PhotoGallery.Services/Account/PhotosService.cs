@@ -3,6 +3,7 @@ using Fabric.Clients.Cs.Api;
 using NHibernate;
 using PhotoGallery.Domain;
 using PhotoGallery.Services.Account.Tools;
+using PhotoGallery.Services.Main;
 
 namespace PhotoGallery.Services.Account {
 
@@ -51,6 +52,7 @@ namespace PhotoGallery.Services.Account {
 				fb.DesTypeRefineId = LiveArtifactId.Depict;
 				s.Save(fb.ToFactor());
 
+				OauthService.AddFabricPersonSession(Fab.PersonSession, u, s);
 				return true;
 			};
 		}

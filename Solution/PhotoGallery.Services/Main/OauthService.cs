@@ -69,7 +69,7 @@ namespace PhotoGallery.Services.Main {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		internal static void AddFabricPersonSession(IFabricPersonSession pPerson,
+		public static void AddFabricPersonSession(IFabricPersonSession pPerson,
 																	FabricUser pUser, ISession pSess) {
 			FabricPersonSession fps = pSess.QueryOver<FabricPersonSession>()
 				.Where(x => x.SessionId == pPerson.SessionId)
