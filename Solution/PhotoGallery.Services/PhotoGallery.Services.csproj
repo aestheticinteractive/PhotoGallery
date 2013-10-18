@@ -60,6 +60,8 @@
     <Compile Include="Account\HomeService.cs" />
     <Compile Include="Fabric\FabricService.cs" />
     <Compile Include="Account\PhotosService.cs" />
+    <Compile Include="Main\AlbumsService.cs" />
+    <Compile Include="Main\Dto\WebAlbumTag.cs" />
     <Compile Include="Main\Dto\WebSearchTagState.cs" />
     <Compile Include="Main\Dto\WebSearchTag.cs" />
     <Compile Include="Main\SearchService.cs" />

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Main;
 using PhotoGallery.Services.Main.Dto;
 using PhotoGallery.Web.Application;
@@ -11,12 +13,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 	/*================================================================================================*/
 	public partial class AlbumsController : BaseController {
 
+		private readonly AlbumsService vAlbums;
 		private readonly HomeService vHome;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public AlbumsController(HomeService pHome) {
+		public AlbumsController(AlbumsService pAlbums, HomeService pHome) {
+			vAlbums = pAlbums;
 			vHome = pHome;
 		}
 
@@ -54,6 +58,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 				var gs = new GallerySession(Session);
 				gs.PhotoSet = vHome.GetAlbumPhotoSet(m.Album);
 				m.Photos = gs.PhotoSet.GetAll();
+			}
+
+			IList<WebAlbumTag> tags = vAlbums.GetTagCounts(id);
+
+			foreach ( WebAlbumTag t in tags ) {
+				Log.Debug(t.PhotoIds.Count+": "+t.Name);
 			}
 
 			return View(m);
