@@ -99,8 +99,11 @@ namespace PhotoGallery.Daemon.Export {
 
 			IList<FabricFactor> facList = vQuery.GetFabricFactors(20, vUser);
 			var dataList = new List<FabBatchNewFactor>();
+			var fixes = new List<object>();
 
 			foreach ( FabricFactor ff in facList ) {
+				//skip factors that rely on not-yet-exported artifacts
+
 				if ( ff.Primary != null && ff.Primary.ArtifactId == null ) {
 					continue;
 				}
@@ -109,11 +112,17 @@ namespace PhotoGallery.Daemon.Export {
 					continue;
 				}
 
+				if ( FactorTasks.FixFactorRefs(ff, vQuery, vClient) ) {
+					fixes.Add(ff);
+				}
+
 				dataList.Add(FabricFactorBuilder.DbFactorToBatchFactor(ff));
 				vFactorMap.Add(ff.Id, ff);
 			}
 
-			LogDebug("GetNewFactors: "+dataList.Count+" (skip "+(facList.Count-dataList.Count)+")");
+			LogDebug("GetNewFactors: "+dataList.Count+
+				" (skips="+(facList.Count-dataList.Count)+", fixes="+fixes.Count+")");
+			vQuery.UpdateObjects(fixes); //for FixFactorRefs
 			return dataList;
 		}
 

@@ -21,10 +21,9 @@ namespace PhotoGallery.Database.Maps {
 			References(x => x.Creator).Nullable();
 
 			References(x => x.Primary).Nullable();
-			Map(x => x.PrimaryArtifactId);
+			Map(x => x.PrimaryArtifactId).Nullable();
 			References(x => x.Related).Nullable();
-			Map(x => x.RelatedArtifactId);
-			Map(x => x.RelatedArtifactIdOld);
+			Map(x => x.RelatedArtifactId).Nullable();
 
 			Map(x => x.FactorAssertionId);
 			Map(x => x.IsDefining).Default("0");

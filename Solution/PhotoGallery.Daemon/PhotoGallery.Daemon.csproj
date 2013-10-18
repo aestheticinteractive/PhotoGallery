@@ -41,6 +41,7 @@
     <Compile Include="..\..\Global\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Export\FactorTasks.cs" />
     <Compile Include="Export\GalleryExportForClient.cs" />
     <Compile Include="Export\GalleryExport.cs" />
     <Compile Include="Export\Queries.cs" />

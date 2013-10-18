@@ -8,10 +8,9 @@
 		public virtual FabricArtifact Creator { get; set; }
 
 		public virtual FabricArtifact Primary { get; set; }
-		public virtual long PrimaryArtifactId { get; set; }
+		public virtual long? PrimaryArtifactId { get; set; }
 		public virtual FabricArtifact Related { get; set; }
-		public virtual long RelatedArtifactId { get; set; }
-		public virtual long RelatedArtifactIdOld { get; set; }
+		public virtual long? RelatedArtifactId { get; set; }
 
 		public virtual byte FactorAssertionId { get; set; }
 		public virtual bool IsDefining { get; set; }

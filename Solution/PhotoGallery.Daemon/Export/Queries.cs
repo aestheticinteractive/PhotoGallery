@@ -77,6 +77,15 @@ namespace PhotoGallery.Daemon.Export {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
+		public virtual FabricArtifact GetFabricArtifactByArtifactId(long pArtifactId) {
+			using ( ISession sess = vSessProv.OpenSession() ) {
+				return sess.QueryOver<FabricArtifact>()
+					.Where(x => x.ArtifactId == pArtifactId)
+					.SingleOrDefault();
+			}
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
 		public virtual IList<FabricArtifact> GetFabricArtifacts(int pCount, FabricUser pUser=null) {
 			using ( ISession sess = vSessProv.OpenSession() ) {
 				var q = sess.QueryOver<FabricArtifact>()
@@ -115,7 +124,28 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
+		public virtual void SaveObjects(IList<object> pObjects) {
+			if ( pObjects.Count == 0 ) {
+				return;
+			}
+
+			using ( ISession sess = vSessProv.OpenSession() ) {
+				using ( ITransaction tx = sess.BeginTransaction() ) {
+					foreach ( object o in pObjects ) {
+						sess.Save(o);
+					}
+
+					tx.Commit();
+				}
+			}
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
 		public virtual void UpdateObjects(IList<object> pObjects) {
+			if ( pObjects.Count == 0 ) {
+				return;
+			}
+
 			using ( ISession sess = vSessProv.OpenSession() ) {
 				using ( ITransaction tx = sess.BeginTransaction() ) {
 					foreach ( object o in pObjects ) {
