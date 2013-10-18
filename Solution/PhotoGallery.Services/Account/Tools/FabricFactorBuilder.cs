@@ -224,9 +224,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			var bnf = new FabBatchNewFactor();
 			bnf.BatchId = pFac.Id;
 			bnf.PrimaryArtifactId = (pFac.Primary == null ? 
-				pFac.PrimaryArtifactId : toLong(pFac.Primary.ArtifactId));
+				(long)pFac.PrimaryArtifactId : toLong(pFac.Primary.ArtifactId));
 			bnf.RelatedArtifactId = (pFac.Related == null ? 
-				pFac.RelatedArtifactId : toLong(pFac.Related.ArtifactId));
+				(long)pFac.RelatedArtifactId : toLong(pFac.Related.ArtifactId));
 			bnf.FactorAssertionId = pFac.FactorAssertionId;
 			bnf.IsDefining = pFac.IsDefining;
 			bnf.Note = pFac.Note;

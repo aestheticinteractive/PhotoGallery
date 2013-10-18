@@ -53,7 +53,7 @@ namespace PhotoGallery.Services.Main {
 
 				var a = new FabricArtifact();
 				a.ArtifactId = fabUser.ArtifactId;
-				a.Type = (byte)FabricArtifact.ArtifactType.User;
+				a.Type = (byte)FabricArtifact.ArtifactType.FabUser;
 				a.Name = fabUser.Name;
 				a.FromFab = true;
 				sess.Save(a);

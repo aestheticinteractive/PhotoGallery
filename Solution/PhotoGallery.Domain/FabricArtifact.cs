@@ -6,10 +6,13 @@ namespace PhotoGallery.Domain {
 	public class FabricArtifact {
 
 		public enum ArtifactType {
-			User = 1,
+			FabUser = 1,
 			Album,
 			Photo,
-			Tag
+			Tag,
+			FabClass,
+			FabInstance,
+			FabApp
 		};
 
 		public virtual int Id { get; set; }

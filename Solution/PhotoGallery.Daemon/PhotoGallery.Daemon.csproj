@@ -47,6 +47,7 @@
     <Compile Include="Export\SavedSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routines\FixFactorReferences.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Fabric.Clients.Cs, Version=0.2.4.5, Culture=neutral, processorArchitecture=MSIL">
