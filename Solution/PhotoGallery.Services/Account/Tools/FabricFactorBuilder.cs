@@ -39,9 +39,9 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabricArtifact CreatorUserArtifact { get; private set; }
 
 		public FabricArtifact PrimaryArtifact { get; private set; }
-		public long PrimaryArtifactId { get; private set; }
+		public long? PrimaryArtifactId { get; private set; }
 		public FabricArtifact RelatedArtifact { get; private set; }
-		public long RelatedArtifactId { get; private set; }
+		public long? RelatedArtifactId { get; private set; }
 
 		public FabEnumsData.FactorAssertionId FactorAssertion { get; private set; }
 		public bool IsDefining { get; private set; }
