@@ -25,7 +25,7 @@
 	
 	<div class="show-for-small columns separator"></div>
 	
-	<div class="large-8 pull-4 columns">
+	<div class="large-8 pull-4 columns" id="Thumbs">
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			Html.RenderPartial(MVC.Main.Shared.Views._PhotoThumb, p);
 		}
