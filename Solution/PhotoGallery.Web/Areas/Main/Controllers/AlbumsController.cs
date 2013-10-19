@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using PhotoGallery.Infrastructure;
+﻿using System.Web.Mvc;
 using PhotoGallery.Services.Main;
 using PhotoGallery.Services.Main.Dto;
 using PhotoGallery.Web.Application;
@@ -60,18 +58,17 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 				m.Photos = gs.PhotoSet.GetAll();
 			}
 
-			IList<WebAlbumTag> tags = vAlbums.GetTagCounts(id);
-
-			foreach ( WebAlbumTag t in tags ) {
-				Log.Debug(t.PhotoIds.Count+": "+t.Name);
-			}
-
 			return View(m);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual PartialViewResult Metas(int id) {
 			return PartialView(MVC.Main.Albums.Views._PhotoMetas, vHome.GetAlbumMeta(id));
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		public virtual PartialViewResult Tags(int id) {
+			return PartialView(MVC.Main.Albums.Views._Tags, vAlbums.GetTagCounts(id));
 		}
 
 	}

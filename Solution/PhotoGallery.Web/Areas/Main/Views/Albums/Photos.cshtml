@@ -14,9 +14,12 @@
 				@a.DateRangeString<br/>
 				@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
 			</p>
-			<p id="Metas" style="margin-top: 20px;">
+			<div id="Metas" style="margin-top: 20px;">
 				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
-			</p>
+			</div>
+			<div id="Tags" style="margin-top: 20px;">
+				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
+			</div>
 		</div>
 	</div>
 	
@@ -46,10 +49,14 @@
 		}
 
 		jQuery.get('@(Url.Action(MVC.Main.Albums.Metas(a.AlbumId)))', null, onMetaLoad);
+		jQuery.get('@(Url.Action(MVC.Main.Albums.Tags(a.AlbumId)))', null, onTagLoad);
 
 		function onMetaLoad(data) {
 			$('#Metas').html(data);
 		}
-
+		
+		function onTagLoad(data) {
+			$('#Tags').html(data);
+		}
 	</script>
 }

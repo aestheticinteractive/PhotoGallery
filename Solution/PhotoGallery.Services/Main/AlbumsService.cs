@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using NHibernate;
 using NHibernate.SqlCommand;
 using PhotoGallery.Domain;
-using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Tools;
 using PhotoGallery.Services.Main.Dto;
 
@@ -30,8 +31,6 @@ namespace PhotoGallery.Services.Main {
 				IList<object[]> list = s.QueryOver<Photo>()
 					.Where(x => x.Album.Id == pAlbumId)
 					.JoinQueryOver(x => x.FabricArtifact, () => artAlias, JoinType.InnerJoin)
-					//.Where(x => x.Disamb == "person" || 
-					//	x.Disamb == "male person" || x.Disamb == "female person")
 					.JoinQueryOver(x => x.PrimaryFactors, () => facAlias, JoinType.InnerJoin)
 					.Where(x => x.DesTypeRefineId == (long)LiveArtifactId.Depict)
 					.Where(x => x.DesTypeId == (byte)FabEnumsData.DescriptorTypeId.RefersTo)
@@ -51,10 +50,6 @@ namespace PhotoGallery.Services.Main {
 					}
 
 					artMap[artId].Add((int)vals[1]);
-				}
-
-				foreach ( KeyValuePair<int, IList<int>> pair in artMap ) {
-					Log.Debug(pair.Key+": "+pair.Value.Count);
 				}
 
 				var tags = new List<WebAlbumTag>();

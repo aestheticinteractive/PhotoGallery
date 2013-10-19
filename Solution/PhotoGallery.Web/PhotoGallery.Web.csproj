@@ -315,6 +315,7 @@
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\People\Index.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_TagLayer.cshtml" />
+    <Content Include="Areas\Main\Views\Albums\_Tags.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

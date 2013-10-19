@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PhotoGallery.Domain;
-using PhotoGallery.Infrastructure;
 
 namespace PhotoGallery.Services.Main.Dto {
 

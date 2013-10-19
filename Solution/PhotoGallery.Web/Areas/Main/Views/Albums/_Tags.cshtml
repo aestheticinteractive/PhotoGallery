@@ -1,0 +1,59 @@
+﻿@model IList<WebAlbumTag>
+@{
+	for ( int i = 0 ; i < 2 ; ++i ) {
+		double sum = 0;
+		int max = 0;
+		var tags = new List<WebAlbumTag>();
+	
+		foreach ( WebAlbumTag t in Model ) {
+			bool isPerson = (t.Disamb == "female person" || t.Disamb == "male person");
+
+			if ( i == 0 && !isPerson ) {
+				continue;
+			}
+
+			if ( i == 1 && isPerson ) {
+				continue;
+			}
+
+			tags.Add(t);
+			max = Math.Max(max, t.PhotoIds.Count);
+			sum += t.PhotoIds.Count;
+		}
+
+		double mult = 1/(max/sum);
+		//51, 136, 204
+
+		<p style="font-weight: bold;">
+			@(i == 0 ? "People" : "Tags")
+		</p>
+		
+		<div style="width: 100%; font-size: 0px; margin-bottom: 20px;">
+			@foreach ( WebAlbumTag t in tags ) {
+				string title = t.PhotoIds.Count+" ("+t.Disamb+")"; //+(t.Note == null ? "" : " ("+t.Note+")");
+				double a = (t.PhotoIds.Count/sum)*mult;
+				a = (a*0.8)+0.2;
+		
+				<div title="@title" class="tag" style="border: 1px dotted rgba(0, 0, 0, @a);">
+					@t.Name
+				</div>
+			}
+		</div>
+	}
+}
+
+<style type="text/css"> 
+	#Tags .tag {
+		display: inline-block; 
+		font-size: 11px; 
+		color: #38c;
+		margin: 0 3px 3px 0;
+		padding: 3px 3px 4px 3px;
+		cursor: pointer;
+	}
+	
+	#Tags .tag:hover {
+		background-color: #38c;
+		color: #fff;
+	}
+</style>
