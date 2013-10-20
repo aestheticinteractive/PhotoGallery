@@ -259,6 +259,8 @@
     <Content Include="Scripts\foundation\foundation.topbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\gallery\PhotoData.js" />
+    <Content Include="Scripts\gallery\PhotoSet.js" />
     <Content Include="Scripts\gallery\gallery.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
     <Content Include="Scripts\gallery\photoViewer.js" />
