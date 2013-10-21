@@ -14,7 +14,7 @@
 				@a.DateRangeString<br/>
 				@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
 			</p>
-			<div id="Metas" style="margin-top: 20px;">
+			<div id="Meta" style="margin-top: 20px;">
 				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
 			</div>
 			<div id="Tags" style="margin-top: 20px;">
@@ -32,18 +32,18 @@
 	</div>
 </div>
 
-@{ Html.RenderPartial(MVC.Main.Shared.Views._PhotoViewer, Model.Photos); }
+@*{ Html.RenderPartial(MVC.Main.Shared.Views._PhotoViewer, Model.Photos); }*@
 
 @section scripts {
 	<script type="text/javascript">
 		var phoSet = new PhotoSet();
+		var phoSetMeta = new PhotoSetMeta(phoSet);
+		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
 		
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			string url = Url.Content("~"+p.ImageUrl);
 			<text>phoSet.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
 		}
-
-		var phoData0 = phoSet.getData(@Model.Photos[0].PhotoId);
 
 		$(".border").hide();
 
@@ -61,8 +61,8 @@
 		jQuery.post('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))', null, onTagLoad);
 
 		function onMetaLoad(data) {
-			phoSet.setPhotoMetas(data);
-			$('#Metas').html("found");
+			phoSetMeta.setMetas(data);
+			phoSetMetaView.buildView();
 		}
 		
 		function onTagLoad(data) {

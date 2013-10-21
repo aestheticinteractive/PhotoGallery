@@ -259,6 +259,8 @@
     <Content Include="Scripts\foundation\foundation.topbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\gallery\PhotoSetMetaView.js" />
+    <Content Include="Scripts\gallery\PhotoSetMeta.js" />
     <Content Include="Scripts\gallery\PhotoData.js" />
     <Content Include="Scripts\gallery\PhotoSet.js" />
     <Content Include="Scripts\gallery\gallery.js" />
@@ -311,7 +313,6 @@
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <Content Include="Areas\Main\Views\Albums\All.cshtml" />
     <Content Include="Areas\Main\Views\Albums\_AllPage.cshtml" />
-    <Content Include="Areas\Main\Views\Albums\_PhotoMetas.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
