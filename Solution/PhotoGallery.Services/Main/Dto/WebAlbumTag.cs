@@ -6,7 +6,7 @@ namespace PhotoGallery.Services.Main.Dto {
 	/*================================================================================================*/
 	public class WebAlbumTag {
 
-		public int FabricArtifactId { get; internal set; }
+		public int Id { get; internal set; }
 		public string Name { get; internal set; }
 		public string Disamb { get; internal set; }
 		public string Note { get; internal set; }
@@ -16,7 +16,7 @@ namespace PhotoGallery.Services.Main.Dto {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public WebAlbumTag(FabricArtifact pArt, IList<int> pPhotoIds) {
-			FabricArtifactId = pArt.Id;
+			Id = pArt.Id;
 			Name = pArt.Name;
 			Disamb = pArt.Disamb;
 			Note = pArt.Note;

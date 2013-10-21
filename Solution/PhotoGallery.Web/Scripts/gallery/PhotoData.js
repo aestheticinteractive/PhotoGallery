@@ -23,17 +23,12 @@ PhotoData.prototype.setMeta = function(pExposure, pFNumber, pFocalLen, pIsoSpeed
 };
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoData.prototype.setTagIds = function(pTagIds) {
-	this.tagIds = (pTagIds ? pTagIds : []);
-	this.tagIdMap = {};
-
-	for ( var i = 0 ; i < this.tagIds.length ; ++i ) {
-		var id = this.tagIds[i];
-		this.tagIdMap[id] = true;
-	}
+PhotoData.prototype.addTagId = function(pTagId) {
+	this.tagIdMap[pTagId] = this.tagIds.length;
+	this.tagIds.push(pTagId);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoData.prototype.hasTag = function(pTagId) {
-	return this.tagIdMap[pTagId];
+	return (this.tagIdMap[pTagId] >= 0);
 };

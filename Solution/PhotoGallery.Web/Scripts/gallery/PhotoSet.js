@@ -43,6 +43,11 @@ PhotoSet.prototype.getPhotoCount = function() {
 	return this.currentList().length;
 };
 
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.isPhotoAvailable = function(pPhotoId) {
+	return (this.currentMap()[pPhotoId] >= 0);
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
@@ -86,7 +91,7 @@ PhotoSet.prototype.setTagFilter = function(pTagId) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.showPhoto = function(pPhotoId) {
-	if ( !this.currentMap()[pPhotoId] ) {
+	if ( !this.isPhotoAvailable(pPhotoId) ) {
 		console.log('PhotoSet.showPhoto(): photo '+pPhotoId+' is not available.');
 		return;
 	}

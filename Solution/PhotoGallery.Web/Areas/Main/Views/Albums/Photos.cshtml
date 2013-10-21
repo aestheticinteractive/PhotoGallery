@@ -38,6 +38,8 @@
 		var phoSet = new PhotoSet();
 		var phoSetMeta = new PhotoSetMeta(phoSet);
 		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
+		var phoSetTags = new PhotoSetTags(phoSet);
+		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 		
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			string url = Url.Content("~"+p.ImageUrl);
@@ -65,7 +67,8 @@
 		}
 		
 		function onTagLoad(data) {
-			$('#Tags').html("found");
+			phoSetTags.setTags(data);
+			phoSetTagsView.buildView();
 		}
 	</script>
 }
