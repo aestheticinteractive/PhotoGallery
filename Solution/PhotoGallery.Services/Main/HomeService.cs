@@ -97,14 +97,12 @@ namespace PhotoGallery.Services.Main {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public WebAlbumMeta GetAlbumMeta(int pAlbumId) {
+		public IList<WebPhotoMeta> GetAlbumPhotoMetas(int pAlbumId) {
 			using ( ISession s = NewSession() ) {
 
-				IList<WebPhotoMeta> metas = GetPhotoMetaQuery(s)
+				return GetPhotoMetaQuery(s)
 					.Where(x => x.Album.Id == pAlbumId)
 					.List<WebPhotoMeta>();
-
-				return new WebAlbumMeta(pAlbumId, metas);
 			};
 		}
 
@@ -114,6 +112,7 @@ namespace PhotoGallery.Services.Main {
 
 			return pSession.QueryOver<Photo>()
 				.SelectList(list => list
+					.Select(x => x.Id).WithAlias(() => dto.PhotoId)
 					.Select(x => x.FNum).WithAlias(() => dto.OrigFNumber)
 					.Select(x => x.Iso).WithAlias(() => dto.OrigIsoSpeed)
 					.Select(x => x.ExpTime).WithAlias(() => dto.OrigExposure)
@@ -123,7 +122,6 @@ namespace PhotoGallery.Services.Main {
 				.TransformUsing(Transformers.AliasToBean<WebPhotoMeta>());
 		}
 		
-
 	}
 
 }

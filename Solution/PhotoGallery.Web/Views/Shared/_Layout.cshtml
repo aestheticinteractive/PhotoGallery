@@ -30,7 +30,8 @@
 }
 
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-<script src="@Url.Content("~/Scripts/gallery/gallery.js")"></script>
+<!--script src="@Url.Content("~/Scripts/gallery/gallery.js")"></script-->
+@Scripts.Render("~/bundles/gallery")
 @RenderSection("scripts", required: false)
 
 <script type="text/javascript">

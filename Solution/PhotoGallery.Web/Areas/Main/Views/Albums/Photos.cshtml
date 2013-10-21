@@ -36,6 +36,15 @@
 
 @section scripts {
 	<script type="text/javascript">
+		var phoSet = new PhotoSet();
+		
+		@foreach ( IWebPhoto p in Model.Photos ) {
+			string url = Url.Content("~"+p.ImageUrl);
+			<text>phoSet.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
+		}
+
+		var phoData0 = phoSet.getData(@Model.Photos[0].PhotoId);
+
 		$(".border").hide();
 
 		if ( !isTouch() ) {
@@ -48,15 +57,16 @@
 				});
 		}
 
-		jQuery.get('@(Url.Action(MVC.Main.Albums.Metas(a.AlbumId)))', null, onMetaLoad);
-		jQuery.get('@(Url.Action(MVC.Main.Albums.Tags(a.AlbumId)))', null, onTagLoad);
+		jQuery.post('@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))', null, onMetaLoad);
+		jQuery.post('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))', null, onTagLoad);
 
 		function onMetaLoad(data) {
-			$('#Metas').html(data);
+			phoSet.setPhotoMetas(data);
+			$('#Metas').html("found");
 		}
 		
 		function onTagLoad(data) {
-			$('#Tags').html(data);
+			$('#Tags').html("found");
 		}
 	</script>
 }

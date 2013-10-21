@@ -62,13 +62,20 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
-		public virtual PartialViewResult Metas(int id) {
-			return PartialView(MVC.Main.Albums.Views._PhotoMetas, vHome.GetAlbumMeta(id));
+		[HttpPost]
+		public virtual JsonResult MetasData(int id) {
+			return Json(vHome.GetAlbumPhotoMetas(id));
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public virtual PartialViewResult Tags(int id) {
 			return PartialView(MVC.Main.Albums.Views._Tags, vAlbums.GetTagCounts(id));
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
+		[HttpPost]
+		public virtual JsonResult TagsData(int id) {
+			return Json(vAlbums.GetTagCounts(id));
 		}
 
 	}

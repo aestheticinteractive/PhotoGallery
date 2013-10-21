@@ -36,6 +36,9 @@ namespace PhotoGallery.Web {
 					  "~/Scripts/foundation/foundation.js",
 					  "~/Scripts/foundation/foundation.topbar.js"));
 			#endregion
+
+			pBundles.Add(new ScriptBundle("~/bundles/gallery").Include(
+					  "~/Scripts/gallery/*.js"));
 		}
 
 	}

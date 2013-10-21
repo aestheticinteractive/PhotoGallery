@@ -65,7 +65,6 @@
     <Compile Include="Main\Dto\WebSearchTagState.cs" />
     <Compile Include="Main\Dto\WebSearchTag.cs" />
     <Compile Include="Main\SearchService.cs" />
-    <Compile Include="Main\Dto\WebAlbumMeta.cs" />
     <Compile Include="Main\Dto\WebPhotoMeta.cs" />
     <Compile Include="Main\Dto\IWebPhoto.cs" />
     <Compile Include="Main\Dto\WebPhotoSet.cs" />

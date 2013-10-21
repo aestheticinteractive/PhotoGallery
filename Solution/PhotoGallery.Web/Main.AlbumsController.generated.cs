@@ -61,15 +61,21 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.PartialViewResult Metas()
+        public virtual System.Web.Mvc.JsonResult MetasData()
         {
-            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Metas);
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.MetasData);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.PartialViewResult Tags()
         {
             return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Tags);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.JsonResult TagsData()
+        {
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.TagsData);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -91,8 +97,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public readonly string All = "All";
             public readonly string AllPage = "AllPage";
             public readonly string Photos = "Photos";
-            public readonly string Metas = "Metas";
+            public readonly string MetasData = "MetasData";
             public readonly string Tags = "Tags";
+            public readonly string TagsData = "TagsData";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -102,8 +109,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             public const string All = "All";
             public const string AllPage = "AllPage";
             public const string Photos = "Photos";
-            public const string Metas = "Metas";
+            public const string MetasData = "MetasData";
             public const string Tags = "Tags";
+            public const string TagsData = "TagsData";
         }
 
 
@@ -131,11 +139,11 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         {
             public readonly string id = "id";
         }
-        static readonly ActionParamsClass_Metas s_params_Metas = new ActionParamsClass_Metas();
+        static readonly ActionParamsClass_MetasData s_params_MetasData = new ActionParamsClass_MetasData();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Metas MetasParams { get { return s_params_Metas; } }
+        public ActionParamsClass_MetasData MetasDataParams { get { return s_params_MetasData; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Metas
+        public class ActionParamsClass_MetasData
         {
             public readonly string id = "id";
         }
@@ -144,6 +152,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         public ActionParamsClass_Tags TagsParams { get { return s_params_Tags; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_Tags
+        {
+            public readonly string id = "id";
+        }
+        static readonly ActionParamsClass_TagsData s_params_TagsData = new ActionParamsClass_TagsData();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_TagsData TagsDataParams { get { return s_params_TagsData; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_TagsData
         {
             public readonly string id = "id";
         }
@@ -219,13 +235,13 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             return callInfo;
         }
 
-        partial void MetasOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, int id);
+        partial void MetasDataOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, int id);
 
-        public override System.Web.Mvc.PartialViewResult Metas(int id)
+        public override System.Web.Mvc.JsonResult MetasData(int id)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Metas);
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.MetasData);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
-            MetasOverride(callInfo, id);
+            MetasDataOverride(callInfo, id);
             return callInfo;
         }
 
@@ -236,6 +252,16 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
             var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.Tags);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
             TagsOverride(callInfo, id);
+            return callInfo;
+        }
+
+        partial void TagsDataOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, int id);
+
+        public override System.Web.Mvc.JsonResult TagsData(int id)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.TagsData);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            TagsDataOverride(callInfo, id);
             return callInfo;
         }
 

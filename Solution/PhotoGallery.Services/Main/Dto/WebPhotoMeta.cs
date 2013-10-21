@@ -3,6 +3,8 @@
 	/*================================================================================================*/
 	public class WebPhotoMeta {
 
+		public int PhotoId { get; set; }
+
 		internal long? OrigFNumber { get; set; }
 		internal long? OrigIsoSpeed { get; set; }
 		internal long? OrigExposure { get; set; }
