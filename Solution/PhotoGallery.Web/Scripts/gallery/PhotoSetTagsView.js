@@ -14,6 +14,10 @@ PhotoSetTagsView.prototype.buildView = function() {
 	var pst = this.photoSetTags;
 	var tags = pst.getTags();
 
+	var onTagClick = function(pEvent) {
+		pst.photoSet.setTagFilter(pEvent.data);
+	};
+
 	var buildRow = function(pTag) {
 		return $('<div>')
 			.attr('title', pTag.Disamb)
@@ -23,7 +27,8 @@ PhotoSetTagsView.prototype.buildView = function() {
 			.append($('<span>')
 				.attr('class', 'number')
 				.html(pTag.PhotoIds.length+'')
-			);
+			)
+			.click(pTag.Id, onTagClick);
 	};
 
 	var buildList = function() {

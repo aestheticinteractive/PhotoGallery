@@ -7,7 +7,13 @@ function PhotoSetMetaView(pPhotoSetMeta, pSelector) {
 	this.photoSetMeta = pPhotoSetMeta;
 	this.selector = pSelector;
 
-	$(this.photoSetMeta.photoSet).on('filterChange', null, null, this.buildView);
+	var callback = function(scope) {
+		return function() {
+			scope.buildView();
+		};
+	};
+
+	this.photoSetMeta.photoSet.addListener("filterChange", callback(this));
 };
 
 /*----------------------------------------------------------------------------------------------------*/

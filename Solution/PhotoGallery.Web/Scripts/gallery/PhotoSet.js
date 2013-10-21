@@ -9,6 +9,7 @@ function PhotoSet() {
 	this.filtList = null;
 	this.filtMap = null;
 	this.activeId = null;
+	this.listeners = {};
 	
 	this.currentList = function() {
 		return (this.filtList == null ? this.dataList : this.filtList);
@@ -17,6 +18,26 @@ function PhotoSet() {
 	this.currentMap = function() {
 		return (this.filtMap == null ? this.dataMap : this.filtMap);
 	};
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.addListener = function(pEventName, pCallback) {
+	if ( !this.listeners[pEventName] ) {
+		this.listeners[pEventName] = [];
+	}
+
+	this.listeners[pEventName].push(pCallback);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.dispatchEvent = function(pEventName) {
+	var list = this.listeners[pEventName];
+
+	for ( var i = 0 ; i < list.length ; ++i ) {
+		list[i].call();
+	}
 };
 
 
@@ -63,8 +84,8 @@ PhotoSet.prototype.setFilter = function(pShowPhotoIds) {
 			this.filtMap[id] = i;
 		}
 	}
-
-	$(this).trigger('filterChange');
+	
+	this.dispatchEvent("filterChange");
 };
 
 /*----------------------------------------------------------------------------------------------------*/

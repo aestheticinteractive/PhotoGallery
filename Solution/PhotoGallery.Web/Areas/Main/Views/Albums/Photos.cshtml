@@ -36,24 +36,25 @@
 @section scripts {
 	<script type="text/javascript">
 		var phoSet = new PhotoSet();
-		var phoSetMeta = new PhotoSetMeta(phoSet);
-		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
-		var phoSetTags = new PhotoSetTags(phoSet);
-		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 		
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			string url = Url.Content("~"+p.ImageUrl);
 			<text>phoSet.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
 		}
+		
+		var phoSetMeta = new PhotoSetMeta(phoSet);
+		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
+		var phoSetTags = new PhotoSetTags(phoSet);
+		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 
 		$(".border").hide();
 
 		if ( !isTouch() ) {
 			$(".thumb")
-				.mouseenter(function () {
+				.mouseenter(function() {
 					$(this).find(".border").show();
 				})
-				.mouseleave(function () {
+				.mouseleave(function() {
 					$(this).find(".border").hide();
 				});
 		}
