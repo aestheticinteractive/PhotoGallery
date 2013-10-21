@@ -18,6 +18,17 @@ PhotoSetMetaView.prototype.buildView = function() {
 		.append($('<tbody>')
 			.append($('<tr>')
 				.append(
+					$('<td>').html('Photo Count')
+				)
+				.append(
+					$('<td>').html('<strong>'+this.photoSetMeta.photoSet.getPhotoCount()+'</strong>')
+				)
+				.append(
+					$('<td>')
+				)
+			)
+			.append($('<tr>')
+				.append(
 					$('<td>').html('Avg. Exposure')
 				)
 				.append(
