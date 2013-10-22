@@ -6,7 +6,8 @@
 function PhotoSetMetaView(pPhotoSetMeta, pSelector) {
 	this.photoSetMeta = pPhotoSetMeta;
 	this.selector = pSelector;
-	this.photoSetMeta.photoSet.events.listen("filterChange", this, this.buildView);
+	this.photoSetMeta.events.listen('dataLoaded', this, this.buildView);
+	this.photoSetMeta.photoSet.events.listen("filterChanged", this, this.buildView);
 };
 
 /*----------------------------------------------------------------------------------------------------*/

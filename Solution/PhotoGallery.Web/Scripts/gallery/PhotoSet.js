@@ -69,7 +69,7 @@ PhotoSet.prototype.setFilter = function(pShowPhotoIds) {
 		this.filtMap = null;
 	}
 	
-	this.events.send("filterChange");
+	this.events.send("filterChanged");
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -102,7 +102,7 @@ PhotoSet.prototype.showPhoto = function(pPhotoId) {
 	}
 
 	this.activeId = pPhotoId;
-	this.events.send("filterChange");
+	this.events.send("photoChanged");
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -122,5 +122,5 @@ PhotoSet.prototype.showNextPhoto = function() {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.hideCurrentPhoto = function() {
 	this.activeId = null;
-	this.events.send('photoChange');
+	this.events.send('photoChanged');
 };

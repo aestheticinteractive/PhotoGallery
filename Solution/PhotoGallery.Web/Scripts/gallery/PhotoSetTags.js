@@ -3,8 +3,22 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
-function PhotoSetTags(pPhotoSet) {
+function PhotoSetTags(pPhotoSet, pTagsUrl) {
 	this.photoSet = pPhotoSet;
+	this.tagsUrl = pTagsUrl;
+	this.activeTagId = null;
+	this.events = new EventDispatcher();
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetTags.prototype.loadData = function() {
+	var onData = function(pScope) {
+		return function(pData) {
+			pScope.setTags(pData);
+		};
+	};
+
+	jQuery.post(this.tagsUrl, null, onData(this));
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -33,6 +47,8 @@ PhotoSetTags.prototype.setTags = function(pTags) {
 			}
 		}
 	}
+
+	this.events.send('dataLoaded');
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -56,4 +72,21 @@ PhotoSetTags.prototype.isPersonTag = function(pTagId) {
 PhotoSetTags.prototype.getTagWeight = function(pTagId) {
 	var t = this.getTag(pTagId);
 	return t.PhotoIds.length/this.tagMaxCount;
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetTags.prototype.isTagActive = function(pTagId) {
+	return (this.activeTagId == pTagId);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetTags.prototype.onTagClick = function(pTagId) {
+	this.activeTagId = (this.isTagActive(pTagId) ? null : pTagId);
+
+	if ( this.activeTagId == null ) {
+		this.photoSet.resetFilter();
+	}
+	else {
+		this.photoSet.setTagFilter(pTagId);
+	}
 };

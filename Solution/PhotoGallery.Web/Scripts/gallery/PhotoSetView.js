@@ -6,21 +6,38 @@
 function PhotoSetView(pPhotoSet, pSelector) {
 	this.photoSet = pPhotoSet;
 	this.selector = pSelector;
-	this.photoSet.events.listen("filterChange", this, this.updateView);
+	this.photoSet.events.listen("filterChanged", this, this.updateView);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.initView = function() {
+	$(this.selector+" .border").hide();
+
+	if ( isTouch() ) {
+		return;
+	}
+
+	$(this.selector+" .thumb")
+		.mouseenter(function() {
+			$(this).find(".border").show();
+		})
+		.mouseleave(function() {
+			$(this).find(".border").hide();
+		});
 };
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetView.prototype.updateView = function() {
-	//var hold = $(this.selector);
-	$(this.selector+" .border").hide();
+	var ps = this.photoSet;
 
-	if ( !isTouch() ) {
-		$(this.selector+" .thumb")
-			.mouseenter(function() {
-				$(this).find(".border").show();
-			})
-			.mouseleave(function() {
-				$(this).find(".border").hide();
-			});
-	}
+	$(this.selector+" .thumb").each(function() {
+		var id = $(this).attr('data-id');
+		
+		if ( ps.isPhotoAvailable(id) ) {
+			$(this).show();
+		}
+		else {
+			$(this).hide();
+		}
+	});
 };

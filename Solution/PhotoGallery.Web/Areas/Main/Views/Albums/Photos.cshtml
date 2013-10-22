@@ -43,30 +43,16 @@
 		}
 		
 		var phoSetView = new PhotoSetView(phoSet, '#Thumbs');
-		phoSetView.updateView();
+		phoSetView.initView();
 
 		var metaUrl = '@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))';
-		var tagUrl = '@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))';
-
-		var phoSetMeta = new PhotoSetMeta(phoSet); //, metaUrl);
+		var phoSetMeta = new PhotoSetMeta(phoSet, metaUrl);
 		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
-		var phoSetTags = new PhotoSetTags(phoSet); //, tagUrl);
+		phoSetMeta.loadData();
+
+		var tagUrl = '@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))';
+		var phoSetTags = new PhotoSetTags(phoSet, tagUrl);
 		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
-
-		jQuery.post('@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))',
-			null, onMetaLoad);
-
-		jQuery.post('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))',
-			null, onTagLoad);
-
-		function onMetaLoad(data) {
-			phoSetMeta.setMetas(data);
-			phoSetMetaView.buildView();
-		}
-		
-		function onTagLoad(data) {
-			phoSetTags.setTags(data);
-			phoSetTagsView.buildView();
-		}
+		phoSetTags.loadData();
 	</script>
 }

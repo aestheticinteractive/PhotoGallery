@@ -3,8 +3,21 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
-function PhotoSetMeta(pPhotoSet, pMetas) {
+function PhotoSetMeta(pPhotoSet, pMetaUrl) {
 	this.photoSet = pPhotoSet;
+	this.metaUrl = pMetaUrl;
+	this.events = new EventDispatcher();
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetMeta.prototype.loadData = function() {
+	var onData = function(pScope) {
+		return function(pData) {
+			pScope.setMetas(pData);
+		};
+	};
+
+	jQuery.post(this.metaUrl, null, onData(this));
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -17,6 +30,8 @@ PhotoSetMeta.prototype.setMetas = function(pMetas) {
 			d.setMeta(pm.Exposure, pm.FNumber, pm.FocalLen, pm.IsoSpeed, pm.UsesFlash);
 		}
 	}
+
+	this.events.send('dataLoaded');
 };
 
 
