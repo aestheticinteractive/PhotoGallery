@@ -42,25 +42,22 @@
 			<text>phoSet.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
 		}
 		
-		var phoSetMeta = new PhotoSetMeta(phoSet);
+		var phoSetView = new PhotoSetView(phoSet, '#Thumbs');
+		phoSetView.updateView();
+
+		var metaUrl = '@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))';
+		var tagUrl = '@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))';
+
+		var phoSetMeta = new PhotoSetMeta(phoSet); //, metaUrl);
 		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
-		var phoSetTags = new PhotoSetTags(phoSet);
+		var phoSetTags = new PhotoSetTags(phoSet); //, tagUrl);
 		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 
-		$(".border").hide();
+		jQuery.post('@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))',
+			null, onMetaLoad);
 
-		if ( !isTouch() ) {
-			$(".thumb")
-				.mouseenter(function() {
-					$(this).find(".border").show();
-				})
-				.mouseleave(function() {
-					$(this).find(".border").hide();
-				});
-		}
-
-		jQuery.post('@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))', null, onMetaLoad);
-		jQuery.post('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))', null, onTagLoad);
+		jQuery.post('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))',
+			null, onTagLoad);
 
 		function onMetaLoad(data) {
 			phoSetMeta.setMetas(data);

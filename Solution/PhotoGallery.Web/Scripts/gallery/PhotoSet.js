@@ -9,7 +9,7 @@ function PhotoSet() {
 	this.filtList = null;
 	this.filtMap = null;
 	this.activeId = null;
-	this.listeners = {};
+	this.events = new EventDispatcher();
 	
 	this.currentList = function() {
 		return (this.filtList == null ? this.dataList : this.filtList);
@@ -18,32 +18,6 @@ function PhotoSet() {
 	this.currentMap = function() {
 		return (this.filtMap == null ? this.dataMap : this.filtMap);
 	};
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*----------------------------------------------------------------------------------------------------*/
-PhotoSet.prototype.addListener = function(pEventName, pCallbackScope, pCallback) {
-	if ( !this.listeners[pEventName] ) {
-		this.listeners[pEventName] = [];
-	}
-
-	var closure = function(pScope) {
-		return function() {
-			pCallback.apply(pScope);
-		};
-	};
-
-	this.listeners[pEventName].push(closure(pCallbackScope));
-};
-
-/*----------------------------------------------------------------------------------------------------*/
-PhotoSet.prototype.dispatchEvent = function(pEventName) {
-	var list = this.listeners[pEventName];
-
-	for ( var i = 0 ; i < list.length ; ++i ) {
-		list[i].call();
-	}
 };
 
 
@@ -95,7 +69,7 @@ PhotoSet.prototype.setFilter = function(pShowPhotoIds) {
 		this.filtMap = null;
 	}
 	
-	this.dispatchEvent("filterChange");
+	this.events.send("filterChange");
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -128,7 +102,7 @@ PhotoSet.prototype.showPhoto = function(pPhotoId) {
 	}
 
 	this.activeId = pPhotoId;
-	this.dispatchEvent("filterChange");
+	this.events.send("filterChange");
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -148,5 +122,5 @@ PhotoSet.prototype.showNextPhoto = function() {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.hideCurrentPhoto = function() {
 	this.activeId = null;
-	$(this).trigger('photoChange');
+	this.events.send('photoChange');
 };
