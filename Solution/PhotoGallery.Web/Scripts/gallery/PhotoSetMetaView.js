@@ -19,6 +19,8 @@ function PhotoSetMetaView(pPhotoSetMeta, pSelector) {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.buildView = function() {
 	var hold = $(this.selector).html('');
+	var cf = this.photoSetMeta.photoSet.getPhotoCount(true);
+	var ct = this.photoSetMeta.photoSet.getPhotoCount(false);
 
 	$('<table>')
 		.append($('<tbody>')
@@ -27,7 +29,7 @@ PhotoSetMetaView.prototype.buildView = function() {
 					$('<td>').html('Photo Count')
 				)
 				.append(
-					$('<td>').html('<strong>'+this.photoSetMeta.photoSet.getPhotoCount()+'</strong>')
+					$('<td>').html('<strong>'+cf+(cf != ct ? ' ('+ct+' total)' : '')+'</strong>')
 				)
 				.append(
 					$('<td>')

@@ -60,8 +60,8 @@ PhotoSet.prototype.getData = function(pPhotoId) { /* PhotoData */
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-PhotoSet.prototype.getPhotoCount = function() {
-	return this.currentList().length;
+PhotoSet.prototype.getPhotoCount = function(pFiltered) {
+	return (pFiltered && this.filtList ? this.filtList : this.dataList).length;
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -73,16 +73,20 @@ PhotoSet.prototype.isPhotoAvailable = function(pPhotoId) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.setFilter = function(pShowPhotoIds) {
-	this.filtList = pShowPhotoIds;
-	this.filtMap = null;
-	
-	if ( this.filtList != null ) {
+	if ( pShowPhotoIds ) {
+		this.filtList = [];
 		this.filtMap = {};
 
-		for ( var i = 0 ; i < this.filtList.length ; ++i ) {
-			var id = this.filtList[i];
-			this.filtMap[id] = i;
+		for ( var i = 0 ; i < pShowPhotoIds.length ; ++i ) {
+			var id = pShowPhotoIds[i];
+			var d = this.getData(id);
+			this.filtMap[id] = this.filtList.length;
+			this.filtList.push(d);
 		}
+	}
+	else {
+		this.filtList = null;
+		this.filtMap = null;
 	}
 	
 	this.dispatchEvent("filterChange");
