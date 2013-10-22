@@ -177,10 +177,17 @@ namespace Links
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string createAlbum_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/createAlbum.min.js") ? Url("createAlbum.min.js") : Url("createAlbum.js");
+            public static readonly string EventDispatcher_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/EventDispatcher.min.js") ? Url("EventDispatcher.min.js") : Url("EventDispatcher.js");
             public static readonly string fabPopup_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/fabPopup.min.js") ? Url("fabPopup.min.js") : Url("fabPopup.js");
             public static readonly string gallery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/gallery.min.js") ? Url("gallery.min.js") : Url("gallery.js");
             public static readonly string PhotoData_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoData.min.js") ? Url("PhotoData.min.js") : Url("PhotoData.js");
+            public static readonly string PhotoLayerView_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoLayerView.min.js") ? Url("PhotoLayerView.min.js") : Url("PhotoLayerView.js");
             public static readonly string PhotoSet_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSet.min.js") ? Url("PhotoSet.min.js") : Url("PhotoSet.js");
+            public static readonly string PhotoSetMeta_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSetMeta.min.js") ? Url("PhotoSetMeta.min.js") : Url("PhotoSetMeta.js");
+            public static readonly string PhotoSetMetaView_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSetMetaView.min.js") ? Url("PhotoSetMetaView.min.js") : Url("PhotoSetMetaView.js");
+            public static readonly string PhotoSetTags_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSetTags.min.js") ? Url("PhotoSetTags.min.js") : Url("PhotoSetTags.js");
+            public static readonly string PhotoSetTagsView_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSetTagsView.min.js") ? Url("PhotoSetTagsView.min.js") : Url("PhotoSetTagsView.js");
+            public static readonly string PhotoSetView_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/PhotoSetView.min.js") ? Url("PhotoSetView.min.js") : Url("PhotoSetView.js");
             public static readonly string photoViewer_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/photoViewer.min.js") ? Url("photoViewer.min.js") : Url("photoViewer.js");
         }
     
@@ -197,6 +204,15 @@ namespace Links
         public static readonly string jquery_validate_unobtrusive_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery.validate.unobtrusive.min.js") ? Url("jquery.validate.unobtrusive.min.js") : Url("jquery.validate.unobtrusive.js");
         public static readonly string jquery_validate_unobtrusive_min_js = Url("jquery.validate.unobtrusive.min.js");
         public static readonly string modernizr_2_6_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/modernizr-2.6.2.min.js") ? Url("modernizr-2.6.2.min.js") : Url("modernizr-2.6.2.js");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class vendor {
+            private const string URLPATH = "~/Scripts/vendor";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string d3_v3_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/d3.v3.min.js") ? Url("d3.v3.min.js") : Url("d3.v3.js");
+            public static readonly string pusher_color_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/pusher.color.min.js") ? Url("pusher.color.min.js") : Url("pusher.color.js");
+        }
+    
         public static readonly string zepto_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/zepto.min.js") ? Url("zepto.min.js") : Url("zepto.js");
     }
 
@@ -228,6 +244,7 @@ namespace Links
             public static readonly string arrow_left_png = Url("arrow-left.png");
             public static readonly string arrow_right_png = Url("arrow-right.png");
             public static readonly string close_png = Url("close.png");
+            public static readonly string person_png = Url("person.png");
             public static readonly string Site_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Site.min.css") ? Url("Site.min.css") : Url("Site.css");
                  
             public static readonly string tag_png = Url("tag.png");

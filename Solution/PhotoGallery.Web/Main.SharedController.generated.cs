@@ -35,12 +35,12 @@ namespace T4MVC.Main
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string _PhotoLayer = "_PhotoLayer";
                 public readonly string _PhotoThumb = "_PhotoThumb";
-                public readonly string _PhotoViewer = "_PhotoViewer";
                 public readonly string _TagLayer = "_TagLayer";
             }
+            public readonly string _PhotoLayer = "~/Areas/Main/Views/Shared/_PhotoLayer.cshtml";
             public readonly string _PhotoThumb = "~/Areas/Main/Views/Shared/_PhotoThumb.cshtml";
-            public readonly string _PhotoViewer = "~/Areas/Main/Views/Shared/_PhotoViewer.cshtml";
             public readonly string _TagLayer = "~/Areas/Main/Views/Shared/_TagLayer.cshtml";
         }
     }

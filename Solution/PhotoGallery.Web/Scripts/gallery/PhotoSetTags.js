@@ -43,7 +43,7 @@ PhotoSetTags.prototype.setTags = function(pTags) {
 			var d = this.photoSet.getData(phoId);
 
 			if ( d ) {
-				d.addTagId(t.Id);
+				d.addTag(t);
 			}
 		}
 	}

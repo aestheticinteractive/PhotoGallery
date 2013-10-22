@@ -31,7 +31,7 @@
 	</div>
 </div>
 
-@*{ Html.RenderPartial(MVC.Main.Shared.Views._PhotoViewer, Model.Photos); }*@
+@{ Html.RenderPartial(MVC.Main.Shared.Views._PhotoLayer, Model.Photos); }
 
 @section scripts {
 	<script type="text/javascript">
@@ -54,5 +54,8 @@
 		var phoSetTags = new PhotoSetTags(phoSet, tagUrl);
 		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 		phoSetTags.loadData();
+		
+		var phoLayView = new PhotoLayerView(phoSet, '#PhotoViewer');
+		phoLayView.initView();
 	</script>
 }

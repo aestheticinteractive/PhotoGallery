@@ -17,7 +17,15 @@ PhotoSetView.prototype.initView = function() {
 		return;
 	}
 
+	var onClickClosure = function(pScope) {
+		return function() {
+			var id = $(this).attr('data-id');
+			pScope.showPhoto(id);
+		};
+	};
+
 	$(this.selector+" .thumb")
+		.click(onClickClosure(this.photoSet))
 		.mouseenter(function() {
 			$(this).find(".border").show();
 		})

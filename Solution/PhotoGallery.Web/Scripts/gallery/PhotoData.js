@@ -9,8 +9,8 @@ function PhotoData(pPhotoId, pUrl, pCreated, pRatio) {
 	this.created = pCreated;
 	this.ratio = pRatio;
 
-	this.tagIds = [];
-	this.tagIdMap = {};
+	this.tagList = [];
+	this.tagMap = {};
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -23,12 +23,18 @@ PhotoData.prototype.setMeta = function(pExposure, pFNumber, pFocalLen, pIsoSpeed
 };
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoData.prototype.addTagId = function(pTagId) {
-	this.tagIdMap[pTagId] = this.tagIds.length;
-	this.tagIds.push(pTagId);
+PhotoData.prototype.addTag = function(pTag) {
+	this.tagMap[pTag.Id] = this.tagList.length;
+	this.tagList.push(pTag);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoData.prototype.hasTag = function(pTagId) {
-	return (this.tagIdMap[pTagId] >= 0);
+	return (this.tagMap[pTagId] >= 0);
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoData.prototype.getTag = function(pTagId) {
+	var id = this.tagMap[pTagId];
+	return this.tagList[id];
 };

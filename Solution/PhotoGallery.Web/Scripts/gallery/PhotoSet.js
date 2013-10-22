@@ -40,6 +40,11 @@ PhotoSet.prototype.getData = function(pPhotoId) { /* PhotoData */
 };
 
 /*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.getCurrentData = function() { /* PhotoData */
+	return this.getData(this.activeId);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.getPhotoCount = function(pFiltered) {
 	return (pFiltered && this.filtList ? this.filtList : this.dataList).length;
 };
@@ -106,17 +111,28 @@ PhotoSet.prototype.showPhoto = function(pPhotoId) {
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-PhotoSet.prototype.showPrevPhoto = function() {
+PhotoSet.prototype.getPrevPhotoId = function() {
 	var i = this.currentMap()[this.activeId]-1;
 	var cl = this.currentList();
-	this.showPhoto(cl[(i < 0 ? cl.length-1 : i)]);
+	//TODO: this (and next) are wrong. return the ID!
+	return cl[(i < 0 ? cl.length-1 : i)];
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.showPrevPhoto = function() {
+	this.showPhoto(this.getPrevPhotoId());
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.getNextPhotoId = function() {
+	var i = this.currentMap()[this.activeId]+1;
+	var cl = this.currentList();
+	return cl[(i >= cl.length ? 0 : i)];
 };
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.showNextPhoto = function() {
-	var i = this.currentMap()[this.activeId]+1;
-	var cl = this.currentList();
-	this.showPhoto(cl[(i >= cl.length ? 0 : i)]);
+	this.showPhoto(this.getNextPhotoId());
 };
 
 /*----------------------------------------------------------------------------------------------------*/

@@ -260,6 +260,7 @@
     <Content Include="Scripts\foundation\foundation.topbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\gallery\PhotoLayerView.js" />
     <Content Include="Scripts\gallery\EventDispatcher.js" />
     <Content Include="Scripts\gallery\PhotoSetView.js" />
     <Content Include="Scripts\gallery\PhotoSetTagsView.js" />
@@ -270,7 +271,7 @@
     <Content Include="Scripts\gallery\PhotoSet.js" />
     <Content Include="Scripts\gallery\gallery.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
-    <Content Include="Scripts\gallery\photoViewer.js" />
+    <Content Include="Scripts\old\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
@@ -314,7 +315,7 @@
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Photos.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
-    <Content Include="Areas\Main\Views\Shared\_PhotoViewer.cshtml" />
+    <Content Include="Areas\Main\Views\Shared\_PhotoLayer.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <Content Include="Areas\Main\Views\Albums\All.cshtml" />
     <Content Include="Areas\Main\Views\Albums\_AllPage.cshtml" />
