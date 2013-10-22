@@ -32,14 +32,22 @@ PhotoSetTagsView.prototype.buildView = function() {
 	};
 
 	var buildRow = function(pTag) {
+		var isPer = pst.isPersonTag(pTag.Id);
+		var w = 1-pst.getTagWeight(pTag.Id);
+		var col = pusher.color("#b77").hue('+'+(w*w*w*180)).hex6();
+
 		return $('<div>')
 			.attr('title', pTag.Disamb)
 			.attr('class', 'tag')
 			.attr('data-id', pTag.Id)
-			.html(pTag.Name)
-			.append($('<span>')
+			.append($('<div>')
 				.attr('class', 'number')
+				.css('background-color', col)
 				.html(pTag.PhotoIds.length+'')
+			)
+			.append($('<span>')
+				//.css('text-decoration', (isPer ? 'underline' : 'inherit'))
+				.html(pTag.Name)
 			)
 			.click(pTag.Id, onTagClick);
 	};

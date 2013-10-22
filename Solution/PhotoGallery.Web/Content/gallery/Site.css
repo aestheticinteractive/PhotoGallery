@@ -586,7 +586,7 @@ ul {
 	border: 1px solid rgba(0, 0, 0, 0.2);
 	background-color: transparent;
 	background-color: rgba(51, 136, 204, 0.15);
-	margin: 0 3px 3px 0;
+	margin: 0 4px 4px 0;
 	padding: 4px;
 	cursor: pointer;
 }
@@ -604,11 +604,16 @@ ul {
 #Tags .tagActive:hover {
 	background-color: #555;
 }
-	
+
 #Tags .tag .number {
 	font-size: 10px;
-	margin-left: 4px;
-	color: rgba(0, 0, 0, 0.5);
+	margin-right: 3px;
+	color: #fff;
+	color: rgba(255, 255, 255, 0.75);
+	padding: 2px 3px;
+	min-width: 14px;
+	text-align: center;
+	display: inline-block;
 }
 
 
