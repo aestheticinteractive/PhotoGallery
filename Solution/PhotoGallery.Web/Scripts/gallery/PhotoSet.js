@@ -23,12 +23,18 @@ function PhotoSet() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
-PhotoSet.prototype.addListener = function(pEventName, pCallback) {
+PhotoSet.prototype.addListener = function(pEventName, pCallbackScope, pCallback) {
 	if ( !this.listeners[pEventName] ) {
 		this.listeners[pEventName] = [];
 	}
 
-	this.listeners[pEventName].push(pCallback);
+	var closure = function(pScope) {
+		return function() {
+			pCallback.apply(pScope);
+		};
+	};
+
+	this.listeners[pEventName].push(closure(pCallbackScope));
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -122,7 +128,7 @@ PhotoSet.prototype.showPhoto = function(pPhotoId) {
 	}
 
 	this.activeId = pPhotoId;
-	$(this).trigger('photoChange');
+	this.dispatchEvent("filterChange");
 };
 
 /*----------------------------------------------------------------------------------------------------*/
