@@ -260,6 +260,8 @@
     <Content Include="Scripts\foundation\foundation.topbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\gallery\LiveSearchTags.js" />
+    <Content Include="Scripts\gallery\LiveSearch.js" />
     <Content Include="Scripts\gallery\PhotoLayerView.js" />
     <Content Include="Scripts\gallery\EventDispatcher.js" />
     <Content Include="Scripts\gallery\PhotoSetView.js" />
@@ -271,6 +273,7 @@
     <Content Include="Scripts\gallery\PhotoSet.js" />
     <Content Include="Scripts\gallery\gallery.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
+    <Content Include="Scripts\gallery\PhotoTaggingLayerView.js" />
     <Content Include="Scripts\old\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">

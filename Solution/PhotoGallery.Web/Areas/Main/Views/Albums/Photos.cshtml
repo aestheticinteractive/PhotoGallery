@@ -57,5 +57,9 @@
 		
 		var phoLayView = new PhotoLayerView(phoSet, '#PhotoViewer');
 		phoLayView.initView();
+
+		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.Tags("", null))/';
+		var test = new LiveSearchTags(tagSearchUrl);
+		test.updateText('name');
 	</script>
 }
