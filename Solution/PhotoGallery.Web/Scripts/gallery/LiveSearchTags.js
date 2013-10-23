@@ -11,7 +11,11 @@ function LiveSearchTags(pSearchUrl) {
 		return pSearchUrl+pText+(pFirst ? '?first=true' : '');
 	};
 
-	LiveSearch.prototype.init.call(this, urlFunc);
+	var idFunc = function(pItem) {
+		return pItem.ArtifactId;
+	};
+
+	LiveSearch.prototype.init.call(this, urlFunc, idFunc);
 };
 
 
@@ -19,21 +23,6 @@ function LiveSearchTags(pSearchUrl) {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchTags.prototype.appendResults = function(pResults) {
 	LiveSearch.prototype.appendResults.call(this, pResults);
-
-	var dedup = [];
-	var map = {};
-	var n = this.results.length;
-
-	for ( var i = 0 ; i < n ; ++i ) {
-		var t = this.results[i];
-
-		if ( !map[t.ArtifactId] ) {
-			map[t.ArtifactId] = true;
-			dedup.push(t);
-		}
-	}
-
-	this.results = dedup;
 	var text = this.searchText.toLowerCase();
 
 	this.results.sort(function(a, b) {
@@ -63,4 +52,22 @@ LiveSearchTags.prototype.appendResults = function(pResults) {
 		t = this.results[i];
 		console.log(' * '+i+': '+t.Name+' ('+t.Disamb+')');
 	}*/
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchTags.prototype.onTagSelect = function(pArtifactId) {
+	this.selectedTag = this.tagMap[pArtifactId];
+
+	alert('Selected! '+this.selectedTag.ArtifactId+"\n\n"+
+		this.selectedTag.Name+' ('+this.selectedTag.Disamb+')');
+
+	this.abortSearch();
+	this.events.send('tagSelected');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchTags.prototype.getSelectedTagArtifactId = function() {
+	return this.selectedTag.ArtifactId;
 };

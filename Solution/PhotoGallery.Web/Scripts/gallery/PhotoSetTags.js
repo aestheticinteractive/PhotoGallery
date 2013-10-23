@@ -24,7 +24,7 @@ PhotoSetTags.prototype.loadData = function() {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetTags.prototype.setTags = function(pTags) {
 	this.tagList = [];
-	this.tagMap = {};
+	this.idMap = {};
 	this.tagCount = 0;
 	this.tagMaxCount = 0;
 
@@ -32,7 +32,7 @@ PhotoSetTags.prototype.setTags = function(pTags) {
 		var t = pTags[i];
 		var count = t.PhotoIds.length;
 
-		this.tagMap[t.Id] = this.tagList.length;
+		this.idMap[t.Id] = this.tagList.length;
 		this.tagList.push(t);
 		
 		this.tagCount += count;
@@ -53,7 +53,7 @@ PhotoSetTags.prototype.setTags = function(pTags) {
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetTags.prototype.getTag = function(pTagId) {
-	var index = this.tagMap[pTagId];
+	var index = this.idMap[pTagId];
 	return this.tagList[index];
 };
 

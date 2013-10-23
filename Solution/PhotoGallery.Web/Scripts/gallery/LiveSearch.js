@@ -7,8 +7,9 @@ function LiveSearch() {
 };
 
 /*--------------------------------------------------------------------------------------------*/
-LiveSearch.prototype.init = function(pSearchUrlFunc) {
+LiveSearch.prototype.init = function(pSearchUrlFunc, pUniqueIdFunc) {
 	this.searchUrlFunc = pSearchUrlFunc;
+	this.uniqueIdFunc = pUniqueIdFunc;
 	this.events = new EventDispatcher('LiveSearch');
 };
 
@@ -47,7 +48,20 @@ LiveSearch.prototype.clearResults = function() {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.appendResults = function(pResults) {
 	this.newResults = pResults;
-	this.results = this.results.concat(pResults);
+	this.idMap = {};
+
+	var items = this.results.concat(pResults);
+	var n = items.length;
+
+	for ( var i = 0 ; i < n ; ++i ) {
+		var item = items[i];
+		var id = this.uniqueIdFunc(item);
+
+		if ( !this.idMap[id] ) {
+			this.idMap[id] = item;
+			this.results.push(item);
+		}
+	}
 };
 
 
@@ -59,9 +73,7 @@ LiveSearch.prototype.doSearch = function() {
 	}
 	
 	if ( this.request ) {
-		this.request.abort();
-		this.request = null;
-		this.events.send('searchAborted');
+		this.abortSearch();
 	}
 
 	this.searchText = this.text+'';
@@ -116,4 +128,15 @@ LiveSearch.prototype.onSearchData = function(pData) {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.onSearchFinish = function() {
 	this.events.send('searchFinished');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.abortSearch = function() {
+	if ( !this.request ) {
+		return;
+	}
+	
+	this.request.abort();
+	this.request = null;
+	this.events.send('searchAborted');
 };

@@ -10,7 +10,7 @@ function PhotoData(pPhotoId, pUrl, pCreated, pRatio) {
 	this.ratio = pRatio;
 
 	this.tagList = [];
-	this.tagMap = {};
+	this.idMap = {};
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -24,17 +24,17 @@ PhotoData.prototype.setMeta = function(pExposure, pFNumber, pFocalLen, pIsoSpeed
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoData.prototype.addTag = function(pTag) {
-	this.tagMap[pTag.Id] = this.tagList.length;
+	this.idMap[pTag.Id] = this.tagList.length;
 	this.tagList.push(pTag);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoData.prototype.hasTag = function(pTagId) {
-	return (this.tagMap[pTagId] >= 0);
+	return (this.idMap[pTagId] >= 0);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoData.prototype.getTag = function(pTagId) {
-	var id = this.tagMap[pTagId];
+	var id = this.idMap[pTagId];
 	return this.tagList[id];
 };

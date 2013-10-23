@@ -29,14 +29,29 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder) {
 		.keyup(keyClosure(this));
 
 	this.loading = $('<div>')
-		.html('LOADING (0)')
+		.attr('class', 'loading')
 		.css('background-color', 'yellow')
+		.html('LOADING (0)')
 		.hide();
+		
+	var table = $('<table>')
+		.attr('class', 'liveSearch')
+		.css('margin', '0');
+
+	this.scroller = $('<div>')
+		.attr('class', 'scroller')
+		.css('max-height', '220px')
+		.css('overflow', 'auto')
+		.append(table);
+
+	this.tbody = $('<tbody>')
+		.appendTo(table);
 
 	$(this.selector)
 		.html('')
 		.append(this.input)
-		.append(this.loading);
+		.append(this.loading)
+		.append(this.scroller);
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -58,7 +73,25 @@ LiveSearchView.prototype.hide = function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onKeyUp = function() {
+	if ( !this.isVisible() ) {
+		return;
+	}
+
 	this.liveSearch.updateText(this.input.val());
+
+	/*switch ( key ) {
+		case ENTER:
+			this.onSelect(this.highArtifactId);
+			break;
+
+		case UP_ARROW:
+			this.onHighlight(-1);
+			break;
+
+		case DOWN_ARROW:
+			this.onHighlight(1);
+			break;
+	}*/
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -69,9 +102,57 @@ LiveSearchView.prototype.onSearchStart = function() {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchData = function() {
 	this.loading.html('LOADING ('+this.liveSearch.getResults().length+')');
+	this.updateResults();
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStop = function() {
 	this.loading.hide();
+	this.updateResults();
 };
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.onSelect = function(pArtifactId, pFromClick) {
+	this.liveSearch.onTagSelect(pArtifactId);
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.updateResults = function() {
+	var results = this.liveSearch.getResults();
+	var n = results.length;
+
+	var selectClosure = function(pScope, pArtifactId) {
+		return function() {
+			pScope.onSelect(pArtifactId, true);
+		};
+	};
+
+	this.tbody.html('');
+
+	for ( var i = 0 ; i < n ; ++i ) {
+		var t = results[i];
+
+		var td = $('<td>')
+			.attr('data-id', t.ArtifactId+'')
+			.attr('title', '['+t.ArtifactId+']'+(t.Note ? ' '+t.Note : ''))
+			.html(t.Name)
+			.click(selectClosure(this, t.ArtifactId));
+
+		if ( t.Disamb ) {
+			var span = $('<span>')
+				.attr('class', 'disamb')
+				.css('font-size', '12px')
+				.css('color', 'rgba(0, 0, 0, 0.5)')
+				.html(t.Disamb);
+
+			td.append('<br/>').append(span);
+		}
+
+		var tr = $('<tr>').append(td);
+		this.tbody.append(tr);
+	}
+};
+
+//TODO: highlighting
