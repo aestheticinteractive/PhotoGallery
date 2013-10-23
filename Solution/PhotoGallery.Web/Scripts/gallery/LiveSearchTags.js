@@ -56,13 +56,11 @@ LiveSearchTags.prototype.appendResults = function(pResults) {
 		return (an > bn);
 	});
 
-	///
-	
-	n = this.results.length;
+	/*n = this.results.length;
 	console.log('---- '+n+' Result(s) ----');
 
 	for ( i = 0 ; i < n ; ++i ) {
 		t = this.results[i];
 		console.log(' * '+i+': '+t.Name+' ('+t.Disamb+')');
-	}
+	}*/
 };

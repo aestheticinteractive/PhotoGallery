@@ -7,7 +7,7 @@ function PhotoSetTags(pPhotoSet, pTagsUrl) {
 	this.photoSet = pPhotoSet;
 	this.tagsUrl = pTagsUrl;
 	this.activeTagId = null;
-	this.events = new EventDispatcher();
+	this.events = new EventDispatcher('PhotoSetTags');
 };
 
 /*----------------------------------------------------------------------------------------------------*/

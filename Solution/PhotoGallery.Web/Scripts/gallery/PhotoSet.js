@@ -9,7 +9,7 @@ function PhotoSet() {
 	this.filtList = null;
 	this.filtMap = null;
 	this.activeId = null;
-	this.events = new EventDispatcher();
+	this.events = new EventDispatcher('PhotoSet');
 	
 	this.currentList = function() {
 		return (this.filtList == null ? this.dataList : this.filtList);

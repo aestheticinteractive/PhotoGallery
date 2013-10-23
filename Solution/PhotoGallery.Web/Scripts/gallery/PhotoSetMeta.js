@@ -6,7 +6,7 @@
 function PhotoSetMeta(pPhotoSet, pMetaUrl) {
 	this.photoSet = pPhotoSet;
 	this.metaUrl = pMetaUrl;
-	this.events = new EventDispatcher();
+	this.events = new EventDispatcher('PhotoSetMeta');
 };
 
 /*----------------------------------------------------------------------------------------------------*/

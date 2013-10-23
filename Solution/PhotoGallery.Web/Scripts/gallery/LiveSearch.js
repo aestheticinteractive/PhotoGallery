@@ -103,14 +103,13 @@ LiveSearch.prototype.onSearchData = function(pData) {
 		return;
 	}
 
-	this.appendResults(pData);
-	this.events.send('searchDataReceived');
-
 	if ( !pData || !pData.length ) {
 		this.onSearchFinish();
 		return;
 	}
 
+	this.appendResults(pData);
+	this.events.send('searchDataReceived');
 	this.continueSearch(false);
 };
 
