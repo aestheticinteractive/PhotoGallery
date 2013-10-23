@@ -32,17 +32,29 @@ PhotoSetTagsView.prototype.buildView = function() {
 	};
 
 	var buildRow = function(pTag) {
-		var isPer = pst.isPersonTag(pTag.Id);
+		//var isPer = pst.isPersonTag(pTag.Id);
 		var w = 1-pst.getTagWeight(pTag.Id);
-		var col = pusher.color("#b77").hue('+'+(w*w*w*180)).hex6();
+		var col = pusher.color("#b66").hue('+'+(w*w*w*225));
+		var bgCol = col.alpha(0.1).html();
 
 		return $('<div>')
 			.attr('title', pTag.Disamb)
 			.attr('class', 'tag')
 			.attr('data-id', pTag.Id)
+			.css('border', '1px solid '+col.hex6())
+			.css('border', '1px solid '+col.alpha(0.5).html())
+			.css('background-color', bgCol)
+			.hover(
+				function() {
+					$(this).css('background-color', col.alpha(0.75).html());
+				},
+				function() {
+					$(this).css('background-color', bgCol);
+				}
+			)
 			.append($('<div>')
 				.attr('class', 'number')
-				.css('background-color', col)
+				.css('background-color', col.shade(0.15).hex6())
 				.html(pTag.PhotoIds.length+'')
 			)
 			.append($('<span>')

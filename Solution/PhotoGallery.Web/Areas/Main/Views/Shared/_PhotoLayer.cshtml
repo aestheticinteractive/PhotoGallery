@@ -7,33 +7,31 @@
 	<div class="bottomBar" id="PhotoViewBar">
 		<p class="details"></p>
 		<div class="buttons">
-			<a href="#" title="Tag Mode" onclick="toggleTagMode(); return false;">
+			<a href="#" title="Tag Mode" class="tagBtn">
 				<img src="@Url.Content("~/Content/gallery/tag.png")"/>
 			</a>
-			<a href="#" title="Previous Photo" onclick="prevPhoto(); return false;">
+			<a href="#" title="Previous Photo" class="prevBtn">
 				<img src="@Url.Content("~/Content/gallery/arrow-left.png")"/>
 			</a>
-			<a href="#" title="Next Photo" onclick="nextPhoto(); return false;">
+			<a href="#" title="Next Photo" class="nextBtn">
 				<img src="@Url.Content("~/Content/gallery/arrow-right.png")"/>
 			</a>
-			<a href="#" title="Close Photo" onclick="closePhoto(); return false;">
+			<a href="#" title="Close Photo" class="closeBtn">
 				<img src="@Url.Content("~/Content/gallery/close.png")"/>
 			</a>
 		</div>
 	</div>
 
-	@{ Html.RenderPartial(MVC.Main.Shared.Views._TagLayer); }
+	@*{ Html.RenderPartial(MVC.Main.Shared.Views._TagLayer); }
 
 	<div class="bottomBar tagBar" id="TagModeBar">
-		<a href="#" title="Tag Mode" onclick="toggleTagMode(); return false;">
+		<a href="#">
 			Done
 		</a>
-	</div>
+	</div>*@
 </div>
 
 <script type="text/javascript">
-	/*initTagSearch(
-		'@Url.Action(MVC.Main.Photos.Tags("", null))/',
-		'@Url.Action(MVC.Main.Photos.AddTag())/'
-	);*/
+	var tagSearchUrl = '@Url.Action(MVC.Main.Photos.Tags("", null))/';
+	var addTagUrl = '@Url.Action(MVC.Main.Photos.AddTag())/';
 </script>

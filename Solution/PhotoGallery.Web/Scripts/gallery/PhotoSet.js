@@ -114,8 +114,7 @@ PhotoSet.prototype.showPhoto = function(pPhotoId) {
 PhotoSet.prototype.getPrevPhotoId = function() {
 	var i = this.currentMap()[this.activeId]-1;
 	var cl = this.currentList();
-	//TODO: this (and next) are wrong. return the ID!
-	return cl[(i < 0 ? cl.length-1 : i)];
+	return cl[(i < 0 ? cl.length-1 : i)].photoId;
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -127,7 +126,7 @@ PhotoSet.prototype.showPrevPhoto = function() {
 PhotoSet.prototype.getNextPhotoId = function() {
 	var i = this.currentMap()[this.activeId]+1;
 	var cl = this.currentList();
-	return cl[(i >= cl.length ? 0 : i)];
+	return cl[(i >= cl.length ? 0 : i)].photoId;
 };
 
 /*----------------------------------------------------------------------------------------------------*/
