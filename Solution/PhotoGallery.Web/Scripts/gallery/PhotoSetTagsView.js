@@ -20,22 +20,26 @@ PhotoSetTagsView.prototype.buildView = function() {
 		return;
 	}
 
-	var onTagClick = function(pEvent) {
+	var onTagClick = function() {
 		var t = $(this);
 		var id = t.attr('data-id');
 		pst.onTagClick(id);
 
 		tagDivs.each(function() {
 			var tagId = $(this).attr('data-id');
-			$(this).attr('class', 'tag'+(pst.isTagActive(tagId) ? ' tagActive' : ''));
+			var act = pst.isTagActive(tagId);
+
+			$(this)
+				.attr('class', 'tag'+(act ? ' tagActive' : ''))
+				.mouseleave();
 		});
 	};
 
 	var buildRow = function(pTag) {
-		//var isPer = pst.isPersonTag(pTag.Id);
+		var isPer = pst.isPersonTag(pTag.Id);
 		var w = 1-pst.getTagWeight(pTag.Id);
 		var col = pusher.color("#b66").hue('+'+(w*w*w*225));
-		var bgCol = col.alpha(0.1).html();
+		var bgCol = col.alpha(0.25*(1-w*w*w)+0.05).html();
 
 		return $('<div>')
 			.attr('title', pTag.Disamb)
@@ -46,19 +50,23 @@ PhotoSetTagsView.prototype.buildView = function() {
 			.css('background-color', bgCol)
 			.hover(
 				function() {
-					$(this).css('background-color', col.alpha(0.75).html());
+					var hovCol = ($(this).attr('class') == 'tag' ?
+						col.alpha(0.75).html() : col.shade(0.2).hex6());
+					$(this).css('background-color', hovCol);
 				},
 				function() {
-					$(this).css('background-color', bgCol);
+					var hovCol = ($(this).attr('class') == 'tag' ?
+						bgCol : col.shade(0.2).hex6());
+					$(this).css('background-color', hovCol);
 				}
 			)
 			.append($('<div>')
 				.attr('class', 'number')
-				.css('background-color', col.shade(0.15).hex6())
+				.css('background-color', col.shade(0.2).hex6())
 				.html(pTag.PhotoIds.length+'')
 			)
 			.append($('<span>')
-				//.css('text-decoration', (isPer ? 'underline' : 'inherit'))
+				.css('text-decoration', (isPer ? 'underline' : 'inherit'))
 				.html(pTag.Name)
 			)
 			.click(pTag.Id, onTagClick);
@@ -78,53 +86,3 @@ PhotoSetTagsView.prototype.buildView = function() {
 
 	var tagDivs = $('#Tags .tag');
 };
-
-/*----------------------------------------------------------------------------------------------------* /
-PhotoSetTagsView.prototype.buildView2 = function() {
-	var hold = $(this.selector).html('');
-	var pst = this.photoSetTags;
-	var tags = pst.getTags();
-
-	var buildRow = function(pTag) {
-		return $('<tr>')
-			.css('height', '30px')
-			.css('margin-bottom', '1px')
-			.append($('<td>')
-				.append($('<div>')
-					.css('width', (pst.getTagWeight(pTag.Id)*100)+'%')
-					.css('height', '22px')
-					.css('margin-bottom', '-22px')
-					.css('background-color', '#ccc')
-					.css('background-color', 'rgba(51, 136, 204, 0.2)')
-				)
-				.append($('<p>')
-					.css('margin-left', '4px')
-					.html(pTag.Name)
-					.append($('<span>')
-						.css('font-size', '11px')
-						.css('margin-left', '6px')
-						.css('color', 'rgba(0, 0, 0, 0.5)')
-						.html(pTag.PhotoIds.length+'')
-					)
-				)
-			);
-	};
-
-	var buildList = function() {
-		var tbody = $('<tbody>');
-
-		for ( var i = 0 ; i < tags.length ; ++i ) {
-			tbody.append(buildRow(tags[i]));
-		}
-
-		return tbody;
-	};
-
-	$(hold)
-		.css('max-height', '300px')
-		.css('overflow', 'auto')
-		.append($('<table>')
-			.css('margin', '0')
-			.append(buildList())
-		);
-};*/
