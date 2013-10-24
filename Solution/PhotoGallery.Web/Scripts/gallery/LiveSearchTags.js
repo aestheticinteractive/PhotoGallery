@@ -45,6 +45,14 @@ LiveSearchTags.prototype.appendResults = function(pResults) {
 		return (an > bn);
 	});
 
+	this.resultsMap = {}; //rebuild map after sorting results
+	var n = this.results.length;
+
+	for ( var i = 0 ; i < n ; ++i ) {
+		var t = this.results[i];
+		this.resultsMap[t.ArtifactId] = i;
+	}
+
 	/*n = this.results.length;
 	console.log('---- '+n+' Result(s) ----');
 
@@ -52,22 +60,4 @@ LiveSearchTags.prototype.appendResults = function(pResults) {
 		t = this.results[i];
 		console.log(' * '+i+': '+t.Name+' ('+t.Disamb+')');
 	}*/
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/*--------------------------------------------------------------------------------------------*/
-LiveSearchTags.prototype.onTagSelect = function(pArtifactId) {
-	this.selectedTag = this.tagMap[pArtifactId];
-
-	alert('Selected! '+this.selectedTag.ArtifactId+"\n\n"+
-		this.selectedTag.Name+' ('+this.selectedTag.Disamb+')');
-
-	this.abortSearch();
-	this.events.send('tagSelected');
-};
-
-/*--------------------------------------------------------------------------------------------*/
-LiveSearchTags.prototype.getSelectedTagArtifactId = function() {
-	return this.selectedTag.ArtifactId;
 };

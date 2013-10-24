@@ -15,6 +15,10 @@ LiveSearch.prototype.init = function(pSearchUrlFunc, pUniqueIdFunc) {
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.updateText = function(pText) {
+	if ( this.text == pText ) {
+		return;
+	}
+
 	this.text = pText;
 
 	var searchClosure = function(pScope) {
@@ -43,22 +47,20 @@ LiveSearch.prototype.getNewResults = function() {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.clearResults = function() {
 	this.results = [];
+	this.resultsMap = {};
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.appendResults = function(pResults) {
 	this.newResults = pResults;
-	this.idMap = {};
-
-	var items = this.results.concat(pResults);
-	var n = items.length;
+	var n = pResults.length;
 
 	for ( var i = 0 ; i < n ; ++i ) {
-		var item = items[i];
+		var item = pResults[i];
 		var id = this.uniqueIdFunc(item);
 
-		if ( !this.idMap[id] ) {
-			this.idMap[id] = item;
+		if ( !this.resultsMap[id] ) {
+			this.resultsMap[id] = this.results.length;
 			this.results.push(item);
 		}
 	}
@@ -77,8 +79,10 @@ LiveSearch.prototype.doSearch = function() {
 	}
 
 	this.searchText = this.text+'';
-	this.events.send('searchStarted');
+	this.selectId = null;
+	this.highlightId = null;
 	this.clearResults();
+	this.events.send('searchStarted');
 
 	if ( this.text == '' ) {
 		this.onSearchFinish();
@@ -139,4 +143,67 @@ LiveSearch.prototype.abortSearch = function() {
 	this.request.abort();
 	this.request = null;
 	this.events.send('searchAborted');
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.onSelect = function(pUniqueId) {
+	this.selectId = pUniqueId;
+	this.abortSearch();
+	this.events.send('itemSelected');
+	alert('Selected! '+pUniqueId);
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.getSelectId = function() {
+	return this.selectId;
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.getSelectItem = function() {
+	var index = this.resultsMap[this.selectId];
+	return this.results[index];
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.onHighlight = function(pUniqueId) {
+	this.highlightId = pUniqueId;
+	this.events.send('itemHighlighted');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.shiftHighlight = function(pDir) {
+	var n = this.results.length;
+
+	if ( this.highlightId == null ) {
+		if ( pDir > 0 && n > 0 ) {
+			this.highlightId = this.uniqueIdFunc(this.results[0]);
+			this.events.send('itemHighlighted');
+		}
+
+		return;
+	}
+
+	var index = this.resultsMap[this.highlightId]+pDir;
+
+	if ( index < 0 || index >= n ) {
+		return;
+	}
+
+	this.highlightId = this.uniqueIdFunc(this.results[index]);
+	this.events.send('itemHighlighted');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.getHighlightId = function() {
+	return this.highlightId;
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.getHighlightItem = function() {
+	var index = this.resultsMap[this.highlightId];
+	return this.results[index];
 };

@@ -11,13 +11,14 @@ function LiveSearchView(pLiveSearch, pSelector) {
 	this.liveSearch.events.listen("searchDataReceived", this, this.onSearchData);
 	this.liveSearch.events.listen("searchAborted", this, this.onSearchStop);
 	this.liveSearch.events.listen("searchFinished", this, this.onSearchStop);
+	this.liveSearch.events.listen("itemHighlighted", this, this.onHighlight);
 }
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.initView = function(pInputPlaceholder) {
 	var keyClosure = function(pScope) {
-		return function() {
-			pScope.onKeyUp();
+		return function(pEvent) {
+			pScope.onKeyUp(pEvent);
 		};
 	};
 
@@ -52,6 +53,74 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder) {
 		.append(this.input)
 		.append(this.loading)
 		.append(this.scroller);
+
+	this.updateResults();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.updateResults = function() {
+	var text = this.input.val();
+
+	if ( text == '' ) {
+		this.scroller.hide();
+		return;
+	}
+
+	this.scroller.show();
+	this.tbody.html('');
+
+	var results = this.liveSearch.getResults();
+	var n = results.length;
+
+	if ( n == 0 ) {
+		this.tbody
+			.append($('<tr>')
+				.append($('<td>')
+					.css('font-style', 'italic')
+					.css('color', 'rgba(0, 0, 0, 0.5)')
+					.html('No results found for "'+text+'".')
+				)
+			);
+
+		return;
+	}
+
+	var selectClosure = function(pScope, pArtifactId) {
+		return function() {
+			pScope.onSelect(pArtifactId);
+		};
+	};
+	
+	var highClosure = function(pScope, pArtifactId) {
+		return function() {
+			pScope.liveSearch.onHighlight(pArtifactId);
+		};
+	};
+
+	for ( var i = 0 ; i < n ; ++i ) {
+		var t = results[i];
+		var aid = t.ArtifactId;
+
+		var td = $('<td>')
+			.attr('data-id', aid+'')
+			.attr('title', '['+aid+']'+(t.Note ? ' '+t.Note : ''))
+			.html(t.Name)
+			.click(selectClosure(this, aid))
+			.mouseenter(highClosure(this, aid));
+
+		if ( t.Disamb ) {
+			var span = $('<span>')
+				.attr('class', 'disamb')
+				.css('font-size', '12px')
+				.css('color', 'rgba(0, 0, 0, 0.5)')
+				.html(t.Disamb);
+
+			td.append('<br/>').append(span);
+		}
+
+		var tr = $('<tr>').append(td);
+		this.tbody.append(tr);
+	}
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -72,31 +141,32 @@ LiveSearchView.prototype.hide = function() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-LiveSearchView.prototype.onKeyUp = function() {
+LiveSearchView.prototype.onKeyUp = function(pEvent) {
 	if ( !this.isVisible() ) {
 		return;
 	}
 
 	this.liveSearch.updateText(this.input.val());
 
-	/*switch ( key ) {
+	switch ( pEvent.which ) {
 		case ENTER:
-			this.onSelect(this.highArtifactId);
+			this.onSelect(this.liveSearch.getHighlightId());
 			break;
 
 		case UP_ARROW:
-			this.onHighlight(-1);
+			this.liveSearch.shiftHighlight(-1);
 			break;
 
 		case DOWN_ARROW:
-			this.onHighlight(1);
+			this.liveSearch.shiftHighlight(1);
 			break;
-	}*/
+	}
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStart = function() {
 	this.loading.show();
+	this.scroller.hide();
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -112,47 +182,18 @@ LiveSearchView.prototype.onSearchStop = function() {
 };
 
 /*--------------------------------------------------------------------------------------------*/
-LiveSearchView.prototype.onSelect = function(pArtifactId, pFromClick) {
+LiveSearchView.prototype.onSelect = function(pArtifactId) {
 	this.liveSearch.onTagSelect(pArtifactId);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-LiveSearchView.prototype.updateResults = function() {
-	var results = this.liveSearch.getResults();
-	var n = results.length;
+LiveSearchView.prototype.onHighlight = function() {
+	var id = this.liveSearch.getHighlightId();
 
-	var selectClosure = function(pScope, pArtifactId) {
-		return function() {
-			pScope.onSelect(pArtifactId, true);
-		};
-	};
-
-	this.tbody.html('');
-
-	for ( var i = 0 ; i < n ; ++i ) {
-		var t = results[i];
-
-		var td = $('<td>')
-			.attr('data-id', t.ArtifactId+'')
-			.attr('title', '['+t.ArtifactId+']'+(t.Note ? ' '+t.Note : ''))
-			.html(t.Name)
-			.click(selectClosure(this, t.ArtifactId));
-
-		if ( t.Disamb ) {
-			var span = $('<span>')
-				.attr('class', 'disamb')
-				.css('font-size', '12px')
-				.css('color', 'rgba(0, 0, 0, 0.5)')
-				.html(t.Disamb);
-
-			td.append('<br/>').append(span);
-		}
-
-		var tr = $('<tr>').append(td);
-		this.tbody.append(tr);
-	}
+	$(this.selector+' td').each(function() {
+		var high = ($(this).attr('data-id') == id);
+		$(this).css('background-color', (high ? '#38c' : 'transparent'));
+	});
 };
-
-//TODO: highlighting
