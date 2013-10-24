@@ -149,6 +149,10 @@ LiveSearch.prototype.abortSearch = function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 LiveSearch.prototype.onSelect = function(pUniqueId) {
+	if ( pUniqueId == null ) {
+		return;
+	}
+
 	this.selectId = pUniqueId;
 	this.abortSearch();
 	this.events.send('itemSelected');

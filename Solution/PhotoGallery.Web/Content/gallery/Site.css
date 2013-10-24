@@ -460,6 +460,7 @@ ul {
 
 /*----------------------------------------------------------------------------------------------------*/
 
+
 #TagLayer {
 	position: absolute;
 	width: 100%;
@@ -485,7 +486,15 @@ ul {
 	border: 4px solid #000;
 }
 
-#TagLayer .inputPanel {
+#TagLayer2 {
+	position: absolute;
+	clear:left;
+	margin-top: -160px;
+	margin-left: 400px;
+	z-index: 999;
+}
+
+#TagLayer2 .liveSearch {
 	position: absolute;
 	width: 300px;
 	height: 300px;
@@ -494,77 +503,87 @@ ul {
 	color: #fff;
 }
 
-#TagLayer .inputPanel .tagSearch {
+#TagLayer2 .liveSearch .bar input {
 	background-color: #000;
 	background-color: rgba(0,0,0,0.95);
 	color: #fff;
 	font-size: 14px;
-	padding-right: 35px;
-	height: 35px;
+	height: 34px;
 	box-shadow: 0px 0px 0px 0px;
 	margin: 0;
 }
 
-#TagLayer .inputPanel .cancel {
-	width: 21px;
-	height: 21px;
-	color: #ddd;
-	text-align: center;
-	background-color: #522;
+#TagLayer2 .liveSearch .bar .loading {
+	width: 100%;
+	height: 25px;
+	margin-top: -25px;
+	background-image: url(wait-small.gif);
+	background-repeat: no-repeat;
+	background-position: 250px 0px;
+}
+
+#TagLayer2 .liveSearch .bar .close {
+	width: 20px;
+	height: 20px;
+	background-image: url(tag-search-close.png);
 	position: absolute;
 	top: 7px;
 	right: 7px;
 	cursor: pointer;
 }
 
-#TagLayer .inputPanel .cancel:hover {
+#TagLayer2 .liveSearch .bar .cancel:hover {
 	color: #fff;
 	background-color: #833;
 }
 
-#TagLayer .resultScroll {
+#TagLayer2 .liveSearch .scroller {
 	height: 265px;
 	overflow-y: auto;
 }
 
-#TagLayer table {
+#TagLayer2 .liveSearch table {
 	border: 0 solid;
 	font-size: 100%;
 	margin: 0;
 }
 
-#TagLayer table tr:nth-child(even) {
+#TagLayer2 .liveSearch table tr:nth-child(even) {
 	background-color: #222;
 	background-color: rgba(0, 0, 0, 0.75);
 }
 
-#TagLayer table tr:nth-child(odd) {
+#TagLayer2 .liveSearch table tr:nth-child(odd) {
 	background-color: #444;
 	background-color: rgba(0, 0, 0, 0.65);
 }
 
-#TagLayer table tr.active {
+#TagLayer2 .liveSearch table tr.active {
 	background-color: #000;
 	background-color: rgba(0, 0, 0, 0.9);
 }
 
-#TagLayer table tr {
+#TagLayer2 .liveSearch table tr {
 	cursor: pointer;
 }
 
-#TagLayer table td {
+#TagLayer2 .liveSearch table td {
 	color: #fff;
 	font-size: 14px;
 	padding: 6px;
 }
 
-#TagLayer table td.active {
+#TagLayer2 .liveSearch table td.highlight {
 	color: #38c;
 	padding: 5px;
 	border: 1px solid #38c;
 }
 
-#TagLayer table td .disamb {
+#TagLayer2 .liveSearch table td.noResults {
+	font-style: italic;
+}
+
+#TagLayer2 .liveSearch table td .disamb {
 	font-size: 12px;
 	color: #999;
 	color: rgba(255, 255, 255, 0.5);

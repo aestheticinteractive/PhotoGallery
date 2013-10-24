@@ -29,7 +29,9 @@
 			Html.RenderPartial(MVC.Main.Shared.Views._PhotoThumb, p);
 		}
 		
-		<div id="LiveSearchTest" style="clear:left; padding-top: 20px;"></div>
+		<div id="TagLayer2">
+			<div class="liveSearch"></div>
+		</div>
 	</div>
 </div>
 
@@ -63,7 +65,7 @@
 		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.Tags("", null))/';
 		var test = new LiveSearchTags(tagSearchUrl);
 		//test.updateText('name');
-		var testView = new LiveSearchView(test, '#LiveSearchTest');
+		var testView = new LiveSearchView(test, '#TagLayer2 .liveSearch');
 		testView.initView('Enter test tag text...', true);
 	</script>
 }

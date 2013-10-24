@@ -30,36 +30,40 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder, pShowClose) {
 
 	this.input = $('<input>')
 		.attr('type', 'text')
-		.attr('class', 'liveSearch')
-		.css('margin-bottom', '0')
-		.css('padding-right', (pShowClose ? '30px' : '0'))
+		.css('padding-right', (pShowClose ? '34px' : '5px'))
 		.attr('placeholder', (pInputPlaceholder ? pInputPlaceholder : ''))
 		.keyup(keyClosure(this));
 
 	var close = $('<div>')
 		.attr('class', 'close')
-		.html('x')
+		.attr('title', 'Cancel')
+		.fadeTo(0, 0.5)
 		.click(closeClosure(this));
+
+	if ( !isTouch() ) {
+		close
+			.mouseenter(function() {
+				$(this).fadeTo(0, 1.0);
+			})
+			.mouseleave(function() {
+				$(this).fadeTo(0, 0.5);
+			});
+	}
 
 	this.loading = $('<div>')
 		.attr('class', 'loading')
-		.css('background-color', 'yellow')
-		.html('LOADING (0)')
 		.hide();
 
 	var inputHold = $('<div>')
+		.attr('class', 'bar')
 		.append(this.input)
 		.append(close)
 		.append(this.loading);
 		
-	var table = $('<table>')
-		.attr('class', 'liveSearch')
-		.css('margin', '0');
+	var table = $('<table>');
 
 	this.scroller = $('<div>')
 		.attr('class', 'scroller')
-		.css('max-height', '220px')
-		.css('overflow', 'auto')
 		.append(table);
 
 	this.tbody = $('<tbody>')
@@ -92,12 +96,15 @@ LiveSearchView.prototype.updateResults = function() {
 		this.tbody
 			.append($('<tr>')
 				.append($('<td>')
-					.css('font-style', 'italic')
-					.css('color', 'rgba(0, 0, 0, 0.5)')
+					.attr('class', 'noResults')
 					.html('No results found for "'+text+'".')
+					.append($('<br/>'))
+					.append($('<span>')
+						.attr('class', 'disamb')
+						.html('Please try a different search.')
+					)
 				)
 			);
-
 		return;
 	}
 
@@ -127,8 +134,6 @@ LiveSearchView.prototype.updateResults = function() {
 		if ( t.Disamb ) {
 			var span = $('<span>')
 				.attr('class', 'disamb')
-				.css('font-size', '12px')
-				.css('color', 'rgba(0, 0, 0, 0.5)')
 				.html(t.Disamb);
 
 			td.append('<br/>').append(span);
@@ -182,12 +187,12 @@ LiveSearchView.prototype.onKeyUp = function(pEvent) {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStart = function() {
 	this.loading.show();
-	this.scroller.hide();
+	//this.scroller.hide();
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchData = function() {
-	this.loading.html('LOADING ('+this.liveSearch.getResults().length+')');
+	//this.loading.html(this.liveSearch.getResults().length+'');
 	this.updateResults();
 };
 
@@ -216,6 +221,6 @@ LiveSearchView.prototype.onHighlight = function() {
 
 	$(this.selector+' td').each(function() {
 		var high = ($(this).attr('data-id') == id);
-		$(this).css('background-color', (high ? '#38c' : 'transparent'));
+		$(this).attr('class', (high ? 'highlight' : ''));
 	});
 };
