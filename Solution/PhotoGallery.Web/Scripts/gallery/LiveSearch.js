@@ -207,3 +207,10 @@ LiveSearch.prototype.getHighlightItem = function() {
 	var index = this.resultsMap[this.highlightId];
 	return this.results[index];
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+LiveSearch.prototype.onClose = function() {
+	this.events.send('closed');
+};

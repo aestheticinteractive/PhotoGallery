@@ -15,10 +15,16 @@ function LiveSearchView(pLiveSearch, pSelector) {
 }
 
 /*--------------------------------------------------------------------------------------------*/
-LiveSearchView.prototype.initView = function(pInputPlaceholder) {
+LiveSearchView.prototype.initView = function(pInputPlaceholder, pShowClose) {
 	var keyClosure = function(pScope) {
 		return function(pEvent) {
 			pScope.onKeyUp(pEvent);
+		};
+	};
+
+	var closeClosure = function(pScope) {
+		return function() {
+			pScope.onClose();
 		};
 	};
 
@@ -26,14 +32,25 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder) {
 		.attr('type', 'text')
 		.attr('class', 'liveSearch')
 		.css('margin-bottom', '0')
+		.css('padding-right', (pShowClose ? '30px' : '0'))
 		.attr('placeholder', (pInputPlaceholder ? pInputPlaceholder : ''))
 		.keyup(keyClosure(this));
+
+	var close = $('<div>')
+		.attr('class', 'close')
+		.html('x')
+		.click(closeClosure(this));
 
 	this.loading = $('<div>')
 		.attr('class', 'loading')
 		.css('background-color', 'yellow')
 		.html('LOADING (0)')
 		.hide();
+
+	var inputHold = $('<div>')
+		.append(this.input)
+		.append(close)
+		.append(this.loading);
 		
 	var table = $('<table>')
 		.attr('class', 'liveSearch')
@@ -50,8 +67,7 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder) {
 
 	$(this.selector)
 		.html('')
-		.append(this.input)
-		.append(this.loading)
+		.append(inputHold)
 		.append(this.scroller);
 
 	this.updateResults();
@@ -183,7 +199,13 @@ LiveSearchView.prototype.onSearchStop = function() {
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSelect = function(pArtifactId) {
-	this.liveSearch.onTagSelect(pArtifactId);
+	this.liveSearch.onSelect(pArtifactId);
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.onClose = function() {
+	this.liveSearch.onClose();
+	this.hide();
 };
 
 
