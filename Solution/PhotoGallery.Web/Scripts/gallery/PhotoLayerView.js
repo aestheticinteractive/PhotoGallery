@@ -41,6 +41,12 @@ PhotoLayerView.prototype.buildView = function() {
 			}
 		};
 	};
+	
+	var tagClosure = function(pScope) {
+		return function() {
+			pScope.toggleTagMode();
+		};
+	};
 
 	$(document)
 		.keydown(keyClosure(this, false))
@@ -61,29 +67,30 @@ PhotoLayerView.prototype.buildView = function() {
 
 	this.photo = $('<img>')
 		.attr('class', 'photo')
-		.click(null, navClosure(this, 1));
+		.click(navClosure(this, 1));
 
 	this.details = $('<p>')
 		.attr('class', 'details');
 
 	this.tagModeBtn = $('<a>')
 		.attr('class', 'tagModeBtn')
-		.attr('title', 'Enter Tag Mode');
+		.attr('title', 'Enter Tag Mode')
+		.click(tagClosure(this));
 
 	this.prevBtn = $('<a>')
 		.attr('class', 'prevBtn')
 		.attr('title', 'Previous Photo')
-		.click(null, navClosure(this, -1));
+		.click(navClosure(this, -1));
 
 	this.nextBtn = $('<a>')
 		.attr('class', 'nextBtn')
 		.attr('title', 'Next Photo')
-		.click(null, navClosure(this, 1));
+		.click(navClosure(this, 1));
 
 	this.closeBtn = $('<a>')
 		.attr('class', 'closeBtn')
 		.attr('title', 'Close Photo')
-		.click(null, navClosure(this, 0));
+		.click(navClosure(this, 0));
 
 	this.buttons = $('<div>')
 		.attr('class', 'buttons')
@@ -99,17 +106,29 @@ PhotoLayerView.prototype.buildView = function() {
 			.mouseleave(function() { $(this).fadeTo(0, 0.4); });
 	}
 
+	this.bar = $('<div>')
+		.attr('class', 'bar')
+		.append(this.details)
+		.append(this.buttons);
+
 	this.layer
 		.append(this.photo)
-		.append($('<div>')
-			.attr('class', 'bar')
-			.append(this.details)
-			.append(this.buttons)
-		);
+		.append(this.bar);
 
 	$('body')
 		.prepend(this.layerPad)
 		.prepend(this.layer);
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.buildTaggingView = function(pSearchUrl, pAddUrl) {
+	var tagDiv = $('<div>').attr('id', 'TaggingLayer');
+	this.layer.append(tagDiv);
+
+	this.tagLayer = new TaggingLayerView(this.photoSet, '#TaggingLayer', '#PhotoLayer .photo',
+		pSearchUrl, pAddUrl);
+	this.tagLayer.buildView();
+	this.tagLayer.toggleView();
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -143,7 +162,7 @@ PhotoLayerView.prototype.hide = function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onKeyDown = function(pEvent) {
-	if ( !this.isVisible() ) {
+	if ( !this.isVisible() || this.tagLayer.isVisible() ) {
 		return;
 	}
 
@@ -168,7 +187,7 @@ PhotoLayerView.prototype.onKeyDown = function(pEvent) {
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onKeyUp = function(pEvent) {
-	if ( !this.isVisible() ) {
+	if ( !this.isVisible() || this.tagLayer.isVisible() ) {
 		return;
 	}
 
@@ -176,6 +195,7 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 
 	switch ( pEvent.which ) {
 		case T_KEY:
+			this.toggleTagMode();
 			break;
 
 		case LEFT_ARROW:
@@ -190,6 +210,12 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 			this.photoSet.hideCurrentPhoto();
 			break;
 	}
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.toggleTagMode = function() {
+	this.tagLayer.toggleView();
+	this.bar.toggle();
 };
 
 

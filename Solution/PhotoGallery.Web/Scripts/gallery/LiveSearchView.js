@@ -15,7 +15,7 @@ function LiveSearchView(pLiveSearch, pSelector) {
 }
 
 /*--------------------------------------------------------------------------------------------*/
-LiveSearchView.prototype.initView = function(pInputPlaceholder, pShowClose) {
+LiveSearchView.prototype.buildView = function(pInputPlaceholder, pShowClose) {
 	var keyClosure = function(pScope) {
 		return function(pEvent) {
 			pScope.onKeyUp(pEvent);
@@ -55,7 +55,7 @@ LiveSearchView.prototype.initView = function(pInputPlaceholder, pShowClose) {
 		.hide();
 
 	var inputHold = $('<div>')
-		.attr('class', 'bar')
+		.attr('class', 'topBar')
 		.append(this.input)
 		.append(close)
 		.append(this.loading);
@@ -154,6 +154,7 @@ LiveSearchView.prototype.isVisible = function() {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.show = function() {
 	$(this.selector).show();
+	this.input.focus();
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -213,6 +214,9 @@ LiveSearchView.prototype.onSelect = function(pArtifactId) {
 LiveSearchView.prototype.onClose = function() {
 	this.liveSearch.onClose();
 	this.hide();
+	this.liveSearch.updateText('');
+	this.input.val('');
+	this.updateResults();
 };
 
 

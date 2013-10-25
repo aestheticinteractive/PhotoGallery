@@ -276,7 +276,7 @@
     <Content Include="Scripts\gallery\PhotoSet.js" />
     <Content Include="Scripts\gallery\gallery.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
-    <Content Include="Scripts\gallery\PhotoTaggingLayerView.js" />
+    <Content Include="Scripts\gallery\TaggingLayerView.js" />
     <Content Include="Scripts\old\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">
@@ -321,7 +321,6 @@
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Photos.cshtml" />
     <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
-    <Content Include="Areas\Main\Views\Shared\_PhotoLayer.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <Content Include="Areas\Main\Views\Albums\All.cshtml" />
     <Content Include="Areas\Main\Views\Albums\_AllPage.cshtml" />
@@ -329,7 +328,6 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\People\Index.cshtml" />
-    <Content Include="Areas\Main\Views\Shared\_TagLayer.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
