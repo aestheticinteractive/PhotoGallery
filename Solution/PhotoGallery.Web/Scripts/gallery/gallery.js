@@ -26,3 +26,8 @@ function pagingLoad(pUrl) {
 	$('#DataPage .dataHold').stop().fadeTo(200, 0.333);
 	$('#DataPage .wait').fadeIn(200);
 }
+
+/*--------------------------------------------------------------------------------------------*/
+function trackPageview(pUrl) {
+	_gaq.push(['_trackPageview', pUrl]);
+}

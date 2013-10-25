@@ -386,7 +386,7 @@ ul {
 /*----------------------------------------------------------------------------------------------------*/
 
 
-#PhotoViewer {
+#PhotoLayer {
 	background-color: #000;
 	position: fixed;
 	width: 100%;
@@ -394,7 +394,7 @@ ul {
 	display: none;
 }
 
-#PhotoViewerPadding {
+#PhotoLayerPadding {
 	/* allows you to scroll on iOS to remove the address bar */
 	position: absolute;
 	height: 100%;
@@ -403,41 +403,59 @@ ul {
 	margin-top: 69px;
 }
 
-#PhotoViewer .photo {
+#PhotoLayer .photo {
 }
 
-#PhotoViewer .bottomBar {
+#PhotoLayer .bar {
 	float: left;
 	position: fixed;
 	bottom: 0;
 	width: 100%;
 	height: 50px;
-	background-color: rgba(0, 0, 0, 0.2);
-}
-
-#PhotoViewer .bottomBar p {
-	color: #ddd;
-	color: rgba(255, 255, 255, 0.666);
-	float: left;
-	padding: 10px;
-	line-height: 1.3em;
-	font-size: 12px;
-}
-
-#PhotoViewer .buttons {
-	float: right;
 	padding: 5px;
 }
 
-#PhotoViewer .buttons a {
+#PhotoLayer .bar .details {
+	float: left;
+	height: 40px;
+	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.4);
+	padding: 5px 10px;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1.3em;
+}
+
+#PhotoLayer .bar .buttons {
+	float: right;
+}
+
+#PhotoLayer .bar .buttons a {
 	margin-left: 5px;
 	display: block;
 	float: left;
 	width: 40px;
 	height: 40px;
+	background-color: rgba(0, 0, 0, 0.4);
 }
 
-#PhotoViewer .tagBar {
+#PhotoLayer .bar .buttons .tagModeBtn {
+	background-image: url(tag.png);
+}
+
+#PhotoLayer .bar .buttons .prevBtn {
+	background-image: url(arrow-left.png);
+}
+
+#PhotoLayer .bar .buttons .nextBtn {
+	background-image: url(arrow-right.png);
+}
+
+#PhotoLayer .bar .buttons .closeBtn {
+	background-image: url(close.png);
+}
+
+#PhotoLayer .tagBar {
 	background-color: rgba(0, 0, 0, 0.75);
 	right:0;
 	width: auto;
@@ -448,11 +466,11 @@ ul {
 
 @media only screen and (max-width: 1024px) {
 
-	#PhotoViewer {
+	#PhotoLayer {
 		background-color: #000;
 	}
 
-	#PhotoViewer .button {
+	#PhotoLayer .button {
 		width: inherit;
 	}
 }
@@ -486,7 +504,7 @@ ul {
 	border: 4px solid #000;
 }
 
-#TagLayer2 {
+#TagLayer {
 	position: absolute;
 	clear:left;
 	margin-top: -160px;
@@ -494,7 +512,7 @@ ul {
 	z-index: 999;
 }
 
-#TagLayer2 .liveSearch {
+#TagLayer .liveSearch {
 	position: absolute;
 	width: 300px;
 	height: 300px;
@@ -503,7 +521,7 @@ ul {
 	color: #fff;
 }
 
-#TagLayer2 .liveSearch .bar input {
+#TagLayer .liveSearch .bar input {
 	background-color: #000;
 	background-color: rgba(0,0,0,0.95);
 	color: #fff;
@@ -513,7 +531,7 @@ ul {
 	margin: 0;
 }
 
-#TagLayer2 .liveSearch .bar .loading {
+#TagLayer .liveSearch .bar .loading {
 	width: 100%;
 	height: 25px;
 	margin-top: -25px;
@@ -522,7 +540,7 @@ ul {
 	background-position: 250px 0px;
 }
 
-#TagLayer2 .liveSearch .bar .close {
+#TagLayer .liveSearch .bar .close {
 	width: 20px;
 	height: 20px;
 	background-image: url(tag-search-close.png);
@@ -532,58 +550,58 @@ ul {
 	cursor: pointer;
 }
 
-#TagLayer2 .liveSearch .bar .cancel:hover {
+#TagLayer .liveSearch .bar .cancel:hover {
 	color: #fff;
 	background-color: #833;
 }
 
-#TagLayer2 .liveSearch .scroller {
+#TagLayer .liveSearch .scroller {
 	height: 265px;
 	overflow-y: auto;
 }
 
-#TagLayer2 .liveSearch table {
+#TagLayer .liveSearch table {
 	border: 0 solid;
 	font-size: 100%;
 	margin: 0;
 }
 
-#TagLayer2 .liveSearch table tr:nth-child(even) {
+#TagLayer .liveSearch table tr:nth-child(even) {
 	background-color: #222;
 	background-color: rgba(0, 0, 0, 0.75);
 }
 
-#TagLayer2 .liveSearch table tr:nth-child(odd) {
+#TagLayer .liveSearch table tr:nth-child(odd) {
 	background-color: #444;
 	background-color: rgba(0, 0, 0, 0.65);
 }
 
-#TagLayer2 .liveSearch table tr.active {
+#TagLayer .liveSearch table tr.active {
 	background-color: #000;
 	background-color: rgba(0, 0, 0, 0.9);
 }
 
-#TagLayer2 .liveSearch table tr {
+#TagLayer .liveSearch table tr {
 	cursor: pointer;
 }
 
-#TagLayer2 .liveSearch table td {
+#TagLayer .liveSearch table td {
 	color: #fff;
 	font-size: 14px;
 	padding: 6px;
 }
 
-#TagLayer2 .liveSearch table td.highlight {
+#TagLayer .liveSearch table td.highlight {
 	color: #38c;
 	padding: 5px;
 	border: 1px solid #38c;
 }
 
-#TagLayer2 .liveSearch table td.noResults {
+#TagLayer .liveSearch table td.noResults {
 	font-style: italic;
 }
 
-#TagLayer2 .liveSearch table td .disamb {
+#TagLayer .liveSearch table td .disamb {
 	font-size: 12px;
 	color: #999;
 	color: rgba(255, 255, 255, 0.5);

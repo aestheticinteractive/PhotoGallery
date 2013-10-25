@@ -51,7 +51,7 @@ PhotoTaggingLayerView.prototype.initView = function() {
 };
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.isVisible = function() {
+PhotoTaggingLayerView.prototype.isVisible = function() {
 	return $(this.selector).is(':visible');
 };
 

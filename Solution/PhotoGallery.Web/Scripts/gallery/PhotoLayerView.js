@@ -3,14 +3,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function PhotoLayerView(pPhotoSet, pSelector) {
+function PhotoLayerView(pPhotoSet, pSiteSelector) {
 	this.photoSet = pPhotoSet;
-	this.selector = pSelector;
+	this.siteSelector = pSiteSelector;
 	this.photoSet.events.listen("photoChanged", this, this.onPhoto);
 }
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.initView = function() {
+PhotoLayerView.prototype.buildView = function() {
 	var keyClosure = function(pScope, pUp) {
 		return function(pEvent) {
 			if ( pUp ) {
@@ -42,40 +42,101 @@ PhotoLayerView.prototype.initView = function() {
 		};
 	};
 
-	$(document).keydown(keyClosure(this, false)).keyup(keyClosure(this, true));
+	$(document)
+		.keydown(keyClosure(this, false))
+		.keyup(keyClosure(this, true));
 
 	$(window).resize(resizeClosure(this));
-	$(this.selector+' .photo').click(null, navClosure(this, 1));
-	//$(this.selector+' .tagBtn').click(null, tagClosure(this));
-	$(this.selector+' .prevBtn').click(null, navClosure(this, -1));
-	$(this.selector+' .nextBtn').click(null, navClosure(this, 1));
-	$(this.selector+' .closeBtn').click(null, navClosure(this, 0));
 
-	if ( !isTouch() ) {
-		$(this.selector+' .buttons a')
-			.fadeTo(0, 0.75)
-			.mouseenter(function() { $(this).fadeTo(0, 1.0); })
-			.mouseleave(function() { $(this).fadeTo(0, 0.75); });
-	}
-
-	$('body').prepend($(this.selector+'Padding')).prepend($(this.selector));
 	this.origBg = $('body').css('background-color');
 	this.origOy = $('body').css('overflow-y');
 
-	this.close();
+	////
+
+	this.layerPad = $('<div>')
+		.attr('id', 'PhotoLayerPadding');
+
+	this.layer = $('<div>')
+		.attr('id', 'PhotoLayer');
+
+	this.photo = $('<img>')
+		.attr('class', 'photo')
+		.click(null, navClosure(this, 1));
+
+	this.details = $('<p>')
+		.attr('class', 'details');
+
+	this.tagModeBtn = $('<a>')
+		.attr('class', 'tagModeBtn')
+		.attr('title', 'Enter Tag Mode');
+
+	this.prevBtn = $('<a>')
+		.attr('class', 'prevBtn')
+		.attr('title', 'Previous Photo')
+		.click(null, navClosure(this, -1));
+
+	this.nextBtn = $('<a>')
+		.attr('class', 'nextBtn')
+		.attr('title', 'Next Photo')
+		.click(null, navClosure(this, 1));
+
+	this.closeBtn = $('<a>')
+		.attr('class', 'closeBtn')
+		.attr('title', 'Close Photo')
+		.click(null, navClosure(this, 0));
+
+	this.buttons = $('<div>')
+		.attr('class', 'buttons')
+		.append(this.tagModeBtn)
+		.append(this.prevBtn)
+		.append(this.nextBtn)
+		.append(this.closeBtn);
+		
+	if ( !isTouch() ) {
+		this.buttons.find('a')
+			.fadeTo(0, 0.4)
+			.mouseenter(function() { $(this).fadeTo(0, 1.0); })
+			.mouseleave(function() { $(this).fadeTo(0, 0.4); });
+	}
+
+	this.layer
+		.append(this.photo)
+		.append($('<div>')
+			.attr('class', 'bar')
+			.append(this.details)
+			.append(this.buttons)
+		);
+
+	$('body')
+		.prepend(this.layerPad)
+		.prepend(this.layer);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.isVisible = function() {
-	return $(this.selector).is(':visible');
+	return this.layer.is(':visible');
 };
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.close = function() {
-	$(this.selector).hide();
-	$(this.selector+'Padding').hide();
-	$('#Site').show();
-	$('body').css('background-color', this.origBg).css('overflow-y', this.origOy);
+PhotoLayerView.prototype.show = function() {
+	this.layer.show();
+	this.layerPad.show();
+	$(this.siteSelector).hide();
+	
+	$('body')
+		.css('background-color', '#000')
+		.css('overflow-y', 'hidden');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.hide = function() {
+	this.layer.hide();
+	this.layerPad.hide();
+	$(this.siteSelector).show();
+
+	$('body')
+		.css('background-color', this.origBg)
+		.css('overflow-y', this.origOy);
 };
 
 
@@ -86,30 +147,23 @@ PhotoLayerView.prototype.onKeyDown = function(pEvent) {
 		return;
 	}
 
-	var btn;
-
 	switch ( pEvent.which ) {
 		case T_KEY: 
-			btn = $(this.selector+' .tagBtn');
+			this.tagModeBtn.mouseenter();
 			break;
 
 		case LEFT_ARROW:
-			btn = $(this.selector+' .prevBtn');
+			this.prevBtn.mouseenter();
 			break;
 
 		case RIGHT_ARROW:
-			btn = $(this.selector+' .nextBtn');
+			this.nextBtn.mouseenter();
 			break;
 			
 		case ESCAPE_KEY:
-			btn = $(this.selector+' .closeBtn');
+			this.closeBtn.mouseenter();
 			break;
-
-		default:
-			return ;
 	}
-
-	btn.fadeTo(0, 1.0);
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -118,11 +172,11 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 		return;
 	}
 
-	$(this.selector+' .buttons a').fadeTo(0, 0.75);
+	this.buttons.find('a').mouseleave();
 
 	switch ( pEvent.which ) {
-		//case T_KEY:
-		//	break;
+		case T_KEY:
+			break;
 
 		case LEFT_ARROW:
 			this.photoSet.showPrevPhoto();
@@ -138,50 +192,56 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 	}
 };
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onPhoto = function() {
 	var phoData = this.photoSet.getCurrentData();
 
 	if ( !phoData ) {
-		this.close();
+		this.hide();
 		return;
 	}
 
-	$(this.selector).show();
-	$(this.selector+'Padding').show();
-	$("#Site").hide();
-
-	$(this.selector+' .photo').attr('src', phoData.url);
+	this.photo.attr('src', phoData.url);
+	this.details.html(phoData.created.replace(' ', '<br/>'));
 	this.onResize();
+	this.show();
+	this.preloadNextImage();
 
-	$(this.selector+' .details').html(phoData.created.replace(' ', '<br/>'));
-	$('body').css('background-color', '#000').css('overflow-y', 'hidden');
-
-	_gaq.push(['_trackPageview', '/Photos/'+phoData.photoId]);
-
-	// preload next image
-
-	var nextId = this.photoSet.getNextPhotoId();
-	var img = new Image();
-	img.src = this.photoSet.getData(nextId).url;
+	trackPageview('/Photos/'+phoData.photoId);
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onResize = function() {
-	var pv = $(this.selector);
-	var pvW = pv.width();
-	var pvH = pv.height();
-	var pvRatio = pvW/pvH;
+	var w = this.layer.width();
+	var h = this.layer.height();
 	var phoRatio = this.photoSet.getCurrentData().ratio;
-	var img = $(this.selector+' .photo');
 
-	if ( pvRatio > phoRatio ) {
-		var imgW = phoRatio*pvH;
-		img.css('height', '100%').css('width', 'auto').css('margin', '0 0 0 '+(pvW-imgW)/2+'px');
+	if ( w/h > phoRatio ) {
+		var imgW = phoRatio*h;
+
+		this.photo
+			.css('height', '100%')
+			.css('width', 'auto')
+			.css('margin', '0 0 0 '+(w-imgW)/2+'px');
 	}
 	else {
-		var imgH = pvW/phoRatio;
-		img.css('width', '100%').css('height', 'auto').css('margin', (pvH-imgH)/2+'px 0 0 0');
+		var imgH = w/phoRatio;
+
+		this.photo
+			.css('width', '100%')
+			.css('height', 'auto')
+			.css('margin', (h-imgH)/2+'px 0 0 0');
 	}
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.preloadNextImage = function() {
+	var id = this.photoSet.getNextPhotoId();
+
+	var img = new Image();
+	img.src = this.photoSet.getData(id).url;
 };
