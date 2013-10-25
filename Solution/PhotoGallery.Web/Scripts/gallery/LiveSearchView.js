@@ -116,7 +116,9 @@ LiveSearchView.prototype.updateResults = function() {
 	
 	var highClosure = function(pScope, pArtifactId) {
 		return function() {
+			pScope.highClick = true;
 			pScope.liveSearch.onHighlight(pArtifactId);
+			pScope.highClick = false;
 		};
 	};
 
@@ -218,9 +220,33 @@ LiveSearchView.prototype.onClose = function() {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onHighlight = function() {
 	var id = this.liveSearch.getHighlightId();
+	var highTd = null;
 
 	$(this.selector+' td').each(function() {
-		var high = ($(this).attr('data-id') == id);
+		var td = $(this);
+		var high = (td.attr('data-id') == id);
 		$(this).attr('class', (high ? 'highlight' : ''));
+
+		if ( high ) {
+			highTd = td;
+		}
 	});
+
+	if ( highTd == null || this.highClick ) {
+		return;
+	}
+
+	var rsH = this.scroller.height();
+	var rsS = this.scroller.scrollTop();
+
+	var tr = highTd.parent();
+	var trH = tr.height();
+	var trY = tr.offset().top-this.scroller.offset().top;
+
+	if ( trY < 0 ) {
+		this.scroller.scrollTop(rsS+trY);
+	}
+	else if ( trY+trH > rsH ) {
+		this.scroller.scrollTop(rsS+trY-rsH+trH);
+	}
 };
