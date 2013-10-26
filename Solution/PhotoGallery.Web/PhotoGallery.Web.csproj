@@ -278,7 +278,6 @@
     <Content Include="Scripts\gallery\gallery.js" />
     <Content Include="Scripts\gallery\fabPopup.js" />
     <Content Include="Scripts\gallery\TaggingLayerView.js" />
-    <Content Include="Scripts\old\photoViewer.js" />
     <Content Include="Scripts\gallery\createAlbum.js" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>

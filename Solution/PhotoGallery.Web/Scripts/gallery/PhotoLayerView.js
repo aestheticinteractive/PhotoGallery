@@ -238,8 +238,8 @@ PhotoLayerView.prototype.onPhoto = function() {
 
 	this.photo.attr('src', phoData.url);
 	this.details.html(phoData.created.replace(' ', '<br/>'));
-	this.onResize();
 	this.show();
+	this.onResize();
 	this.tagLayer.setPhotoId(phoData.photoId);
 	this.preloadNextImage();
 

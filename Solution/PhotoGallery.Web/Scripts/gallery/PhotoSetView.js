@@ -13,25 +13,27 @@ function PhotoSetView(pPhotoSet, pSelector) {
 PhotoSetView.prototype.initView = function() {
 	$(this.selector+" .border").hide();
 
-	if ( isTouch() ) {
-		return;
-	}
-
 	var onClickClosure = function(pScope) {
 		return function() {
 			var id = $(this).attr('data-id');
 			pScope.showPhoto(id);
 		};
 	};
+	
+	var thumbs = $(this.selector+" .thumb")
+		.click(onClickClosure(this.photoSet));
+		
+	if ( !isTouch() ) {
+		thumbs
+			.mouseenter(function() {
+				$(this).find(".border").show();
+			})
+			.mouseleave(function() {
+				$(this).find(".border").hide();
+			});
+	}
 
-	$(this.selector+" .thumb")
-		.click(onClickClosure(this.photoSet))
-		.mouseenter(function() {
-			$(this).find(".border").show();
-		})
-		.mouseleave(function() {
-			$(this).find(".border").hide();
-		});
+	
 };
 
 /*----------------------------------------------------------------------------------------------------*/

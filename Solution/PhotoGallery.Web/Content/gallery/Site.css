@@ -440,19 +440,19 @@ ul {
 }
 
 #PhotoLayer .bar .buttons .tagModeBtn {
-	background-image: url(tag.png);
+	background-image: url(/Content/gallery/tag.png);
 }
 
 #PhotoLayer .bar .buttons .prevBtn {
-	background-image: url(arrow-left.png);
+	background-image: url(/Content/gallery/arrow-left.png);
 }
 
 #PhotoLayer .bar .buttons .nextBtn {
-	background-image: url(arrow-right.png);
+	background-image: url(/Content/gallery/arrow-right.png);
 }
 
 #PhotoLayer .bar .buttons .closeBtn {
-	background-image: url(close.png);
+	background-image: url(/Content/gallery/close.png);
 }
 
 @media only screen and (max-width: 1024px) {
@@ -534,7 +534,7 @@ ul {
 	width: 100%;
 	height: 25px;
 	margin-top: -25px;
-	background-image: url(wait-small.gif);
+	background-image: url(/Content/gallery/wait-small.gif);
 	background-repeat: no-repeat;
 	background-position: 250px 0px;
 }
@@ -542,7 +542,7 @@ ul {
 #TaggingLayer .liveSearch .topBar .close {
 	width: 20px;
 	height: 20px;
-	background-image: url(tag-search-close.png);
+	background-image: url(/Content/gallery/tag-search-close.png);
 	position: absolute;
 	top: 7px;
 	right: 7px;
@@ -842,7 +842,7 @@ table tbody tr td.vertTop {
 #DataPage .wait {
 	width: 100%;
 	height: 100%;
-	background-image: url("wait.gif");
+	background-image: url(/Content/gallery/wait.gif);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	position: absolute;
