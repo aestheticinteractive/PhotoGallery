@@ -3,12 +3,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function TaggingLayerView(pPhotoSet, pSelector, pPhotoSelector, pSearchUrl, pAddUrl) {
-	this.photoSet = pPhotoSet;
+function TaggingLayerView(pTaggingLayer, pSelector, pPhotoSelector) {
+	this.taggingLayer = pTaggingLayer;
 	this.selector = pSelector;
 	this.photoSelector = pPhotoSelector;
-	this.tagSearchUrl = pSearchUrl;
-	this.addUrl = pAddUrl;
+
+	this.taggingLayer.events.listen('addTagFailed', this, this.onAddTagFail);
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -31,9 +31,9 @@ TaggingLayerView.prototype.buildView = function() {
 		};
 	};
 
-	var cancelClosure = function(pScope) {
+	var closeClosure = function(pScope) {
 		return function() {
-			pScope.onCancel(false);
+			pScope.hide();
 		};
 	};
 
@@ -50,7 +50,7 @@ TaggingLayerView.prototype.buildView = function() {
 	this.closeBtn = $('<a>')
 		.attr('class', 'closeBtn')
 		.html('Done')
-		.click(cancelClosure(this));
+		.click(closeClosure(this));
 
 	this.searchDiv = $('<div>')
 		.attr('class', 'liveSearch');
@@ -61,10 +61,11 @@ TaggingLayerView.prototype.buildView = function() {
 		.append(this.closeBtn)
 		.append(this.searchDiv);
 
-	var lst = new LiveSearchTags(this.tagSearchUrl);
-	lst.events.listen('closed', this, this.onSearchClose);
+	var ls = this.taggingLayer.liveSearch;
+	ls.events.listen('itemSelected', this, this.onSearchSelect);
+	ls.events.listen('closed', this, this.onSearchClose);
 
-	this.searchView = new LiveSearchView(lst, this.selector+' .liveSearch');
+	this.searchView = new LiveSearchView(ls, this.selector+' .liveSearch');
 	this.searchView.buildView('Enter tag text...', true);
 
 	$(window).resize(resizeClosure(this));
@@ -77,8 +78,15 @@ TaggingLayerView.prototype.isVisible = function() {
 };
 
 /*--------------------------------------------------------------------------------------------*/
-TaggingLayerView.prototype.toggleView = function() {
-	this.layer.toggle();
+TaggingLayerView.prototype.show = function() {
+	this.layer.show();
+	this.onCancel(true);
+};
+
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayerView.prototype.hide = function() {
+	this.layer.hide();
+	this.taggingLayer.onClose();
 	this.onCancel(true);
 };
 
@@ -102,7 +110,7 @@ TaggingLayerView.prototype.onKeyup = function(pEvent) {
 			this.searchView.onClose();
 		}
 		else {
-			this.toggleView();
+			this.hide();
 		}
 	}
 };
@@ -118,19 +126,14 @@ TaggingLayerView.prototype.onClick = function(pEvent) {
 	var pos = pho.offset();
 	var x = Math.max(pos.left, Math.min(pos.left+pho.width(), pEvent.pageX));
 	var y = Math.max(pos.top, Math.min(pos.top+pho.height(), pEvent.pageY));
-	this.spotRelX = (x-pos.left)/pho.width();
-	this.spotRelY = (y-pos.top)/pho.height();
+	var sx = (x-pos.left)/pho.width();
+	var sy = (y-pos.top)/pho.height();
+	this.taggingLayer.setSpotPos(sx, sy);
 	
 	this.spot.show();
 	this.searchView.show();
 	this.closeBtn.hide();
 	this.onResize();
-};
-
-/*--------------------------------------------------------------------------------------------*/
-TaggingLayerView.prototype.onSearchClose = function() {
-	this.spot.hide();
-	this.closeBtn.show();
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -143,8 +146,9 @@ TaggingLayerView.prototype.onResize = function() {
 	var pos = pho.offset();
 	var winW = $(window).width();
 	var winH = $(window).height();
-	var x = pos.left+pho.width()*this.spotRelX;
-	var y = pos.top+pho.height()*this.spotRelY;
+	var sp = this.taggingLayer.getSpotPos();
+	var x = pos.left+pho.width()*sp.x;
+	var y = pos.top+pho.height()*sp.y;
 	var boxW = 300;
 	var boxH = 300;
 	var boxX = x;
@@ -169,4 +173,20 @@ TaggingLayerView.prototype.onResize = function() {
 	this.searchDiv
 		.css('left', boxX+'px')
 		.css('top', boxY+'px');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayerView.prototype.onSearchSelect = function() {
+	this.searchView.onClose();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayerView.prototype.onSearchClose = function() {
+	this.spot.hide();
+	this.closeBtn.show();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayerView.prototype.onAddTagFail = function() {
+	alert('Your attempt to tag this photo failed. Please make sure you are logged into Fabric.');
 };

@@ -190,6 +190,7 @@ LiveSearchView.prototype.onKeyUp = function(pEvent) {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStart = function() {
 	this.loading.show();
+	this.scroller.scrollTop(0);
 	//this.scroller.hide();
 };
 
@@ -197,12 +198,13 @@ LiveSearchView.prototype.onSearchStart = function() {
 LiveSearchView.prototype.onSearchData = function() {
 	//this.loading.html(this.liveSearch.getResults().length+'');
 	this.updateResults();
+	this.onHighlight();
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStop = function() {
 	this.loading.hide();
-	this.updateResults();
+	this.onSearchData();
 };
 
 /*--------------------------------------------------------------------------------------------*/

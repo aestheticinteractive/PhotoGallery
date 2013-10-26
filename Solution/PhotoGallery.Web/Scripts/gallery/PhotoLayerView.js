@@ -44,7 +44,7 @@ PhotoLayerView.prototype.buildView = function() {
 	
 	var tagClosure = function(pScope) {
 		return function() {
-			pScope.toggleTagMode();
+			pScope.showTagLayer();
 		};
 	};
 
@@ -125,10 +125,12 @@ PhotoLayerView.prototype.buildTaggingView = function(pSearchUrl, pAddUrl) {
 	var tagDiv = $('<div>').attr('id', 'TaggingLayer');
 	this.layer.append(tagDiv);
 
-	this.tagLayer = new TaggingLayerView(this.photoSet, '#TaggingLayer', '#PhotoLayer .photo',
-		pSearchUrl, pAddUrl);
-	this.tagLayer.buildView();
-	this.tagLayer.toggleView();
+	this.tagLayer = new TaggingLayer(pSearchUrl, pAddUrl);
+	this.tagLayer.events.listen('closed', this, this.onTagLayerClose);
+
+	this.tagLayerView = new TaggingLayerView(this.tagLayer, '#TaggingLayer', '#PhotoLayer .photo');
+	this.tagLayerView.buildView();
+	this.tagLayerView.hide();
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -162,7 +164,7 @@ PhotoLayerView.prototype.hide = function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onKeyDown = function(pEvent) {
-	if ( !this.isVisible() || this.tagLayer.isVisible() ) {
+	if ( !this.isVisible() || this.tagLayerView.isVisible() ) {
 		return;
 	}
 
@@ -187,7 +189,7 @@ PhotoLayerView.prototype.onKeyDown = function(pEvent) {
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onKeyUp = function(pEvent) {
-	if ( !this.isVisible() || this.tagLayer.isVisible() ) {
+	if ( !this.isVisible() || this.tagLayerView.isVisible() ) {
 		return;
 	}
 
@@ -195,7 +197,7 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 
 	switch ( pEvent.which ) {
 		case T_KEY:
-			this.toggleTagMode();
+			this.showTagLayer();
 			break;
 
 		case LEFT_ARROW:
@@ -213,9 +215,14 @@ PhotoLayerView.prototype.onKeyUp = function(pEvent) {
 };
 
 /*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.toggleTagMode = function() {
-	this.tagLayer.toggleView();
-	this.bar.toggle();
+PhotoLayerView.prototype.showTagLayer = function() {
+	this.tagLayerView.show();
+	this.bar.hide();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.onTagLayerClose = function() {
+	this.bar.show();
 };
 
 
@@ -233,6 +240,7 @@ PhotoLayerView.prototype.onPhoto = function() {
 	this.details.html(phoData.created.replace(' ', '<br/>'));
 	this.onResize();
 	this.show();
+	this.tagLayer.setPhotoId(phoData.photoId);
 	this.preloadNextImage();
 
 	trackPageview('/Photos/'+phoData.photoId);
@@ -240,9 +248,15 @@ PhotoLayerView.prototype.onPhoto = function() {
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerView.prototype.onResize = function() {
+	var pho = this.photoSet.getCurrentData();
+
+	if ( !pho ) {
+		return;
+	}
+
 	var w = this.layer.width();
 	var h = this.layer.height();
-	var phoRatio = this.photoSet.getCurrentData().ratio;
+	var phoRatio = pho.ratio;
 
 	if ( w/h > phoRatio ) {
 		var imgW = phoRatio*h;

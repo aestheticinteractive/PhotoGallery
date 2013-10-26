@@ -156,7 +156,6 @@ LiveSearch.prototype.onSelect = function(pUniqueId) {
 	this.selectId = pUniqueId;
 	this.abortSearch();
 	this.events.send('itemSelected');
-	alert('Selected! '+pUniqueId);
 };
 
 /*--------------------------------------------------------------------------------------------*/
