@@ -166,6 +166,7 @@
     <Compile Include="Areas\Account\Models\HomeModel.cs" />
     <Compile Include="Areas\Account\Models\AccountBaseModel.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\PetsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PeopleController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Models\AdminBaseModel.cs" />
@@ -331,6 +332,7 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\People\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Pets\Index.cshtml" />
     <None Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

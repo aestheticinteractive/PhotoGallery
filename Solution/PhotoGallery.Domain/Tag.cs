@@ -7,7 +7,8 @@
 			Unspecified = 0,
 			Person,
 			CameraMake,
-			CameraModel
+			CameraModel,
+			Pet
 		};
 
 		public virtual int Id { get; set; }

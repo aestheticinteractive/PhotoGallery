@@ -53,6 +53,7 @@
     <Compile Include="Account\Tools\PhotoExif.cs" />
     <Compile Include="Account\Tools\PhotoUploader.cs" />
     <Compile Include="Account\Dto\WebUser.cs" />
+    <Compile Include="Admin\PetsService.cs" />
     <Compile Include="Admin\Dto\WebPersonTag.cs" />
     <Compile Include="Admin\PeopleService.cs" />
     <Compile Include="BaseService.cs" />
