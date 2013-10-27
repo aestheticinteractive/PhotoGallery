@@ -3,10 +3,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function PhotoLayerView(pPhotoSet, pSiteSelector) {
-	this.photoSet = pPhotoSet;
-	this.siteSelector = pSiteSelector;
+function PhotoLayerView(pPhotoLayer, pSiteSelector) {
+	this.photoLayer = pPhotoLayer;
+	this.photoSet = this.photoLayer.photoSet;
 	this.photoSet.events.listen("photoChanged", this, this.onPhoto);
+	this.siteSelector = pSiteSelector;
 }
 
 /*--------------------------------------------------------------------------------------------*/
@@ -118,17 +119,16 @@ PhotoLayerView.prototype.buildView = function() {
 	$('body')
 		.prepend(this.layerPad)
 		.prepend(this.layer);
-};
 
-/*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.buildTaggingView = function(pSearchUrl, pAddUrl) {
+	///
+
 	var tagDiv = $('<div>').attr('id', 'TaggingLayer');
 	this.layer.append(tagDiv);
 
-	this.tagLayer = new TaggingLayer(pSearchUrl, pAddUrl);
-	this.tagLayer.events.listen('closed', this, this.onTagLayerClose);
+	this.photoLayer.tagLayer.events.listen('closed', this, this.onTagLayerClose);
 
-	this.tagLayerView = new TaggingLayerView(this.tagLayer, '#TaggingLayer', '#PhotoLayer .photo');
+	this.tagLayerView = new TaggingLayerView(this.photoLayer.tagLayer,
+		'#TaggingLayer', '#PhotoLayer .photo');
 	this.tagLayerView.buildView();
 	this.tagLayerView.hide();
 };
@@ -240,10 +240,7 @@ PhotoLayerView.prototype.onPhoto = function() {
 	this.details.html(phoData.created.replace(' ', '<br/>'));
 	this.show();
 	this.onResize();
-	this.tagLayer.setPhotoId(phoData.photoId);
-	this.preloadNextImage();
-
-	trackPageview('/Photos/'+phoData.photoId);
+	this.photoLayer.tagLayer.setPhotoId(phoData.photoId);
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -274,14 +271,4 @@ PhotoLayerView.prototype.onResize = function() {
 			.css('height', 'auto')
 			.css('margin', (h-imgH)/2+'px 0 0 0');
 	}
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/*--------------------------------------------------------------------------------------------*/
-PhotoLayerView.prototype.preloadNextImage = function() {
-	var id = this.photoSet.getNextPhotoId();
-
-	var img = new Image();
-	img.src = this.photoSet.getData(id).url;
 };

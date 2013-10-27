@@ -262,6 +262,8 @@
     <Content Include="Scripts\foundation\foundation.topbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\gallery\PhotoLayer.js" />
+    <Content Include="Scripts\gallery\PhotoLayerTags.js" />
     <Content Include="Scripts\gallery\TaggingLayer.js" />
     <Content Include="Scripts\gallery\LiveSearchView.js" />
     <Content Include="Scripts\gallery\LiveSearchTags.js" />

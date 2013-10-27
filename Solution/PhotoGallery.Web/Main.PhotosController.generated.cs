@@ -43,6 +43,12 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.JsonResult Tags()
+        {
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.JsonResult FindTags()
         {
             return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.FindTags);
@@ -69,6 +75,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
+            public readonly string Tags = "Tags";
             public readonly string FindTags = "FindTags";
             public readonly string AddTag = "AddTag";
         }
@@ -76,11 +83,20 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
+            public const string Tags = "Tags";
             public const string FindTags = "FindTags";
             public const string AddTag = "AddTag";
         }
 
 
+        static readonly ActionParamsClass_Tags s_params_Tags = new ActionParamsClass_Tags();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Tags TagsParams { get { return s_params_Tags; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Tags
+        {
+            public readonly string id = "id";
+        }
         static readonly ActionParamsClass_FindTags s_params_FindTags = new ActionParamsClass_FindTags();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_FindTags FindTagsParams { get { return s_params_FindTags; } }
@@ -116,6 +132,16 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
     public partial class T4MVC_PhotosController : PhotoGallery.Web.Areas.Main.Controllers.PhotosController
     {
         public T4MVC_PhotosController() : base(Dummy.Instance) { }
+
+        partial void TagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, int? id);
+
+        public override System.Web.Mvc.JsonResult Tags(int? id)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
+            TagsOverride(callInfo, id);
+            return callInfo;
+        }
 
         partial void FindTagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id, bool? first);
 

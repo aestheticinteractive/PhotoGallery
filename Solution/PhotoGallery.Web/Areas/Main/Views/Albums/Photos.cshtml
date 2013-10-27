@@ -53,17 +53,13 @@
 		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 		phoSetTags.loadData();
 		
+		var tagUrl = '@Url.Action(MVC.Main.Photos.Tags(null))/';
 		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.FindTags("", null))/';
 		var addTagUrl = '@Url.Action(MVC.Main.Photos.AddTag())/';
-		
-		var phoLayView = new PhotoLayerView(phoSet, '#Site');
-		phoLayView.buildView();
-		phoLayView.buildTaggingView(tagSearchUrl, addTagUrl);
-		phoLayView.hide();
+		var phoLay = new PhotoLayer(phoSet, tagUrl, tagSearchUrl, addTagUrl);
 
-		//var test = new LiveSearchTags(tagSearchUrl);
-		//test.updateText('name');
-		//var testView = new LiveSearchView(test, '#TagLayer2 .liveSearch');
-		//testView.initView('Enter test tag text...', true);
+		var phoLayView = new PhotoLayerView(phoLay, '#Site');
+		phoLayView.buildView();
+		phoLayView.hide();
 	</script>
 }
