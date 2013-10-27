@@ -59,8 +59,10 @@
     <Compile Include="Account\Dto\WebUploadResult.cs" />
     <Compile Include="Account\HomeService.cs" />
     <Compile Include="Fabric\FabricService.cs" />
-    <Compile Include="Account\PhotosService.cs" />
+    <Compile Include="Account\CreateService.cs" />
     <Compile Include="Main\AlbumsService.cs" />
+    <Compile Include="Main\Dto\WebPhotoTag.cs" />
+    <Compile Include="Main\PhotosService.cs" />
     <Compile Include="Main\Dto\WebAlbumTag.cs" />
     <Compile Include="Main\Dto\WebSearchTagState.cs" />
     <Compile Include="Main\Dto\WebSearchTag.cs" />

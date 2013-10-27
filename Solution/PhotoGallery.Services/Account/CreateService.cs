@@ -8,12 +8,12 @@ using PhotoGallery.Services.Main;
 namespace PhotoGallery.Services.Account {
 
 	/*================================================================================================*/
-	public class PhotosService : BaseService {
+	public class CreateService : BaseService {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotosService(IFabricClient pFab) : base(pFab) {}
+		public CreateService(IFabricClient pFab) : base(pFab) {}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

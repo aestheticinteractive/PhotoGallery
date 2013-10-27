@@ -43,9 +43,9 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.JsonResult Tags()
+        public virtual System.Web.Mvc.JsonResult FindTags()
         {
-            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
+            return new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.FindTags);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -69,23 +69,23 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string Tags = "Tags";
+            public readonly string FindTags = "FindTags";
             public readonly string AddTag = "AddTag";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string Tags = "Tags";
+            public const string FindTags = "FindTags";
             public const string AddTag = "AddTag";
         }
 
 
-        static readonly ActionParamsClass_Tags s_params_Tags = new ActionParamsClass_Tags();
+        static readonly ActionParamsClass_FindTags s_params_FindTags = new ActionParamsClass_FindTags();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Tags TagsParams { get { return s_params_Tags; } }
+        public ActionParamsClass_FindTags FindTagsParams { get { return s_params_FindTags; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Tags
+        public class ActionParamsClass_FindTags
         {
             public readonly string id = "id";
             public readonly string first = "first";
@@ -117,14 +117,14 @@ namespace PhotoGallery.Web.Areas.Main.Controllers
     {
         public T4MVC_PhotosController() : base(Dummy.Instance) { }
 
-        partial void TagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id, bool? first);
+        partial void FindTagsOverride(T4MVC_System_Web_Mvc_JsonResult callInfo, string id, bool? first);
 
-        public override System.Web.Mvc.JsonResult Tags(string id, bool? first)
+        public override System.Web.Mvc.JsonResult FindTags(string id, bool? first)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.Tags);
+            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.FindTags);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "id", id);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "first", first);
-            TagsOverride(callInfo, id, first);
+            FindTagsOverride(callInfo, id, first);
             return callInfo;
         }
 

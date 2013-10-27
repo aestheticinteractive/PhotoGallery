@@ -11,13 +11,15 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 	public partial class PhotosController : BaseController {
 
 		private readonly PhotosService vPhotos;
+		private readonly CreateService vCreate;
 		private readonly SearchService vSearch;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public PhotosController(PhotosService pPhotos) {
+		public PhotosController(PhotosService pPhotos, CreateService pCreate) {
 			vPhotos = pPhotos;
+			vCreate = pCreate;
 			//TODO: inject this using a custom IFabricClientDataProv interface
 			vSearch = new SearchService(new FabricClient(FabricWebApplication.DataProvConfigKey));
 		}
@@ -26,7 +28,13 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		[HttpPost]
-		public virtual JsonResult Tags(string id, bool? first) {
+		public virtual JsonResult Tags(int id) {
+			return Json(vPhotos.GetTags(id));
+		}
+		
+		/*--------------------------------------------------------------------------------------------*/
+		[HttpPost]
+		public virtual JsonResult FindTags(string id, bool? first) {
 			return Json(vSearch.FindTags(id, (first ?? false)));
 		}
 
@@ -37,7 +45,7 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 
 			if ( ModelState.IsValid ) {
 				long artId = long.Parse(pModel.ArtifactId);
-				res = vPhotos.AddTag(pModel.PhotoId, artId, pModel.PosX, pModel.PosY);
+				res = vCreate.AddTag(pModel.PhotoId, artId, pModel.PosX, pModel.PosY);
 			}
 
 			return Json(new { success = res });

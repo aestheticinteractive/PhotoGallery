@@ -53,7 +53,7 @@
 		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
 		phoSetTags.loadData();
 		
-		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.Tags("", null))/';
+		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.FindTags("", null))/';
 		var addTagUrl = '@Url.Action(MVC.Main.Photos.AddTag())/';
 		
 		var phoLayView = new PhotoLayerView(phoSet, '#Site');
