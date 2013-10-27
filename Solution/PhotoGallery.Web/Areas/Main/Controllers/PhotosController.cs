@@ -29,6 +29,10 @@ namespace PhotoGallery.Web.Areas.Main.Controllers {
 		/*--------------------------------------------------------------------------------------------*/
 		[HttpPost]
 		public virtual JsonResult Tags(int? id) {
+			if ( id == null ) {
+				return null;
+			}
+
 			return Json(vPhotos.GetTags((int)id));
 		}
 		

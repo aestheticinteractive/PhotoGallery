@@ -48,6 +48,12 @@ PhotoLayerView.prototype.buildView = function() {
 			pScope.showTagLayer();
 		};
 	};
+	
+	var detailClosure = function(pScope) {
+		return function() {
+			pScope.toggleDetailPanel();
+		};
+	};
 
 	$(document)
 		.keydown(keyClosure(this, false))
@@ -71,7 +77,8 @@ PhotoLayerView.prototype.buildView = function() {
 		.click(navClosure(this, 1));
 
 	this.details = $('<p>')
-		.attr('class', 'details');
+		.attr('class', 'details')
+		.click(detailClosure(this));
 
 	this.tagModeBtn = $('<a>')
 		.attr('class', 'tagModeBtn')
@@ -122,8 +129,17 @@ PhotoLayerView.prototype.buildView = function() {
 
 	///
 
-	var tagDiv = $('<div>').attr('id', 'TaggingLayer');
-	this.layer.append(tagDiv);
+	var tagsDiv = $('<div>').attr('class', 'tagsPanel');
+	this.layer.append(tagsDiv);
+
+	this.tagsView = new PhotoLayerTagsView(this.photoLayer.tags, '#PhotoLayer .tagsPanel');
+	this.tagsView.buildView();
+	this.tagsView.hide();
+
+	///
+
+	var taggingDiv = $('<div>').attr('id', 'TaggingLayer');
+	this.layer.append(taggingDiv);
 
 	this.photoLayer.tagLayer.events.listen('closed', this, this.onTagLayerClose);
 
@@ -225,6 +241,17 @@ PhotoLayerView.prototype.onTagLayerClose = function() {
 	this.bar.show();
 };
 
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerView.prototype.toggleDetailPanel = function() {
+	if ( this.tagsView.isVisible() ) {
+		this.tagsView.hide();
+	}
+	else {
+		this.tagsView.show();
+		this.tagsView.update();
+	}
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
@@ -238,6 +265,7 @@ PhotoLayerView.prototype.onPhoto = function() {
 
 	this.photo.attr('src', phoData.url);
 	this.details.html(phoData.created.replace(' ', '<br/>'));
+	this.tagsView.update();
 	this.show();
 	this.onResize();
 	this.photoLayer.tagLayer.setPhotoId(phoData.photoId);

@@ -18,10 +18,15 @@ PhotoLayerTags.prototype.getTag = function(pIndex) {
 	return this.tags[pIndex];
 };
 
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerTags.prototype.setPhotoId = function(pPhotoId) {
+	this.photoId = pPhotoId;
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-PhotoLayerTags.prototype.loadTags = function(pPhotoId) {
+PhotoLayerTags.prototype.loadTags = function() {
 	if ( this.request ) {
 		this.request.abort();
 		this.request = null;
@@ -34,11 +39,12 @@ PhotoLayerTags.prototype.loadTags = function(pPhotoId) {
 	};
 
 	this.tags = [];
-	this.request = $.post(this.tagsUrl+pPhotoId, null, tagsClosure(this));
+	this.request = $.post(this.tagsUrl+this.photoId, null, tagsClosure(this));
+	this.events.send('loadStarted');
 };
 
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerTags.prototype.onTagsLoad = function(pData) {
 	this.tags = pData;
-	this.events.send('tagsLoaded');
+	this.events.send('loadCompleted');
 };

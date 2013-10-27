@@ -22,6 +22,7 @@ PhotoLayer.prototype.onPhoto = function() {
 	if ( this.currPhoto ) {
 		var id = this.currPhoto.photoId;
 
+		this.tags.setPhotoId(id);
 		this.tagLayer.setPhotoId(id);
 		this.preloadNextImage();
 

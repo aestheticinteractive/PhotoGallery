@@ -424,6 +424,7 @@ ul {
 	color: #fff;
 	font-size: 12px;
 	line-height: 1.3em;
+	cursor: pointer;
 }
 
 #PhotoLayer .bar .buttons {
@@ -455,15 +456,35 @@ ul {
 	background-image: url(/Content/gallery/close.png);
 }
 
-@media only screen and (max-width: 1024px) {
+#PhotoLayer .tagsPanel {
+	float: left;
+	position: fixed;
+	bottom: 50px;
+	width: 25%;
+	padding: 5px 5px 1px 5px;
+}
 
-	#PhotoLayer {
-		background-color: #000;
+#PhotoLayer .tagsPanel .tag {
+	display: inline-block; 
+	font-size: 11px;
+	color: #ccc;
+	color: rgba(255, 255, 255, 0.8);
+	background-color: rgba(0, 0, 0, 0.4);
+	margin: 0 4px 4px 0;
+	padding: 4px;
+}
+	
+#PhotoLayer .tagsPanel .tag:hover {
+	color: #fff;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media only screen and (max-width: 480px) {
+
+	#PhotoLayer .tagsPanel {
+		width: 100%;
 	}
 
-	#PhotoLayer .button {
-		width: inherit;
-	}
 }
 
 
