@@ -210,7 +210,7 @@
     <Compile Include="Models\IMvcLink.cs" />
     <Compile Include="Models\MvcLink.cs" />
     <Compile Include="Application\Windsor\ControllersInstaller.cs" />
-    <Compile Include="Application\Windsor\LogicInstaller.cs" />
+    <Compile Include="Application\Windsor\ServicesInstaller.cs" />
     <Compile Include="Application\Windsor\WindsorControllerFactory.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

@@ -12,9 +12,11 @@ namespace PhotoGallery.Web.Application.Windsor {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public void Install(IWindsorContainer pCont, IConfigurationStore pStore) {
-			pCont.Register(Classes.FromThisAssembly()
+			IRegistration ctrl = Classes.FromThisAssembly()
 				.BasedOn<IController>()
-				.LifestyleTransient());
+				.LifestyleTransient();
+
+			pCont.Register(ctrl);
 		}
 
 	}
