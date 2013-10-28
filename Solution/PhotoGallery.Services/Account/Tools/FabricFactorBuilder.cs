@@ -32,6 +32,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		Depict = 55437768435695617,
 
 		LhasaApso = 55435726858223616,
+		Dog = 55435554928459776,
 		Pet = 55434242198339585
 	};
 

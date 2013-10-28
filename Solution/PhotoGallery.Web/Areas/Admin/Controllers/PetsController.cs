@@ -33,6 +33,13 @@ namespace PhotoGallery.Web.Areas.Admin.Controllers {
 			vPets.AddDog("Gulliver Kinstner", "Lhasa Apso, pet", null,
 				(long)LiveArtifactId.LhasaApso, gulliverOwners);*/
 
+			/*IList<long> chewyOwners = new List<long>();
+			chewyOwners.Add(58694628326506496); //dave
+			chewyOwners.Add(58694638811217920); //pat
+
+			vPets.AddDog("Chewbacca McDonald", "Dog, pet", null,
+				(long)LiveArtifactId.Dog, chewyOwners);*/
+
 			return View();
 		}
 
