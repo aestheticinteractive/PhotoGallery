@@ -68,6 +68,11 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
+		public string OAuthRedirectUri {
+			get { throw new NotImplementedException(); }
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
 		public string GetGrantCodeUrl(bool pSwitchUser = false) {
 			throw new NotImplementedException();
 		}

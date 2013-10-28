@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -79,20 +80,38 @@ namespace PhotoGallery.Web {
 #endif
 
 			FabricDataProvSess = new FabricSessionContainer();
-			string redir = BaseUrl+"/Oauth/FabricRedirect";
 
 			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
-				FabricAppId, FabricAppSecret, FabricDataProvId, redir, FabricSessProv);
+				FabricAppId, FabricAppSecret, FabricDataProvId, RedirProv, FabricSessProv);
 
 			var dataProvConfig = new FabricClientConfig(DataProvConfigKey, "http://api.inthefabric.com",
-				FabricAppId, FabricAppSecret, FabricDataProvId, redir, (k => FabricDataProvSess));
+				FabricAppId, FabricAppSecret, FabricDataProvId, RedirProv, (k => FabricDataProvSess));
 
 			FabricClient.InitOnce(config);
 			FabricClient.AddConfig(dataProvConfig);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
+		private static string RedirProv(string pConfigKey) {
+			return HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)+
+				"/Oauth/FabricRedirect";
+		}
+
+		/*--------------------------------------------------------------------------------------------*/
 		private static IFabricSessionContainer FabricSessProv(string pConfigKey) {
+			string key = "Fabric_"+pConfigKey;
+
+			if ( HttpContext.Current != null ) {
+				var sess = HttpContext.Current.Session;
+				Log.Debug("SESSION: "+sess[key]);
+				IFabricSessionContainer sc = (sess[key] as IFabricSessionContainer);
+				Log.Debug("SESSION SC: "+(sc == null ? "no contain" : 
+					(sc.Person == null ? "no person" : sc.Person.SessionId)));
+			}
+			else {
+				Log.Debug("NO SESSION!");
+			}
+
 			return FabricSessionContainer.FromHttpContext(HttpContext.Current, pConfigKey);
 		}
 

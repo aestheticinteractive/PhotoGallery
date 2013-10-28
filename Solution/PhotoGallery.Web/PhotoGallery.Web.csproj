@@ -58,9 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Packages\Castle.Windsor.3.2.1\lib\net40\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Fabric.Clients.Cs, Version=0.2.4.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Packages\FabricClient.0.2.4.5\lib\Fabric.Clients.Cs.dll</HintPath>
+      <HintPath>..\..\Packages\FabricClient.0.2.4.6\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -251,18 +251,14 @@
     <Content Include="Scripts\foundation\foundation.forms.js" />
     <Content Include="Scripts\foundation\foundation.interchange.js" />
     <Content Include="Scripts\foundation\foundation.joyride.js" />
-    <Content Include="Scripts\foundation\foundation.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Scripts\foundation\foundation.js" />
     <Content Include="Scripts\foundation\foundation.magellan.js" />
     <Content Include="Scripts\foundation\foundation.orbit.js" />
     <Content Include="Scripts\foundation\foundation.placeholder.js" />
     <Content Include="Scripts\foundation\foundation.reveal.js" />
     <Content Include="Scripts\foundation\foundation.section.js" />
     <Content Include="Scripts\foundation\foundation.tooltips.js" />
-    <Content Include="Scripts\foundation\foundation.topbar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Scripts\foundation\foundation.topbar.js" />
     <Content Include="Scripts\gallery\PhotoLayerTagsView.js" />
     <Content Include="Scripts\gallery\PhotoLayer.js" />
     <Content Include="Scripts\gallery\PhotoLayerTags.js" />

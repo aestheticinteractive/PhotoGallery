@@ -64,9 +64,7 @@ namespace PhotoGallery.Daemon {
 			long dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 
 			var query = new Queries(new SessionProvider());
-			string redir = baseUrl+"/Oauth/FabricRedirect";
-
-			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId, redir);
+			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/
