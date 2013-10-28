@@ -23,6 +23,7 @@ TaggingLayer.prototype.setPhotoId = function(pPhotoId) {
 TaggingLayer.prototype.setSpotPos = function(pRelX, pRelY) {
 	this.spotX = pRelX;
 	this.spotY = pRelY;
+	console.log('TaggingLayer SpotPos: '+this.spotX+', '+this.spotY+' ('+this.photoId+')');
 };
 
 /*--------------------------------------------------------------------------------------------*/

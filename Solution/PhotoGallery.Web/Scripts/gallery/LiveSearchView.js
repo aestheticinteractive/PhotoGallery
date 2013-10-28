@@ -116,9 +116,13 @@ LiveSearchView.prototype.updateResults = function() {
 	
 	var highClosure = function(pScope, pArtifactId) {
 		return function() {
-			pScope.highClick = true;
+			if ( pScope.shouldIgnoreMoveUnderCursor() ) {
+				return;
+			}
+
+			pScope.highHover = true;
 			pScope.liveSearch.onHighlight(pArtifactId);
-			pScope.highClick = false;
+			pScope.highHover = false;
 		};
 	};
 
@@ -165,6 +169,20 @@ LiveSearchView.prototype.hide = function() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.beforeMoveUnderCursor = function() {
+	this.moveUnder = new Date().getTime();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+LiveSearchView.prototype.shouldIgnoreMoveUnderCursor = function() {
+	var ms = new Date().getTime()-this.moveUnder;
+	//console.log('LiveSearchView.shouldIgnoreMoveUnderCursor(): '+ms);
+	return (ms < 500);
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onKeyUp = function(pEvent) {
 	if ( !this.isVisible() ) {
 		return;
@@ -178,10 +196,12 @@ LiveSearchView.prototype.onKeyUp = function(pEvent) {
 			break;
 
 		case UP_ARROW:
+			this.beforeMoveUnderCursor();
 			this.liveSearch.shiftHighlight(-1);
 			break;
 
 		case DOWN_ARROW:
+			this.beforeMoveUnderCursor();
 			this.liveSearch.shiftHighlight(1);
 			break;
 	}
@@ -190,14 +210,21 @@ LiveSearchView.prototype.onKeyUp = function(pEvent) {
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchStart = function() {
 	this.loading.show();
-	this.scroller.scrollTop(0);
+	this.loadingFirst = true;
 	//this.scroller.hide();
 };
 
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onSearchData = function() {
 	//this.loading.html(this.liveSearch.getResults().length+'');
+	this.beforeMoveUnderCursor();
 	this.updateResults();
+
+	if ( this.loadingFirst ) {
+		this.loadingFirst = false;
+		this.scroller.scrollTop(0);
+	}
+
 	this.onHighlight();
 };
 
@@ -221,8 +248,6 @@ LiveSearchView.prototype.onClose = function() {
 	this.updateResults();
 };
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
 LiveSearchView.prototype.onHighlight = function() {
 	var id = this.liveSearch.getHighlightId();
@@ -238,7 +263,7 @@ LiveSearchView.prototype.onHighlight = function() {
 		}
 	});
 
-	if ( highTd == null || this.highClick ) {
+	if ( highTd == null || this.highHover ) {
 		return;
 	}
 
