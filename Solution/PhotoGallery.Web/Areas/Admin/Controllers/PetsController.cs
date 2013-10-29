@@ -40,6 +40,28 @@ namespace PhotoGallery.Web.Areas.Admin.Controllers {
 			vPets.AddDog("Chewbacca McDonald", "Dog, pet", null,
 				(long)LiveArtifactId.Dog, chewyOwners);*/
 
+			/*IList<long> boomerOwners = new List<long>();
+			boomerOwners.Add(58694649307463680); //david
+			boomerOwners.Add(58694670308343808); //jen
+			boomerOwners.Add(58694680783618048); //caleb
+
+			vPets.AddDog("Boomer McDonald", "Dog, pet", null,
+				(long)LiveArtifactId.Dog, boomerOwners);
+
+			IList<long> pixieOwners = new List<long>();
+			pixieOwners.Add(58693020653977600); //rick
+			pixieOwners.Add(58693020958064640); //sue
+
+			vPets.AddDog("Pixie Kinstner", "Dog, pet", null,
+				(long)LiveArtifactId.Dog, pixieOwners);
+
+			IList<long> kateOwners = new List<long>();
+			kateOwners.Add(58694360862031872); //lance
+			kateOwners.Add(58694523385020416); //julia
+
+			vPets.AddDog("Kate Kinstner", "Great Dane, pet", null,
+				(long)LiveArtifactId.GreatDane, kateOwners);*/
+
 			return View();
 		}
 
