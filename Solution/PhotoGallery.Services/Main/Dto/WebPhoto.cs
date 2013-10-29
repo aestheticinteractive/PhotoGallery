@@ -11,7 +11,7 @@ namespace PhotoGallery.Services.Main.Dto {
 		public string ImgName { get; internal set; }
 		public int AlbumId { get; internal set; }
 		public float Ratio { get; internal set; }
-		public DateTime Created { get; internal set; }
+		public DateTime Taken { get; internal set; }
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,15 @@ namespace PhotoGallery.Services.Main.Dto {
 			ImgName = p.ImgName;
 			AlbumId = p.Album.Id;
 			Ratio = p.Ratio;
-			Created = new DateTime(p.Created);
+
+			DateTime date = (p.Date == null ? DateTime.UtcNow : new DateTime((long)p.Date));
+#if DEBUG
+			const string estName = "Eastern Standard Time"; //Windows
+#else
+			const string estName = "US/Eastern"; //Unix
+#endif
+			TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById(estName);
+			Taken = TimeZoneInfo.ConvertTimeFromUtc(date, est);
 		}
 
 

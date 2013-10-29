@@ -20,7 +20,7 @@
 		
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			string url = Url.Content("~"+p.ImageUrl);
-			<text>ps.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
+			<text>ps.addData(@p.PhotoId, '@url', '@p.Taken', @p.Ratio);</text>
 		}
 		
 		var psView = new PhotoSetView(ps, '#PhotoSet', '#Site');

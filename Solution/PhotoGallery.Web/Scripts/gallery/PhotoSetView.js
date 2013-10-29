@@ -74,13 +74,17 @@ PhotoSetView.prototype.buildView = function() {
 		var data = this.photoSet.dataList[i];
 
 		var phoDiv = $('<div>')
-			.attr('class', 'thumb')
+			.attr('class', 'thumb photo')
 			.attr('data-id', data.photoId+'')
-			.attr('title', data.created)
 			.click(clickClosure(this))
 			.append($('<div>')
 				.attr('class', 'image')
 				.css('background-image', 'url('+data.url+')')
+			)
+			.append($('<p>')
+				.attr('class', 'textBox details')
+				.html(data.created)
+				.hide()
 			);
 
 		this.photoHold.append(phoDiv);
@@ -99,20 +103,15 @@ PhotoSetView.prototype.buildView = function() {
 
 	this.thumbs = $(this.selector+' .thumb');
 
-	/*$(this.selector+" .border").hide();
-
-	var thumbs = $(this.selector+" .thumb")
-		.click(onClickClosure(this.photoSet));
-		
 	if ( !isTouch() ) {
-		thumbs
+		this.thumbs
 			.mouseenter(function() {
-				$(this).find(".border").show();
+				$(this).find(".textBox").show();
 			})
 			.mouseleave(function() {
-				$(this).find(".border").hide();
+				$(this).find(".textBox").hide();
 			});
-	}*/
+	}
 	
 	this.metaView = new PhotoSetMetaView(this.photoSet.meta, '#Meta');
 	this.tagsView = new PhotoSetTagsView(this.photoSet.tags, '#Tags');

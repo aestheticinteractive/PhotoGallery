@@ -224,7 +224,7 @@ ul {
 	height: 240px;
 }
 
-#Page .thumb.album .textBox {
+#Page .textBox {
 	color: #fff;
 	background-color: rgba(0, 0, 0, 0.5);
 	font-size: 12px;
@@ -252,6 +252,12 @@ ul {
 	width: 100%;
 	height: 60px;
 	padding-right: 0;
+}
+
+#Page .thumb.photo .details {
+	position: absolute;
+	margin: 5px;
+	bottom: 0;
 }
 
 @media only screen and (max-width: 767px) {

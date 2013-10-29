@@ -9,7 +9,7 @@ namespace PhotoGallery.Services.Main.Dto {
 		string ImgName { get; }
 		int AlbumId { get; }
 		float Ratio { get; }
-		DateTime Created { get; }
+		DateTime Taken { get; }
 
 		string ImageUrl { get; }
 		string ThumbUrl { get; }
