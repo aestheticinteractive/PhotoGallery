@@ -63,10 +63,15 @@ PhotoLayerTagsView.prototype.onLoadComplete = function() {
 	for ( var i = 0 ; i < n ; ++i ) {
 		var tag = this.photoLayerTags.getTag(i);
 
+		if ( tag.Name == null ) {
+			tag = this.photoLayerTags.getTagData(tag.ArtifactId);
+		}
+
 		this.hold
 			.append($('<div>')
 				.attr('class', 'tag')
-				.html(tag.Name)
+				.attr('title', tag.Disamb)
+				.html(tag.Name ? tag.Name : tag.ArtifactId)
 			);
 	}
 };

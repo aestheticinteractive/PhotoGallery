@@ -24,6 +24,7 @@ namespace PhotoGallery.Services.Main.Dto {
 			FabricArtifact tagArt = pTagFactor.Related;
 
 			if ( tagArt == null ) {
+				ArtifactId = pTagFactor.RelatedArtifactId+"";
 				return;
 			}
 

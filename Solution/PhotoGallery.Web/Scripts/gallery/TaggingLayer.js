@@ -39,6 +39,11 @@ TaggingLayer.prototype.getSearchUrl = function() {
 	return this.searchUrl;
 };
 
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayer.prototype.getSelectedItem = function() {
+	return this.liveSearch.getSelectItem();
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
@@ -64,6 +69,7 @@ TaggingLayer.prototype.addTag = function(pArtifactId) {
 	console.log('TaggingLayer.addTag(): '+
 		data.PhotoId+', '+data.ArtifactId+', '+data.PosX+', '+data.PosY);
 
+	this.events.send('addTagStarted');
 	$.post(this.addUrl, data, compClosure(this));
 };
 

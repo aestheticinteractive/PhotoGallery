@@ -6,8 +6,12 @@
 function PhotoLayer(pPhotoSet, pTagsUrl, pSearchUrl, pAddUrl) {
 	this.photoSet = pPhotoSet;
 	this.photoSet.events.listen("photoChanged", this, this.onPhoto);
-	this.tagLayer = new TaggingLayer(pSearchUrl, pAddUrl);
+
 	this.tags = new PhotoLayerTags(pTagsUrl);
+
+	this.tagLayer = new TaggingLayer(pSearchUrl, pAddUrl);
+	this.tagLayer.events.listen('addTagStarted', this, this.onAddTagStarted);
+	this.tagLayer.events.listen('addTagCompleted', this, this.onAddTagCompleted);
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -36,4 +40,16 @@ PhotoLayer.prototype.preloadNextImage = function() {
 
 	var img = new Image();
 	img.src = this.photoSet.getData(id).url;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayer.prototype.onAddTagStarted = function() {
+	this.tags.cacheTagData(this.tagLayer.getSelectedItem());
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayer.prototype.onAddTagCompleted = function() {
+	this.tags.loadTags();
 };

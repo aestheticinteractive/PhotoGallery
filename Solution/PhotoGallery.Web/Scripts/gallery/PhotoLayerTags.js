@@ -5,6 +5,7 @@
 /*--------------------------------------------------------------------------------------------*/
 function PhotoLayerTags(pTagsUrl) {
 	this.tagsUrl = pTagsUrl;
+	this.cache = {};
 	this.events = new EventDispatcher('PhotoLayerTags');
 };
 
@@ -21,6 +22,18 @@ PhotoLayerTags.prototype.getTag = function(pIndex) {
 /*--------------------------------------------------------------------------------------------*/
 PhotoLayerTags.prototype.setPhotoId = function(pPhotoId) {
 	this.photoId = pPhotoId;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerTags.prototype.cacheTagData = function(pTag) {
+	this.cache[pTag.ArtifactId] = pTag;
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoLayerTags.prototype.getTagData = function(pArtifactId) {
+	return this.cache[pArtifactId];
 };
 
 
