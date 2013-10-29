@@ -312,7 +312,6 @@
     </None>
     <Content Include="Areas\Main\Views\Oauth\FabricRedirect.cshtml" />
     <Content Include="NHibernate.config" />
-    <Content Include="Areas\Main\Views\Albums\_AlbumThumb.cshtml" />
     <Content Include="Areas\Account\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Account\Views\Home\Index.cshtml" />
     <Content Include="Areas\Account\Views\Web.config" />
@@ -320,7 +319,6 @@
     <Content Include="Areas\Account\Views\Albums\Index.cshtml" />
     <Content Include="Areas\Account\Views\Albums\Create.cshtml" />
     <Content Include="Areas\Main\Views\Albums\Photos.cshtml" />
-    <Content Include="Areas\Main\Views\Shared\_PhotoThumb.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <Content Include="Areas\Main\Views\Albums\All.cshtml" />
     <Content Include="Areas\Main\Views\Albums\_AllPage.cshtml" />

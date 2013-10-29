@@ -3,63 +3,27 @@
 	WebAlbum a = Model.Album;
 }
 
-<div class="row">
-	<div class="large-4 push-8 columns">
-		<div class="rightTextBox">
-			<h2>
-				@a.Title
-			</h2>
-			<p>
-				Album by <strong>@a.UserName</strong><br/>
-				@a.DateRangeString
-			</p>
-			<div id="Meta" style="margin-top: 20px;">
-				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
-			</div>
-			<div id="Tags" style="margin-top: 20px;">
-				<img src="@Url.Content("~/Content/gallery/wait.gif")" />
-			</div>
-		</div>
-	</div>
-	
-	<div class="show-for-small columns separator"></div>
-	
-	<div class="large-8 pull-4 columns" id="Thumbs">
-		@foreach ( IWebPhoto p in Model.Photos ) {
-			Html.RenderPartial(MVC.Main.Shared.Views._PhotoThumb, p);
-		}
-	</div>
+<div id="PhotoSet">
 </div>
 
 @section scripts {
 	<script type="text/javascript">
-		var phoSet = new PhotoSet();
+		var ps = new PhotoSet('@a.Title', '@a.DateRangeString');
+		ps.initMetaInfo('@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))');
+		ps.initTagsInfo('@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))');
+
+		ps.initPhotoLayer(
+			'@Url.Action(MVC.Main.Photos.Tags(null))/',
+			'@Url.Action(MVC.Main.Photos.FindTags("", null))/',
+			'@Url.Action(MVC.Main.Photos.AddTag())/'
+		);
 		
 		@foreach ( IWebPhoto p in Model.Photos ) {
 			string url = Url.Content("~"+p.ImageUrl);
-			<text>phoSet.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
+			<text>ps.addData(@p.PhotoId, '@url', '@p.Created', @p.Ratio);</text>
 		}
 		
-		var phoSetView = new PhotoSetView(phoSet, '#Thumbs');
-		phoSetView.initView();
-
-		var metaUrl = '@(Url.Action(MVC.Main.Albums.MetasData(a.AlbumId)))';
-		var phoSetMeta = new PhotoSetMeta(phoSet, metaUrl);
-		var phoSetMetaView = new PhotoSetMetaView(phoSetMeta, '#Meta');
-		phoSetMeta.loadData();
-
-		var tagUrl = '@(Url.Action(MVC.Main.Albums.TagsData(a.AlbumId)))';
-		var phoSetTags = new PhotoSetTags(phoSet, tagUrl);
-		var phoSetTagsView = new PhotoSetTagsView(phoSetTags, '#Tags');
-		phoSetTags.loadData();
-		
-		var tagUrl = '@Url.Action(MVC.Main.Photos.Tags(null))/';
-		var tagSearchUrl = '@Url.Action(MVC.Main.Photos.FindTags("", null))/';
-		var addTagUrl = '@Url.Action(MVC.Main.Photos.AddTag())/';
-		var phoLay = new PhotoLayer(phoSet, tagUrl, tagSearchUrl, addTagUrl);
-
-		var phoLayView = new PhotoLayerView(phoLay, '#Site');
-		phoLayView.buildView();
-		phoLayView.hide();
+		var psView = new PhotoSetView(ps, '#PhotoSet', '#Site');
+		psView.buildView();
 	</script>
 }

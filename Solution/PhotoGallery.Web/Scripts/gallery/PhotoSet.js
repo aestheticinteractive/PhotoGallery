@@ -3,7 +3,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
-function PhotoSet() {
+function PhotoSet(pTitle, pSubtitle) {
+	this.title = pTitle;
+	this.subtitle = pSubtitle;
+
 	this.dataList = [];
 	this.dataMap = {};
 	this.filtList = null;
@@ -18,6 +21,23 @@ function PhotoSet() {
 	this.currentMap = function() {
 		return (this.filtMap == null ? this.dataMap : this.filtMap);
 	};
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.initMetaInfo = function(pMetaUrl) {
+	this.meta = new PhotoSetMeta(this, pMetaUrl);
+	//this.meta.loadData();
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.initTagsInfo = function(pTagsUrl) {
+	this.tags = new PhotoSetTags(this, pTagsUrl);
+	//this.tags.loadData();
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.initPhotoLayer = function(pTagsUrl, pSearchUrl, pAddUrl) {
+	this.photoLayer = new PhotoLayer(this, pTagsUrl, pSearchUrl, pAddUrl);
 };
 
 
@@ -47,6 +67,11 @@ PhotoSet.prototype.getCurrentData = function() { /* PhotoData */
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.getPhotoCount = function(pFiltered) {
 	return (pFiltered && this.filtList ? this.filtList : this.dataList).length;
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSet.prototype.getPhotoAtIndex = function(pIndex) {
+	return (pFiltered && this.filtList ? this.filtList : this.dataList)[pIndex];
 };
 
 /*----------------------------------------------------------------------------------------------------*/

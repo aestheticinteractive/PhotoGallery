@@ -3,7 +3,27 @@
 <div class="row">
 	<div class="large-12 columns">
 		@foreach ( WebAlbum a in Model.Albums ) {
-			Html.RenderPartial(MVC.Main.Albums.Views._AlbumThumb, a);
+			string url = Url.Content("~"+a.FirstPhoto.ImageUrl);
+			
+			<div class="thumb album">
+				<div class="image" style="background-image: url(@url);">
+				</div>
+				<p class="title textBox">
+					@a.Title
+				</p>
+				<div class="details">
+					<p class="textBox">
+						by <strong>@a.UserName</strong>
+					</p>
+					<p class="textBox">
+						@a.DateRangeString
+					</p>
+					<p class="textBox">
+						@a.NumPhotos photo@(a.NumPhotos==1?"":"s")
+					</p>
+				</div>
+				@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+			</div>
 		}
 	</div>
 </div>

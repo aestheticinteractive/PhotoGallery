@@ -9,11 +9,14 @@
 	</thead>
 	<tbody>
 		@foreach ( WebAlbum a in Model.Items ) {
+			string url = Url.Content("~"+a.FirstPhoto.ImageUrl);
+			
 			<tr>
 				<td style="padding: 0 4px 0 0;">
-					<div class="thumb album" style="width: 100%; height: 60px;
-							background-image: url(@Url.Content("~"+a.FirstPhoto.ImageUrl));">
-						@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+					<div class="thumb allAlbum">
+						<div class="image" style="background-image: url(@url);">
+							@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+						</div>
 					</div>
 				</td>
 				<td>
