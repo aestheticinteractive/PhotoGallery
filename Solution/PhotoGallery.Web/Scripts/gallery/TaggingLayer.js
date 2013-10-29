@@ -81,6 +81,16 @@ TaggingLayer.prototype.onAddTagComplete = function(pResponse) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
+TaggingLayer.prototype.onNext = function() {
+	this.events.send('nextRequested');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+TaggingLayer.prototype.onPrev = function() {
+	this.events.send('prevRequested');
+};
+
+/*--------------------------------------------------------------------------------------------*/
 TaggingLayer.prototype.onClose = function() {
 	this.events.send('closed');
 };

@@ -105,13 +105,26 @@ TaggingLayerView.prototype.onKeyup = function(pEvent) {
 		return;
 	}
 
-	if ( pEvent.which == ESCAPE_KEY ) {
-		if ( this.searchView.isVisible() ) {
+	if ( this.searchView.isVisible() ) {
+		if ( pEvent.which == ESCAPE_KEY ) {
 			this.searchView.onClose();
 		}
-		else {
+
+		return;
+	}
+	
+	switch ( pEvent.which ) {
+		case ESCAPE_KEY:
 			this.hide();
-		}
+			break;
+
+		case LEFT_ARROW:
+			this.taggingLayer.onPrev();
+			break;
+
+		case RIGHT_ARROW:
+			this.taggingLayer.onNext();
+			break;
 	}
 };
 
