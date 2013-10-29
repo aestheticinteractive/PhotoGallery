@@ -11,7 +11,8 @@ function PhotoSetTagsView(pPhotoSetTags, pSelector) {
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetTagsView.prototype.buildView = function() {
-	var hold = $(this.selector).html('');
+	this.hold = $(this.selector).html('');
+
 	var pst = this.photoSetTags;
 	var tags = pst.getTags();
 
@@ -82,7 +83,23 @@ PhotoSetTagsView.prototype.buildView = function() {
 		return div;
 	};
 
-	$(hold).append(buildList());
+	$(this.hold).append(buildList());
 
 	var tagDivs = $('#Tags .tag');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetTagsView.prototype.isVisible = function() {
+	return $(this.selector).is(':visible');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetTagsView.prototype.show = function() {
+	$(this.selector).show();
+	this.photoSetTags.loadData();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetTagsView.prototype.hide = function() {
+	$(this.selector).hide();
 };

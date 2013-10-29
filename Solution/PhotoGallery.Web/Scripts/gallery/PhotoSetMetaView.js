@@ -12,7 +12,7 @@ function PhotoSetMetaView(pPhotoSetMeta, pSelector) {
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.buildView = function() {
-	var hold = $(this.selector).html('');
+	this.hold = $(this.selector).html('');
 	var cf = this.photoSetMeta.photoSet.getPhotoCount(true);
 	var ct = this.photoSetMeta.photoSet.getPhotoCount(false);
 
@@ -85,7 +85,7 @@ PhotoSetMetaView.prototype.buildView = function() {
 				)
 			)
 		)
-		.appendTo(hold);
+		.appendTo(this.hold);
 
 	var expVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.exposure; });
 	var fnmVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.fNumber; });
@@ -98,10 +98,30 @@ PhotoSetMetaView.prototype.buildView = function() {
 	this.buildHistogram('#MetaIsoGraph', isoVals);
 };
 
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetMetaView.prototype.isVisible = function() {
+	return $(this.selector).is(':visible');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetMetaView.prototype.show = function() {
+	$(this.selector).show();
+	this.photoSetMeta.loadData();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetMetaView.prototype.hide = function() {
+	$(this.selector).hide();
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.buildHistogram = function(pSelector, pValues) {
+	if ( !pValues || !pValues.length ) {
+		return;
+	}
+
 	var g = {};
 	g.selector = pSelector;
 	g.width = 60;

@@ -26,6 +26,26 @@ PhotoSetView.prototype.buildView = function() {
 		};
 	};
 
+	var metaClosure = function(pScope) {
+		return function() {
+			pScope.tagsView.hide();
+			pScope.metaView.show();
+		};
+	};
+
+	var tagsClosure = function(pScope) {
+		return function() {
+			pScope.metaView.hide();
+			pScope.tagsView.show();
+		};
+	};
+	
+	var keyClosure = function(pScope) {
+		return function(pEvent) {
+			pScope.onKeyup(pEvent);
+		};
+	};
+
 	var n = this.photoSet.dataList.length;
 
 	var top = $('<div>')
@@ -55,10 +75,12 @@ PhotoSetView.prototype.buildView = function() {
 				.append($('<div>')
 					.attr('class', 'item')
 					.html('Info')
+					.click(metaClosure(this))
 				)
 				.append($('<div>')
 					.attr('class', 'item')
 					.html('Tags')
+					.click(tagsClosure(this))
 				)
 			)
 		);
@@ -85,6 +107,14 @@ PhotoSetView.prototype.buildView = function() {
 		this.photoHold.append(phoDiv);
 	}
 
+	var metaDiv = $('<div>')
+		.attr('id', 'Meta')
+		.attr('class', 'infoScreen');
+
+	var tagsDiv = $('<div>')
+		.attr('id', 'Tags')
+		.attr('class', 'infoScreen');
+
 	$(this.selector)
 		.append(top)
 		.append($('<div>')
@@ -92,6 +122,8 @@ PhotoSetView.prototype.buildView = function() {
 			.append($('<div>')
 				.attr('class', 'large-12 columns')
 				.append(this.photoHold)
+				.append(metaDiv)
+				.append(tagsDiv)
 			)
 		);
 
@@ -108,17 +140,24 @@ PhotoSetView.prototype.buildView = function() {
 	}
 	
 	this.metaView = new PhotoSetMetaView(this.photoSet.meta, '#Meta');
+	this.metaView.hide();
+
 	this.tagsView = new PhotoSetTagsView(this.photoSet.tags, '#Tags');
+	this.tagsView.hide();
 
 	this.layerView = new PhotoLayerView(this.photoSet.photoLayer, this.siteSelector);
 	this.layerView.buildView();
 	this.layerView.hide();
 
-	this.photoSet.meta.loadData();
-	this.photoSet.tags.loadData();
-
 	$(window).resize(resizeClosure(this));
+	$(document).keyup(keyClosure(this));
+
 	this.onResize();
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.isVisible = function() {
+	return $(this.selector).is(':visible');
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -159,4 +198,16 @@ PhotoSetView.prototype.onResize = function() {
 	$(this.selector+' .thumb')
 		.css('width', w+'%')
 		.css('height', h+'px');
+};
+
+/*--------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.onKeyup = function(pEvent) {
+	if ( !this.isVisible() ) {
+		return;
+	}
+
+	if ( pEvent.which == ESCAPE_KEY ) {
+		this.metaView.hide();
+		this.tagsView.hide();
+	}
 };

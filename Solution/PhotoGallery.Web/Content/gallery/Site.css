@@ -411,10 +411,6 @@ ul {
 	margin: 0 2px 2px 0;
 	cursor: pointer;
 	vertical-align: top;
-	
-	/*border: 0 solid;
-	border-left: 2px solid #888;
-	background-color: #ddd;*/
 }
 
 #PhotoSet .menu .item.title {
@@ -428,6 +424,16 @@ ul {
 #PhotoSet .menu .item.text {
 	cursor: inherit;
 	color: #888;
+}
+
+#PhotoSet .infoScreen {
+	width: 100%;
+	height: 100%;
+	background-color: #666;
+	background-color: rgba(30, 30, 30, 0.8);
+	position: absolute;
+	top: 0;
+	z-index: 999;
 }
 
 @media only screen and (max-width: 767px) {
