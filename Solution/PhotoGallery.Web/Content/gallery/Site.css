@@ -458,7 +458,7 @@ ul {
 	padding-top: 40px;
 }
 
-#PhotoSet .infoScreen .content .metaCell .avg {
+#PhotoSet .infoScreen .content .metaCell .val {
 	font-size: 72px;
 }
 
@@ -468,10 +468,22 @@ ul {
 	margin-bottom: 10px;
 }
 
-#PhotoSet .infoScreen .content .metaCell .histBar {
-	float: left;
-	height: 16px;
+#PhotoSet .infoScreen .content .metaCell .hist {
+	height: 46px;
+	padding: 4px 3px;
 	border-bottom: 2px solid #333;
+	background-color: #999;
+	background-color: rgba(51, 51, 51, 0.2);
+}
+
+#PhotoSet .infoScreen .content .metaCell .hist .slot {
+	float: left;
+	height: 40px;
+	padding: 0 1px 0 1px;
+}
+
+#PhotoSet .infoScreen .content .metaCell .hist .slot .bar {
+	width: 100%;
 }
 
 @media only screen and (max-width: 767px) {

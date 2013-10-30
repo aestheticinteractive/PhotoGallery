@@ -21,46 +21,67 @@ PhotoSetMetaView.prototype.buildView = function() {
 	var psm = this.photoSetMeta;
 
 	var buildCell = function(pName, pValues, pStrFunc) {
+		var buckets = psm.getBuckets(pValues, 20);
 		var avg = psm.getAvg(pValues);
-		var buckets = psm.getBuckets(pValues, 16);
 		var count = buckets.length;
-		var bucketDiv = $('<div>');
 		var buckMax = 0;
 
 		for ( var i = 0 ; i < count ; ++i ) {
 			buckMax = Math.max(buckMax, buckets[i].count);
 		}
 
+		var histDiv = $('<div>')
+			.attr('class', 'hist');
+		var histH = 40;
+
 		for ( var i = 0 ; i < count ; ++i ) {
 			var b = buckets[i];
 			var weight = 1-b.count/buckMax;
-			var col = pusher.color("#b66").hue('+'+(weight*225));
-				//.alpha(weight == 1 ? 0 : 1);
-				//.alpha((1-weight)*0.5+0.5);
-				//.saturation((1-weight)*75+25);
+			var h = (1-weight)*histH;
+			var col = pusher.color("#855").hue('+'+(weight*225));
 
-			bucketDiv
+			histDiv
 				.append($('<div>')
-					.attr('class', 'histBar')
 					.attr('title', pStrFunc(b.min)+' to '+pStrFunc(b.max)+' ('+b.count+')')
-					.css('background-color', col.html())
+					.attr('class', 'slot')
+					//.css('background-color', col.alpha(0.25).html())
 					.css('width', (100/count)+'%')
+					.append($('<div>')
+						.attr('class', 'bar')
+						//.css('border-top', '2px solid #333')
+						.css('background-color', col.html())
+						.css('height', h+'px')
+						.css('margin-top', (histH-h)+'px')
+					)
 				);
 		}
 
 		return $('<div>')
 			.attr('class', 'metaCell')
 			.append($('<div>')
-				.attr('class', 'avg')
+				.attr('class', 'val')
 				.html(pStrFunc(avg))
 			)
 			.append($('<div>')
 				.attr('class', 'name')
 				.html(pName)
 			)
-			.append(bucketDiv)
+			.append(histDiv)
 			.append($('<div>')
 				.css('clear', 'left')
+			);
+	};
+
+	var buildBasic = function(pName, pValue) {
+		return $('<div>')
+			.attr('class', 'metaCell')
+			.append($('<div>')
+				.attr('class', 'val')
+				.html(pValue)
+			)
+			.append($('<div>')
+				.attr('class', 'name')
+				.html(pName)
 			);
 	};
 
@@ -69,10 +90,10 @@ PhotoSetMetaView.prototype.buildView = function() {
 	var focVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.focalLen; });
 	var isoVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.isoSpeed; });
 
-	var expCell = buildCell('Avg. Shutter Speed', expVals, this.photoSetMeta.getExposureStr);
-	var fnmCell = buildCell('Avg. F-Number', fnmVals, this.photoSetMeta.getFNumberStr);
-	var focCell = buildCell('Avg. Focal Length', focVals, this.photoSetMeta.getFocalLengthStr);
-	var isoCell = buildCell('Avg. ISO Speed', isoVals, this.photoSetMeta.getIsoSpeedStr);
+	var expCell = buildCell('Avg. Shutter Speed', expVals, psm.getExposureStr);
+	var fnmCell = buildCell('Avg. F-Number', fnmVals, psm.getFNumberStr);
+	var focCell = buildCell('Avg. Focal Length', focVals, psm.getFocalLengthStr);
+	var isoCell = buildCell('Avg. ISO Speed', isoVals, psm.getIsoSpeedStr);
 	
 	var flaVals = this.photoSetMeta.getValues(
 		function(pPhotoData) { return (pPhotoData.flash == true ? 1 : 0); });
@@ -106,19 +127,12 @@ PhotoSetMetaView.prototype.buildView = function() {
 			.append($('<div>')
 				.attr('class', 'row')
 				.append($('<div>')
-					.attr('class', 'large-12 columns')
-					.append($('<div>')
-						.attr('class', 'metaCell')
-						.css('text-align', 'center')
-						.append($('<div>')
-							.attr('class', 'avg')
-							.html(this.photoSetMeta.getFlashUsageStr(flaAvg))
-						)
-						.append($('<div>')
-							.attr('class', 'name')
-							.html('Flash Usage')
-						)
-					)
+					.attr('class', 'large-6 columns')
+					.append(buildBasic("Photos", this.photoSetMeta.photoSet.dataList.length))
+				)
+				.append($('<div>')
+					.attr('class', 'large-6 columns')
+					.append(buildBasic("Flash Usage", this.photoSetMeta.getFlashUsageStr(flaAvg)))
 				)
 			)
 		);

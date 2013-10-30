@@ -89,25 +89,26 @@ PhotoSetMeta.prototype.getMax = function(pValues) {
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-PhotoSetMeta.prototype.getBuckets = function(pValues, pCount) {
-	var min = 999999999999;
-	var max = -999999999999;
+PhotoSetMeta.prototype.getBuckets = function(pValues, pCount, pHistMin, pHistMax) {
+	var min = pHistMin;
+	var max = pHistMax;
 
-	for ( var i = 0 ; i < pValues.length ; ++i ) {
-		min = Math.min(pValues[i], min);
-		max = Math.max(pValues[i], max);
+	if ( min == null ) {
+		min = 999999999999;
+		max = -999999999999;
+
+		for ( var i = 0 ; i < pValues.length ; ++i ) {
+			min = Math.min(pValues[i], min);
+			max = Math.max(pValues[i], max);
+		}
+	}
+
+	if ( min == max ) {
+		min--;
+		max++;
 	}
 
 	var size = (max-min)/pCount;
-	
-	if ( size == 0 ) {
-		return [{
-			min: min,
-			max: max,
-			count: pCount
-		}];
-	}
-
 	var buckets = [];
 
 	for ( i = 0 ; i < pCount ; ++i ) {
