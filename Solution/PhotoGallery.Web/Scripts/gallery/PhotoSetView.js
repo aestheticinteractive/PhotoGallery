@@ -28,15 +28,13 @@ PhotoSetView.prototype.buildView = function() {
 
 	var metaClosure = function(pScope) {
 		return function() {
-			pScope.tagsView.hide();
-			pScope.metaView.show();
+			pScope.toggleMeta();
 		};
 	};
 
 	var tagsClosure = function(pScope) {
 		return function() {
-			pScope.metaView.hide();
-			pScope.tagsView.show();
+			pScope.toggleTags();
 		};
 	};
 	
@@ -107,6 +105,11 @@ PhotoSetView.prototype.buildView = function() {
 		this.photoHold.append(phoDiv);
 	}
 
+	this.photoHold
+		.append($('<div>')
+			.css('clear', 'left')
+		);
+
 	var metaDiv = $('<div>')
 		.attr('id', 'Meta')
 		.attr('class', 'infoScreen');
@@ -121,6 +124,7 @@ PhotoSetView.prototype.buildView = function() {
 			.attr('class', 'row')
 			.append($('<div>')
 				.attr('class', 'large-12 columns')
+				.css('position', 'relative')
 				.append(this.photoHold)
 				.append(metaDiv)
 				.append(tagsDiv)
@@ -207,7 +211,44 @@ PhotoSetView.prototype.onKeyup = function(pEvent) {
 	}
 
 	if ( pEvent.which == ESCAPE_KEY ) {
-		this.metaView.hide();
-		this.tagsView.hide();
+		this.hideInfoScreen();
 	}
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.showInfoScreen = function() {
+	this.tagsView.hide();
+	this.metaView.hide();
+	this.thumbs.fadeTo(0, 0.15);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.hideInfoScreen = function() {
+	this.tagsView.hide();
+	this.metaView.hide();
+	this.thumbs.fadeTo(0, 1.0);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.toggleMeta = function() {
+	if ( this.metaView.isVisible() ) {
+		this.hideInfoScreen();
+		return;
+	};
+
+	this.showInfoScreen();
+	this.metaView.show();
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.toggleTags = function() {
+	if ( this.tagsView.isVisible() ) {
+		this.hideInfoScreen();
+		return;
+	};
+
+	this.showInfoScreen();
+	this.tagsView.show();
 };
