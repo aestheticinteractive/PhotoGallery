@@ -83,9 +83,10 @@ PhotoSetTagsView.prototype.buildView = function() {
 		return div;
 	};
 
-	$(this.hold).append(buildList());
-
+	this.hold.append(buildList());
 	var tagDivs = $('#Tags .tag');
+
+	this.hold.trigger('heightChanged');
 };
 
 /*--------------------------------------------------------------------------------------------*/

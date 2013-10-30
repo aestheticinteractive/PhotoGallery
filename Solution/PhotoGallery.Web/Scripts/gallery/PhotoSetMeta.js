@@ -66,28 +66,6 @@ PhotoSetMeta.prototype.getAvg = function(pValues) {
 	return (count == 0 ? null : sum/count);
 };
 
-/*----------------------------------------------------------------------------------------------------* /
-PhotoSetMeta.prototype.getMin = function(pValues) {
-	var min = 999999999999;
-
-	for ( var i = 0 ; i < pValues.length ; ++i ) {
-		min = Math.min(pValues[i], min);
-	}
-
-	return min;
-};
-
-/*----------------------------------------------------------------------------------------------------* /
-PhotoSetMeta.prototype.getMax = function(pValues) {
-	var max = -999999999999;
-
-	for ( var i = 0 ; i < pValues.length ; ++i ) {
-		max = Math.max(pValues[i], max);
-	}
-
-	return max;
-};
-
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMeta.prototype.getBuckets = function(pValues, pCount, pHistMin, pHistMax) {
 	var min = pHistMin;

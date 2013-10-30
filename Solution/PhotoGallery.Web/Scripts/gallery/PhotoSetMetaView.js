@@ -13,9 +13,6 @@ function PhotoSetMetaView(pPhotoSetMeta, pSelector) {
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.buildView = function() {
-	//var cf = this.photoSetMeta.photoSet.getPhotoCount(true);
-	//var ct = this.photoSetMeta.photoSet.getPhotoCount(false);
-
 	this.loaded = true;
 	this.hold.html('');
 	var psm = this.photoSetMeta;
@@ -98,6 +95,9 @@ PhotoSetMetaView.prototype.buildView = function() {
 	var flaVals = this.photoSetMeta.getValues(
 		function(pPhotoData) { return (pPhotoData.flash == true ? 1 : 0); });
 	var flaAvg = this.photoSetMeta.getAvg(flaVals);
+	
+	var cf = this.photoSetMeta.photoSet.getPhotoCount(true);
+	var ct = this.photoSetMeta.photoSet.getPhotoCount(false);
 
 	this.hold
 		.append($('<div>')
@@ -128,7 +128,12 @@ PhotoSetMetaView.prototype.buildView = function() {
 				.attr('class', 'row')
 				.append($('<div>')
 					.attr('class', 'large-6 columns')
-					.append(buildBasic("Photos", this.photoSetMeta.photoSet.dataList.length))
+					.append(
+						buildBasic(
+							'Photo Count'+(cf == ct ? '' : ' (Filtered)'),
+							ct+(cf == ct ? '' : ' ('+cf+')')
+						)
+					)
 				)
 				.append($('<div>')
 					.attr('class', 'large-6 columns')
@@ -136,6 +141,8 @@ PhotoSetMetaView.prototype.buildView = function() {
 				)
 			)
 		);
+
+	this.hold.trigger('heightChanged');
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -149,6 +156,9 @@ PhotoSetMetaView.prototype.show = function() {
 
 	if ( !this.loaded ) {
 		this.photoSetMeta.loadData();
+	}
+	else {
+		this.buildView();
 	}
 };
 

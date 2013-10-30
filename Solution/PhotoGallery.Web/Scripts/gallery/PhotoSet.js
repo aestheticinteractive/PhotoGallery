@@ -26,13 +26,11 @@ function PhotoSet(pTitle, pSubtitle) {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.initMetaInfo = function(pMetaUrl) {
 	this.meta = new PhotoSetMeta(this, pMetaUrl);
-	//this.meta.loadData();
 };
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSet.prototype.initTagsInfo = function(pTagsUrl) {
 	this.tags = new PhotoSetTags(this, pTagsUrl);
-	//this.tags.loadData();
 };
 
 /*----------------------------------------------------------------------------------------------------*/
