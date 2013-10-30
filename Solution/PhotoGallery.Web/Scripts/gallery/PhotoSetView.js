@@ -26,25 +26,49 @@ PhotoSetView.prototype.buildView = function() {
 		};
 	};
 
+	var photosClosure = function(pScope) {
+		return function() {
+			pScope.showPhotos();
+		};
+	};
+
 	var metaClosure = function(pScope) {
 		return function() {
-			pScope.toggleMeta();
+			pScope.showMeta();
 		};
 	};
 
 	var tagsClosure = function(pScope) {
 		return function() {
-			pScope.toggleTags();
-		};
-	};
-	
-	var keyClosure = function(pScope) {
-		return function(pEvent) {
-			pScope.onKeyup(pEvent);
+			pScope.showTags();
 		};
 	};
 
 	var n = this.photoSet.dataList.length;
+
+	this.photosBtn = $('<div>')
+		.attr('class', 'item btn')
+		.attr('title', 'View Photos')
+		.append($('<span>')
+			.attr('class', 'fa fa-picture-o fa-lg')
+		)
+		.click(photosClosure(this));
+	
+	this.metaBtn = $('<div>')
+		.attr('class', 'item btn')
+		.attr('title', 'View Info')
+		.append($('<span>')
+			.attr('class', 'fa fa-info-circle fa-lg')
+		)
+		.click(metaClosure(this));
+	
+	this.tagsBtn = $('<div>')
+		.attr('class', 'item btn')
+		.attr('title', 'View Tags')
+		.append($('<span>')
+			.attr('class', 'fa fa-tags fa-lg')
+		)
+		.click(tagsClosure(this));
 
 	var top = $('<div>')
 		.attr('class', 'row header')
@@ -70,16 +94,9 @@ PhotoSetView.prototype.buildView = function() {
 					.css('width', 'auto')
 					.html(n+' photos')
 				)
-				.append($('<div>')
-					.attr('class', 'item')
-					.html('Info')
-					.click(metaClosure(this))
-				)
-				.append($('<div>')
-					.attr('class', 'item')
-					.html('Tags')
-					.click(tagsClosure(this))
-				)
+				.append(this.photosBtn)
+				.append(this.metaBtn)
+				.append(this.tagsBtn)
 			)
 		);
 
@@ -110,14 +127,6 @@ PhotoSetView.prototype.buildView = function() {
 			.css('clear', 'left')
 		);
 
-	var metaDiv = $('<div>')
-		.attr('id', 'Meta')
-		.attr('class', 'infoScreen');
-
-	var tagsDiv = $('<div>')
-		.attr('id', 'Tags')
-		.attr('class', 'infoScreen');
-
 	$(this.selector)
 		.append(top)
 		.append($('<div>')
@@ -126,8 +135,14 @@ PhotoSetView.prototype.buildView = function() {
 				.attr('class', 'large-12 columns')
 				.css('position', 'relative')
 				.append(this.photoHold)
-				.append(metaDiv)
-				.append(tagsDiv)
+				.append($('<div>')
+					.attr('id', 'Meta')
+					.attr('class', 'infoScreen')
+				)
+				.append($('<div>')
+					.attr('id', 'Tags')
+					.attr('class', 'infoScreen')
+				)
 			)
 		);
 
@@ -154,9 +169,8 @@ PhotoSetView.prototype.buildView = function() {
 	this.layerView.hide();
 
 	$(window).resize(resizeClosure(this));
-	$(document).keyup(keyClosure(this));
-
 	this.onResize();
+	this.highlightBtn(this.photosBtn);
 };
 
 /*--------------------------------------------------------------------------------------------*/
@@ -204,24 +218,33 @@ PhotoSetView.prototype.onResize = function() {
 		.css('height', h+'px');
 };
 
-/*--------------------------------------------------------------------------------------------*/
-PhotoSetView.prototype.onKeyup = function(pEvent) {
-	if ( !this.isVisible() ) {
-		return;
-	}
-
-	if ( pEvent.which == ESCAPE_KEY ) {
-		this.hideInfoScreen();
-	}
-};
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.showPhotos = function() {
+	this.hideInfoScreen();
+	this.highlightBtn(this.photosBtn);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.showMeta = function() {
+	this.showInfoScreen();
+	this.metaView.show();
+	this.highlightBtn(this.metaBtn);
+};
+
+/*----------------------------------------------------------------------------------------------------*/
+PhotoSetView.prototype.showTags = function() {
+	this.showInfoScreen();
+	this.tagsView.show();
+	this.highlightBtn(this.tagsBtn);
+};
+
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetView.prototype.showInfoScreen = function() {
 	this.tagsView.hide();
 	this.metaView.hide();
-	this.thumbs.fadeTo(0, 0.15);
+	this.thumbs.fadeTo(0, 0.2);
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -232,23 +255,9 @@ PhotoSetView.prototype.hideInfoScreen = function() {
 };
 
 /*----------------------------------------------------------------------------------------------------*/
-PhotoSetView.prototype.toggleMeta = function() {
-	if ( this.metaView.isVisible() ) {
-		this.hideInfoScreen();
-		return;
-	};
-
-	this.showInfoScreen();
-	this.metaView.show();
-};
-
-/*----------------------------------------------------------------------------------------------------*/
-PhotoSetView.prototype.toggleTags = function() {
-	if ( this.tagsView.isVisible() ) {
-		this.hideInfoScreen();
-		return;
-	};
-
-	this.showInfoScreen();
-	this.tagsView.show();
+PhotoSetView.prototype.highlightBtn = function(pBtn) {
+	this.photosBtn.attr('class', 'item btn');
+	this.metaBtn.attr('class', 'item btn');
+	this.tagsBtn.attr('class', 'item btn');
+	pBtn.attr('class', 'item btn active');
 };

@@ -16,6 +16,7 @@ PhotoSetMetaView.prototype.buildView = function() {
 	//var cf = this.photoSetMeta.photoSet.getPhotoCount(true);
 	//var ct = this.photoSetMeta.photoSet.getPhotoCount(false);
 
+	this.loaded = true;
 	this.hold.html('');
 	var psm = this.photoSetMeta;
 
@@ -121,43 +122,6 @@ PhotoSetMetaView.prototype.buildView = function() {
 				)
 			)
 		);
-
-	/*$('<table>')
-		.append($('<tbody>')
-			.append($('<tr>')
-				.append(
-					$('<td>').html('Photo Count')
-				)
-				.append(
-					$('<td>').html('<strong>'+cf+(cf != ct ? ' ('+ct+' total)' : '')+'</strong>')
-				)
-				.append(
-					$('<td>')
-				)
-			)
-			.append($('<tr>')
-				.append(
-					$('<td>').html('Flash Usage')
-				)
-				.append(
-					$('<td>').html('<strong>'+this.photoSetMeta.getFlashUsageAvgStr()+'</strong>')
-				)
-				.append(
-					$('<td>')
-				)
-			)
-		)
-		.appendTo(this.hold);
-
-	var expVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.exposure; });
-	var fnmVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.fNumber; });
-	var focVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.focalLen; });
-	var isoVals = this.photoSetMeta.getValues(function(pPhotoData) { return pPhotoData.isoSpeed; });
-
-	this.buildHistogram('#MetaExpGraph', expVals);
-	this.buildHistogram('#MetaFNumGraph', fnmVals);
-	this.buildHistogram('#MetaFocalGraph', focVals);
-	this.buildHistogram('#MetaIsoGraph', isoVals);*/
 };
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -168,69 +132,13 @@ PhotoSetMetaView.prototype.isVisible = function() {
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.show = function() {
 	$(this.selector).show();
-	this.photoSetMeta.loadData();
+
+	if ( !this.loaded ) {
+		this.photoSetMeta.loadData();
+	}
 };
 
 /*----------------------------------------------------------------------------------------------------*/
 PhotoSetMetaView.prototype.hide = function() {
 	$(this.selector).hide();
 };
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*----------------------------------------------------------------------------------------------------* /
-PhotoSetMetaView.prototype.buildHistogram = function(pSelector, pValues) {
-	if ( !pValues || !pValues.length ) {
-		return;
-	}
-
-	var g = {};
-	g.selector = pSelector;
-	g.width = 60;
-	g.height = 15;
-
-	g.xs = d3.scale
-		.linear()
-		.domain([0, d3.max(pValues)])
-		.range([0, g.width]);
-
-	g.data = d3.layout
-		.histogram()
-		.bins(g.xs.ticks(20))(pValues);
-
-	g.ys = d3.scale
-		.linear()
-		.domain([0, d3.max(g.data, function (d) { return d.y; })])
-		.range([g.height, 0]);
-
-	g.xAxis = d3.svg
-		.axis()
-		.scale(g.xs)
-		.orient('bottom');
-
-	g.svg = d3.select(g.selector)
-		.append('svg')
-		.attr('width', g.width)
-		.attr('height', g.height)
-		.append('g');
-
-	////
-
-	g.bar = g.svg.selectAll('.bar')
-		.data(g.data)
-		.enter()
-		.append('g')
-			.attr('class', 'miniHistBar')
-			.attr('transform', function (d) { return 'translate('+g.xs(d.x)+','+g.ys(d.y)+')'; });
-
-	g.bar.append('rect')
-		.attr('width', g.xs(g.data[0].dx))
-		.attr('height', function (d) { return g.height-g.ys(d.y); });
-
-	g.svg.append('g')
-		.attr('class', 'miniHistXAxis')
-		.attr('transform', 'translate(0,'+g.height+')')
-		.call(g.xAxis);
-
-	return g;
-};*/

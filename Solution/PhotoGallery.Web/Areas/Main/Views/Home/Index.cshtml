@@ -22,10 +22,13 @@
 		<div class="large-6 columns">
 			<div class="landingAlbumHold">
 				@foreach ( WebAlbum a in Model.Albums ) {
+					string url = Url.Content("~"+a.FirstPhoto.ImageUrl);
+					
 					<div class="landingThumbHold">
-					   <div class="thumb landingAlbum" title="@a.Title" style="background-image: 
-								url(@Url.Content("~"+a.FirstPhoto.ImageUrl));">
-							@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+					   <div class="thumb landingAlbum" title="@a.Title">
+							<div class="image" style="background-image: url(@url);">
+								@Html.ActionLink(" ", MVC.Main.Albums.Photos(a.AlbumId))
+							</div>
 						</div>
 					</div>
 				}

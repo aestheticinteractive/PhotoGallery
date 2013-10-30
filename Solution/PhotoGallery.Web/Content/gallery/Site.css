@@ -403,13 +403,11 @@ ul {
 #PhotoSet .menu .item {
 	height: 40px;
 	font-size: 16px;
-	color: #38c;
 	display: inline-block;
 	border: 1px solid #d4d4d4;
 	background-color: #f2f2f2;
 	padding: 11px;
 	margin: 0 2px 2px 0;
-	cursor: pointer;
 	vertical-align: top;
 }
 
@@ -422,8 +420,25 @@ ul {
 }
 
 #PhotoSet .menu .item.text {
-	cursor: inherit;
 	color: #888;
+}
+
+#PhotoSet .menu .item.btn {
+	width: 40px;
+	padding-left: 0;
+	padding-right: 0;
+	text-align: center;
+	cursor: pointer;
+	color: #666;
+	border: 1px solid #aaa;
+	background-color: #ccc;
+}
+
+#PhotoSet .menu .item.btn.active {
+	cursor: pointer;
+	color: #fff;
+	border: 1px solid transparent;
+	background-color: #333;
 }
 
 #PhotoSet .infoScreen {
@@ -455,7 +470,7 @@ ul {
 
 #PhotoSet .infoScreen .content .metaCell .histBar {
 	float: left;
-	height: 12px;
+	height: 16px;
 	border-bottom: 2px solid #333;
 }
 
@@ -466,14 +481,18 @@ ul {
 	}
 	
 	#PhotoSet .menu .item {
-		height: 30px;
+		height: 36px;
 		font-size: 14px;
-		padding: 7px;
+		padding: 10px;
+	}
+	
+	#PhotoSet .menu .item.btn {
+		width: 36px;
 	}
 	
 	#PhotoSet .menu .item.title {
 		font-size: 18px;
-		padding-top: 5px;
+		padding-top: 8px;
 	}
 	
 	#PhotoSet .infoScreen .content {
