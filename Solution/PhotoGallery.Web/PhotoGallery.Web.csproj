@@ -232,14 +232,6 @@
     <Content Include="Content\foundation\foundation.css" />
     <Content Include="Content\foundation\foundation.mvc.css" />
     <Content Include="Content\foundation\normalize.css" />
-    <Content Include="Content\gallery\arrow-left.png" />
-    <Content Include="Content\gallery\arrow-right.png" />
-    <Content Include="Content\gallery\close.png" />
-    <Content Include="Content\gallery\person.png" />
-    <Content Include="Content\gallery\tag-search-close.png" />
-    <Content Include="Content\gallery\tag.png" />
-    <Content Include="Content\gallery\wait.gif" />
-    <Content Include="Content\gallery\wait-small.gif" />
     <Content Include="Scripts\exif\binaryajax.js" />
     <Content Include="Scripts\exif\exif.js" />
     <Content Include="Scripts\exif\imageinfo.js" />

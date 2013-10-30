@@ -81,22 +81,26 @@ PhotoLayerView.prototype.buildView = function() {
 		.click(detailClosure(this));
 
 	this.tagModeBtn = $('<a>')
-		.attr('class', 'tagModeBtn')
+		.attr('class', 'fa fa-tag fa-2x')
+		.css('padding-top', '5px')
 		.attr('title', 'Enter Tag Mode')
 		.click(tagClosure(this));
 
 	this.prevBtn = $('<a>')
-		.attr('class', 'prevBtn')
+		.attr('class', 'fa fa-chevron-left fa-2x')
+		.css('padding-right', '2px')
 		.attr('title', 'Previous Photo')
 		.click(navClosure(this, -1));
 
 	this.nextBtn = $('<a>')
-		.attr('class', 'nextBtn')
+		.attr('class', 'fa fa-chevron-right fa-2x')
+		.css('padding-left', '2px')
 		.attr('title', 'Next Photo')
 		.click(navClosure(this, 1));
 
 	this.closeBtn = $('<a>')
-		.attr('class', 'closeBtn')
+		.attr('class', 'fa fa-times fa-2x')
+		.css('padding-top', '3px')
 		.attr('title', 'Close Photo')
 		.click(navClosure(this, 0));
 
@@ -109,9 +113,9 @@ PhotoLayerView.prototype.buildView = function() {
 		
 	if ( !isTouch() ) {
 		this.buttons.find('a')
-			.fadeTo(0, 0.4)
+			.fadeTo(0, 0.5)
 			.mouseenter(function() { $(this).fadeTo(0, 1.0); })
-			.mouseleave(function() { $(this).fadeTo(0, 0.4); });
+			.mouseleave(function() { $(this).fadeTo(0, 0.5); });
 	}
 
 	this.bar = $('<div>')

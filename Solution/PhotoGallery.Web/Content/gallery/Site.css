@@ -580,23 +580,10 @@ ul {
 	float: left;
 	width: 40px;
 	height: 40px;
+	color: #fff;
 	background-color: rgba(0, 0, 0, 0.4);
-}
-
-#PhotoLayer .bar .buttons .tagModeBtn {
-	background-image: url(/Content/gallery/tag.png);
-}
-
-#PhotoLayer .bar .buttons .prevBtn {
-	background-image: url(/Content/gallery/arrow-left.png);
-}
-
-#PhotoLayer .bar .buttons .nextBtn {
-	background-image: url(/Content/gallery/arrow-right.png);
-}
-
-#PhotoLayer .bar .buttons .closeBtn {
-	background-image: url(/Content/gallery/close.png);
+	text-align: center;
+	padding-top: 6px;
 }
 
 #PhotoLayer .tagsPanel {
@@ -698,24 +685,21 @@ ul {
 	width: 100%;
 	height: 25px;
 	margin-top: -25px;
-	background-image: url(/Content/gallery/wait-small.gif);
-	background-repeat: no-repeat;
-	background-position: 250px 0px;
+	padding-left: 252px;
+	color: #999;
 }
 
 #TaggingLayer .liveSearch .topBar .close {
 	width: 20px;
 	height: 20px;
-	background-image: url(/Content/gallery/tag-search-close.png);
 	position: absolute;
 	top: 7px;
 	right: 7px;
 	cursor: pointer;
-}
-
-#TaggingLayer .liveSearch .topBar .cancel:hover {
 	color: #fff;
 	background-color: #833;
+	text-align: center;
+	padding: 1px 1px 0 0;
 }
 
 #TaggingLayer .liveSearch .scroller {
@@ -1006,13 +990,14 @@ table tbody tr td.vertTop {
 #DataPage .wait {
 	width: 100%;
 	height: 100%;
-	background-image: url(/Content/gallery/wait.gif);
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
 	position: absolute;
 	top: 0;
 	left: 0;
 	display: none;
+	text-align: center;
+	padding-top: 50px;
+	color: #bbb;
+	color: rgba(0, 0, 0, 0.25);
 }
 
 

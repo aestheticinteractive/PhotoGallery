@@ -37,6 +37,9 @@ LiveSearchView.prototype.buildView = function(pInputPlaceholder, pShowClose) {
 	var close = $('<div>')
 		.attr('class', 'close')
 		.attr('title', 'Cancel')
+		.append($('<span>')
+			.attr('class', 'fa fa-times')
+		)
 		.fadeTo(0, 0.5)
 		.click(closeClosure(this));
 
@@ -52,6 +55,9 @@ LiveSearchView.prototype.buildView = function(pInputPlaceholder, pShowClose) {
 
 	this.loading = $('<div>')
 		.attr('class', 'loading')
+		.append($('<span>')
+			.attr('class', 'fa fa-spinner fa-spin')
+		)
 		.hide();
 
 	var inputHold = $('<div>')
