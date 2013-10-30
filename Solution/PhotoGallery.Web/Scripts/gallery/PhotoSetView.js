@@ -299,4 +299,6 @@ PhotoSetView.prototype.onHeightChange = function() {
 	}
 
 	this.thumbsHold.css('min-height', h);
+	//this.thumbsHold.css('height', h);
+	//this.thumbsHold.css('overflow', 'hidden');
 };

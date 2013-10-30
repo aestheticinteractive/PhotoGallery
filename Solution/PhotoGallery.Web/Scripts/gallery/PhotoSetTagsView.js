@@ -40,14 +40,14 @@ PhotoSetTagsView.prototype.buildView = function() {
 		var isPer = pst.isPersonTag(pTag.Id);
 		var w = 1-pst.getTagWeight(pTag.Id);
 		var col = pusher.color("#b66").hue('+'+(w*w*w*225));
-		var bgCol = col.alpha(0.25*(1-w*w*w)+0.05).html();
+		var bgCol = col.alpha(0.55*(1-w*w*w)+0.2).html();
 
 		return $('<div>')
 			.attr('title', pTag.Disamb)
 			.attr('class', 'tag')
 			.attr('data-id', pTag.Id)
 			.css('border', '1px solid '+col.hex6())
-			.css('border', '1px solid '+col.alpha(0.5).html())
+			.css('border', '1px solid '+col.html())
 			.css('background-color', bgCol)
 			.hover(
 				function() {
@@ -74,7 +74,8 @@ PhotoSetTagsView.prototype.buildView = function() {
 	};
 
 	var buildList = function() {
-		var div = $('<div>');
+		var div = $('<div>')
+			.attr('class', 'tagCell');
 
 		for ( var i = 0 ; i < tags.length ; ++i ) {
 			div.append(buildRow(tags[i]));
@@ -82,8 +83,19 @@ PhotoSetTagsView.prototype.buildView = function() {
 
 		return div;
 	};
+	
+	this.hold
+		.append($('<div>')
+			.attr('class', 'content')
+			.append($('<div>')
+				.attr('class', 'row')
+				.append($('<div>')
+					.attr('class', 'large-12 columns')
+					.append(buildList())
+				)
+			)
+		);
 
-	this.hold.append(buildList());
 	var tagDivs = $('#Tags .tag');
 
 	this.hold.trigger('heightChanged');

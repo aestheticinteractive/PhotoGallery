@@ -446,16 +446,18 @@ ul {
 	top: 0;
 	left: 0;
 	width: 100%;
+	overflow: hidden;
 }
 
 #PhotoSet .infoScreen .content {
 	max-width: 900px;
 	width: 90%;
 	margin: 0 auto 0 auto;
+	padding-top: 40px;
 }
 
 #PhotoSet .infoScreen .content .metaCell {
-	padding-top: 40px;
+	padding-bottom: 40px;
 }
 
 #PhotoSet .infoScreen .content .metaCell .val {
@@ -486,6 +488,48 @@ ul {
 	width: 100%;
 }
 
+#PhotoSet .infoScreen .content .tagCell {
+	padding-bottom: 40px;
+	text-align: center;
+}
+
+#PhotoSet .infoScreen .content .tag {
+	display: inline-block; 
+	font-size: 16px;
+	color: #666;
+	color: rgba(0, 0, 0, 0.75);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background-color: transparent;
+	margin: 0 8px 8px 0;
+	padding: 8px;
+	cursor: pointer;
+}
+
+#PhotoSet .infoScreen .content .tag:hover {
+	background-color: #38c;
+	color: #fff;
+}
+	
+#PhotoSet .infoScreen .content .tagActive {
+	background-color: #666;
+	color: #fff;
+}
+	
+#PhotoSet .infoScreen .content .tagActive:hover {
+	background-color: #555;
+}
+
+#PhotoSet .infoScreen .content .tag .number {
+	font-size: 12px;
+	margin-right: 6px;
+	color: #fff;
+	color: rgba(255, 255, 255, 0.75);
+	padding: 4px 5px;
+	min-width: 18px;
+	text-align: center;
+	display: inline-block;
+}
+
 @media only screen and (max-width: 767px) {
 
 	#PhotoSet .row.header {
@@ -509,10 +553,11 @@ ul {
 	
 	#PhotoSet .infoScreen .content {
 		width: 100%;
+		padding-top: 20px;
 	}
 	
 	#PhotoSet .infoScreen .content .metaCell {
-		padding: 20px 36px 0 36px;
+		padding: 0 36px 30px 36px;
 	}
 	
 	#PhotoSet .infoScreen .content .metaCell .val {
@@ -522,7 +567,24 @@ ul {
 	#PhotoSet .infoScreen .content .metaCell .name {
 		font-size: 14px;
 	}
+	
+	#PhotoSet .infoScreen .content .tagCell {
+		padding: 0 36px 20px 36px;
+	}
 
+	#PhotoSet .infoScreen .content .tag {
+		font-size: 14px;
+		margin: 0 4px 4px 0;
+		padding: 4px;
+	}
+
+	#PhotoSet .infoScreen .content .tag .number {
+		font-size: 10px;
+		margin-right: 4px;
+		padding: 2px 3px;
+		min-width: 13px;
+	}
+	
 }
 
 
@@ -752,52 +814,6 @@ ul {
 	font-size: 12px;
 	color: #999;
 	color: rgba(255, 255, 255, 0.5);
-}
-
-
-/*----------------------------------------------------------------------------------------------------*/
-
-
-#Tags {
-	max-height: 205px;
-	overflow: auto;
-}
-
-#Tags .tag {
-	display: inline-block; 
-	font-size: 11px;
-	color: #666;
-	color: rgba(0, 0, 0, 0.75);
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	background-color: transparent;
-	margin: 0 4px 4px 0;
-	padding: 4px;
-	cursor: pointer;
-}
-	
-#Tags .tag:hover {
-	background-color: #38c;
-	color: #fff;
-}
-	
-#Tags .tagActive {
-	background-color: #666;
-	color: #fff;
-}
-	
-#Tags .tagActive:hover {
-	background-color: #555;
-}
-
-#Tags .tag .number {
-	font-size: 10px;
-	margin-right: 3px;
-	color: #fff;
-	color: rgba(255, 255, 255, 0.75);
-	padding: 2px 3px;
-	min-width: 14px;
-	text-align: center;
-	display: inline-block;
 }
 
 
