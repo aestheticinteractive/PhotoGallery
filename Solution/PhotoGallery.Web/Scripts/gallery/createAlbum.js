@@ -1,13 +1,14 @@
 ﻿/// <reference path="~/Scripts/jquery-2.0.3-vsdoc.js" />
 
-var caData;
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function submitCreateAlbum(albumUrl, photoUrl, editAlbumId) {
-	var form = $("#CreateAlbum");
+function CreateAlbum() {
+};
 
+/*--------------------------------------------------------------------------------------------*/
+CreateAlbum.prototype.onFormSubmit = function(pAlbumUrl, pPhotoUrl, pEditAlbumId) {
+	var form = $("#CreateAlbum");
 	form.validate();
 
 	if ( !form.valid() ) {
@@ -16,92 +17,115 @@ function submitCreateAlbum(albumUrl, photoUrl, editAlbumId) {
 
 	form.hide();
 
-	caData = {};
-	caData.photoUrl = photoUrl;
-	caData.title = $('#Title').val();
-	caData.imagesOrig = $('#Files').get(0).files;
-	caData.imageCount = caData.imagesOrig.length;
-	caData.uploadIndex = -1;
-	caData.uploadCount = 0;
-	caData.failCount = 0;
+	this.photoUrl = pPhotoUrl;
+	this.title = $('#Title').val();
+	this.imagesOrig = $('#Files').get(0).files;
+	this.imageCount = this.imagesOrig.length;
+	this.uploadIndex = -1;
+	this.uploadCount = 0;
+	this.failCount = 0;
 
 	var prog = $("#CreateAlbumProgress").show();
-	var action = (editAlbumId == null ? "Creating" : "Editing");
-	prog.find("#Title").html(action+' album "' + caData.title + '":');
-	onCreateAlbumProgress();
+	var action = (pEditAlbumId == null ? "Creating" : "Editing");
+	prog.find("#Title").html(action+' album "' + this.title + '":');
+	this.onCreateAlbumProgress();
 
 	var data = {
-		Title: caData.title
+		Title: this.title
 	};
 
-	if ( editAlbumId == null ) {
-		var jqxhr = $.post(albumUrl, data, onAlbumTitleSuccess);
-		jqxhr.fail(onAlbumTitleFail);
+	if ( pEditAlbumId == null ) {
+		var successClosure = function(pScope) {
+			return function(pData) {
+				pScope.onAlbumTitleSuccess(pData);
+			};
+		};
+
+		var failClosure = function(pScope) {
+			return function(pData, pStatus) {
+				pScope.onAlbumTitleFail(pData, pStatus);
+			};
+		};
+
+		var jqxhr = $.post(pAlbumUrl, data, successClosure(this));
+		jqxhr.fail(failClosure(this));
 	}
 	else {
-		caData.albumId = editAlbumId;
-		createNextImage();
+		this.albumId = pEditAlbumId;
+		this.createNextImage();
 	}
-}
+};
 
 /*--------------------------------------------------------------------------------------------*/
-function onAlbumTitleSuccess(data) {
-	caData.albumId = Number(data);
-	createNextImage();
-}
+CreateAlbum.prototype.onAlbumTitleSuccess = function(pData) {
+	this.albumId = Number(pData);
+	this.createNextImage();
+};
 
 /*--------------------------------------------------------------------------------------------*/
-function onAlbumTitleFail(data, textStatus) {
-	alert("onAlbumTitleFail: " + data + " // " + textStatus);
-}
+CreateAlbum.prototype.onAlbumTitleFail = function(pData, pStatus) {
+	alert("onAlbumTitleFail: " + pData + " // " + pStatus);
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function createNextImage() {
-	onCreateAlbumProgress();
+CreateAlbum.prototype.createNextImage = function() {
+	this.onCreateAlbumProgress();
 	
-	var n = caData.imageCount;
-	var i = ++caData.uploadIndex;
+	var n = this.imageCount;
+	var i = ++this.uploadIndex;
 
 	if ( i >= n ) {
-		onCreateAlbumComplete();
+		this.onCreateAlbumComplete();
 		return;
 	}
 
-	var file = caData.imagesOrig[i];
+	var file = this.imagesOrig[i];
 
 	if ( !file.type.match(/image.*/) ) {
-		caData.failCount++;
-		createNextImage();
+		this.failCount++;
+		this.createNextImage();
 		return;
 	}
 
+	var exifClosure = function(pScope, pFile) {
+		return function(pEvent) {
+			pScope.captureExif(pFile, pEvent.target.result);
+		};
+	};
+
 	var reader = new FileReader();
-	reader.onload = function(e) { captureExif(file, e.target.result); };
+	reader.onload = exifClosure(this, file);
 	reader.readAsBinaryString(file);
-}
+};
 
 /*--------------------------------------------------------------------------------------------*/
 //Adapted from: http://stackoverflow.com/questions/10341685/
 //  html-javascript-acces-exif-data-before-file-upload
-function captureExif(file, binaryData) {
-	var exifData = EXIF.readFromBinaryFile(new BinaryFile(binaryData));
+CreateAlbum.prototype.captureExif = function(pFile, pBinaryData) {
+	var exifData = EXIF.readFromBinaryFile(new BinaryFile(pBinaryData));
 	delete exifData.MakerNote;
 	delete exifData.UserComment;
 	//console.log("EXIF: "+JSON.stringify(exifData));
+	
+	var uploadClosure = function(pScope, pClosureFile, pImg, pExif) {
+		return function() {
+			pScope.resizeAndUploadImage(pClosureFile, pImg, pExif);
+		};
+	};
 
 	var img = document.createElement("img");
-	img.onload = function() { resizeAndUploadImage(file, img, exifData); };
-	img.src = window.URL.createObjectURL(file);
-}
+	img.onload = uploadClosure(this, pFile, img, exifData);
+	img.src = window.URL.createObjectURL(pFile);
+};
 
 /*--------------------------------------------------------------------------------------------*/
 //Adapted from: http://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader
-function resizeAndUploadImage(file, img, exifData) {
+CreateAlbum.prototype.resizeAndUploadImage = function(pFile, pImg, pExifData) {
 	var max = 1024;
-	var w = img.width;
-	var h = img.height;
+	var w = pImg.width;
+	var h = pImg.height;
 
 	if ( w > h && w > max ) {
 		h *= max/w;
@@ -113,58 +137,65 @@ function resizeAndUploadImage(file, img, exifData) {
 	}
 
 	var canvas = document.createElement("canvas");
-	var ctx = canvas.getContext("2d");
 	canvas.width = w;
 	canvas.height = h;
-	ctx.drawImage(img, 0, 0, w, h);
+
+	var ctx = canvas.getContext("2d");
+	ctx.drawImage(pImg, 0, 0, w, h);
 
 	var data = {
-		AlbumId: caData.albumId,
-		Filename: file.name,
-		ExifData: JSON.stringify(exifData),
+		AlbumId: this.albumId,
+		Filename: pFile.name,
+		ExifData: JSON.stringify(pExifData),
 		ImageData: canvas.toDataURL("image/jpeg", 1.0),
-		LastImage: (caData.uploadIndex == caData.imageCount-1)
+		LastImage: (this.uploadIndex == this.imageCount-1)
 	};
 	
-	/*var img2 = document.createElement("img");
-	img2.src = data.ImageData;
-	$("#CreateAlbumProgress").append("<hr/>");
-	$("#CreateAlbumProgress").append(img2);
-	$("#CreateAlbumProgress").append("<br/>");
-	$("#CreateAlbumProgress").append(exifData);*/
-	$.post(caData.photoUrl, data, onAlbumImageSuccess);
-}
+	var successClosure = function(pScope) {
+		return function(pData) {
+			pScope.onAlbumImageSuccess(pData);
+		};
+	};
+	
+	var failClosure = function(pScope) {
+		return function(pData, pStatus) {
+			pScope.onAlbumImageFail(pData, pStatus);
+		};
+	};
+
+	var jqxhr = $.post(this.photoUrl, data, successClosure(this));
+	jqxhr.fail(failClosure(this));
+};
 
 /*--------------------------------------------------------------------------------------------*/
-function onAlbumImageSuccess(data) {
-	//alert("onAlbumImageSuccess: "+data+" // "+textStatus);
-	++caData.uploadCount;
-	createNextImage();
-}
+CreateAlbum.prototype.onAlbumImageSuccess = function(pData) {
+	//alert("onAlbumImageSuccess: "+pData+" // "+textStatus);
+	++this.uploadCount;
+	this.createNextImage();
+};
 
 /*--------------------------------------------------------------------------------------------*/
-function onAlbumImageFail(data, textStatus) {
-	alert("onAlbumImageFail: "+data+" // "+textStatus);
-	caData.failCount++;
-	createNextImage();
-}
+CreateAlbum.prototype.onAlbumImageFail = function(pData, pStatus) {
+	alert("onAlbumImageFail: "+pData+" // "+pStatus);
+	this.failCount++;
+	this.createNextImage();
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------*/
-function onCreateAlbumProgress() {
-	var n = caData.imageCount;
-	var u = caData.uploadCount;
-	var f = caData.failCount;
+CreateAlbum.prototype.onCreateAlbumProgress = function() {
+	var n = this.imageCount;
+	var u = this.uploadCount;
+	var f = this.failCount;
 
 	var s = 'Uploading ' + n + ' image(s)...<br/>' +
 		' &bull; Complete: ' + u + ' (' + Math.round(u / n * 100) + '%)<br/>' +
 		' &bull; Failures: ' + f + ' (' + Math.round(f / n * 100) + '%)<br/>';
 
 	$("#CreateAlbumProgress").find("#Info").html(s);
-}
+};
 
 /*--------------------------------------------------------------------------------------------*/
-function onCreateAlbumComplete() {
-	caData = null;
-}
+CreateAlbum.prototype.onCreateAlbumComplete = function() {
+};

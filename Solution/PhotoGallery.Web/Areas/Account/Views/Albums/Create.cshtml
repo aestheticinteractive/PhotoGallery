@@ -4,7 +4,7 @@
 
 	string albumUrl = Html.ActionLinkUrl(MVC.Account.Albums.CreateAlbum());
 	string imageUrl = Html.ActionLinkUrl(MVC.Account.Albums.UploadImage());
-	string onSubmit = "submitCreateAlbum('"+albumUrl+"','"+imageUrl+"',"+
+	string onSubmit = "new CreateAlbum().onFormSubmit('"+albumUrl+"','"+imageUrl+"',"+
 		(create ? "null" : Model.EditAlbumId+"")+"); return false;";
 	
 	string title = (create ? "Create New Album" : "Edit Album");
@@ -44,4 +44,3 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/exif/binaryajax.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/exif/imageinfo.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/exif/exif.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Scripts/gallery/createAlbum.js")"></script>

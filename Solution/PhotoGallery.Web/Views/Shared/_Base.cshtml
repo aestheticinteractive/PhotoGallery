@@ -22,14 +22,6 @@
 <body>
 	
 	@RenderBody()
-	
-	<script type="text/javascript">
-		document.write(
-			'<script src='+
-				'@Url.Content("~/Scripts/jquery.js")'+
-			'><\/script>'
-		);
-    </script>
 
 	@*Scripts.Render("~/bundles/foundation")*@
 	<script src="@Url.Content("~/Scripts/foundation/foundation.js")"></script>

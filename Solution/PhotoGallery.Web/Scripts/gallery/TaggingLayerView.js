@@ -142,7 +142,16 @@ TaggingLayerView.prototype.onClick = function(pEvent) {
 	var sx = (x-pos.left)/pho.width();
 	var sy = (y-pos.top)/pho.height();
 	this.taggingLayer.setSpotPos(sx, sy);
+
+	console.log("XY: "+x+', '+y+' / '+sx+', '+sy+' / '+pos.left+', '+pos.top);
+	console.log(" *** "+pho.css('margin-top')+', '+pho.css('padding-top')+', '+pho.css('border-top'));
 	
+	//good2 --- XY: 587, 112 / 0.3982725527831094, 0.3227665706051873 / 379.5, 0
+	//bad22 --- XY: 587, 180 / 0.3982725527831094, 0.31988472622478387 / 379.5, 69
+
+
+	//bad2  --- XY: 610, 228 / 0.44241842610364684, 0.45821325648414984 / 379.5, 69
+
 	this.spot.show();
 	this.searchView.show();
 	this.closeBtn.hide();
