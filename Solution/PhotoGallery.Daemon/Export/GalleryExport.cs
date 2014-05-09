@@ -24,17 +24,17 @@ namespace PhotoGallery.Daemon.Export {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public GalleryExport(Queries pQuery, Func<IFabricPersonSession, IFabricClient> pClientProv,
-														long pAppId, string pAppSecret, long pDpId) {
+																	long pAppId, string pAppSecret) {
 			vQuery = pQuery;
 			vClientProv = pClientProv;
 
 			if ( !FabricClient.IsInitialized ) {
 				FabricClient.InitOnce(new FabricClientConfig("gallery", "http://api.inthefabric.com",
-					pAppId, pAppSecret, pDpId, (ck => ""), (ck => new FabricSessionContainer())));
+					pAppId, pAppSecret, (ck => ""), (ck => new FabricSessionContainer())));
 			}
 
 			vDbClient = vClientProv(null);
-			vDbClient.UseDataProviderPerson = true;
+			vDbClient.UseAppDataProvider = true;
 
 			vExpSvc = new ExportService(this);
 		}

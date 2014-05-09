@@ -175,9 +175,9 @@ namespace PhotoGallery.Services.Account.Tools {
 				var fb = new FabricFactorBuilder(null, "<make> is an instance of 'make' ('camera')");
 				fb.Init(
 					makeArt,
-					FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+					DescriptorTypeId.IsAnInstanceOf,
 					LiveArtifactId.CameraMake,
-					FabEnumsData.FactorAssertionId.Fact,
+					FactorAssertionId.Fact,
 					true
 				);
 				fb.DesRelatedArtifactRefineId = LiveArtifactId.Camera;
@@ -214,9 +214,9 @@ namespace PhotoGallery.Services.Account.Tools {
 					"<model "+vPhoto.Model+">");
 				fb.Init(
 					vPhotoArt,
-					FabEnumsData.DescriptorTypeId.IsCreatedBy,
+					DescriptorTypeId.IsCreatedBy,
 					modelArt,
-					FabEnumsData.FactorAssertionId.Fact,
+					FactorAssertionId.Fact,
 					true
 				);
 				fb.DesTypeRefineId = LiveArtifactId.Record;
@@ -250,9 +250,9 @@ namespace PhotoGallery.Services.Account.Tools {
 				"<make "+pMakeArt.Name+">");
 			fb.Init(
 				modelArt,
-				FabEnumsData.DescriptorTypeId.IsCreatedBy,
+				DescriptorTypeId.IsCreatedBy,
 				pMakeArt,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			pSess.Save(fb.ToFactor());
@@ -265,13 +265,13 @@ namespace PhotoGallery.Services.Account.Tools {
 				"('photograph') [iden: 'key' "+vPhoto.Id+"]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.RefersTo,
+				DescriptorTypeId.RefersTo,
 				LiveArtifactId.KinstnerPhotoGallery,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			fb.AddIdentor(
-				FabEnumsData.IdentorTypeId.Key,
+				IdentorTypeId.Key,
 				vPhoto.Id+""
 			);
 			fb.DesRelatedArtifactRefineId = LiveArtifactId.Photograph;
@@ -282,9 +282,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			fb = new FabricFactorBuilder(null, vPhotoLbl+" belongs to <album "+vAlbum.Title+">");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.BelongsTo,
+				DescriptorTypeId.BelongsTo,
 				vAlbum.FabricArtifact,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			pSess.Save(fb.ToFactor());
@@ -297,13 +297,13 @@ namespace PhotoGallery.Services.Account.Tools {
 				"<user "+vPhoto.FabricUser.Name+"> [eventor: occur "+cre+"]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsCreatedBy,
+				DescriptorTypeId.IsCreatedBy,
 				vUserArt,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			fb.AddEventor(
-				FabEnumsData.EventorTypeId.Occur,
+				EventorTypeId.Occur,
 				cre
 			);
 			fb.DesPrimaryArtifactRefineId = LiveArtifactId.ComputerFile;
@@ -334,13 +334,13 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[eventor: occur "+val+"]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			fb.AddEventor(
-				FabEnumsData.EventorTypeId.Occur,
+				EventorTypeId.Occur,
 				val
 			);
 			pSess.Save(fb.ToFactor());
@@ -360,17 +360,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'width' "+vPhoto.Width+" base pixels]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Width,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				vPhoto.Width,
-				FabEnumsData.VectorUnitPrefixId.Base,
-				FabEnumsData.VectorUnitId.Pixel
+				VectorUnitPrefixId.Base,
+				VectorUnitId.Pixel
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -389,17 +389,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'height' "+vPhoto.Height+" base pixels]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Height,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				vPhoto.Height,
-				FabEnumsData.VectorUnitPrefixId.Base,
-				FabEnumsData.VectorUnitId.Pixel
+				VectorUnitPrefixId.Base,
+				VectorUnitId.Pixel
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -418,17 +418,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'shutter' "+vPhoto.ExpTime+" micro secs]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.Shutter,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				(long)vPhoto.ExpTime,
-				FabEnumsData.VectorUnitPrefixId.Micro,
-				FabEnumsData.VectorUnitId.Second
+				VectorUnitPrefixId.Micro,
+				VectorUnitId.Second
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -447,17 +447,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'fnumber' "+vPhoto.FNum+" milli units]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.FNumber,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				(long)vPhoto.FNum,
-				FabEnumsData.VectorUnitPrefixId.Milli,
-				FabEnumsData.VectorUnitId.Unit
+				VectorUnitPrefixId.Milli,
+				VectorUnitId.Unit
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -476,17 +476,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'focal length' "+vPhoto.FocalLen+" milli meters]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.FocalLength,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				(long)vPhoto.FocalLen,
-				FabEnumsData.VectorUnitPrefixId.Milli,
-				FabEnumsData.VectorUnitId.Metre
+				VectorUnitPrefixId.Milli,
+				VectorUnitId.Metre
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -505,17 +505,17 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[vec: 'iso speed' "+vPhoto.Iso+" base units]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			fb.AddVector(
 				LiveArtifactId.ISOSpeed,
-				FabEnumsData.VectorTypeId.PosLong,
+				VectorTypeId.PosLong,
 				(long)vPhoto.Iso,
-				FabEnumsData.VectorUnitPrefixId.Base,
-				FabEnumsData.VectorUnitId.Unit
+				VectorUnitPrefixId.Base,
+				VectorUnitId.Unit
 			);
 			pSess.Save(fb.ToFactor());
 		}
@@ -537,9 +537,9 @@ namespace PhotoGallery.Services.Account.Tools {
 			var fb = new FabricFactorBuilder(vUserArt, vPhotoLbl+" uses 'flash'");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.Uses,
+				DescriptorTypeId.Uses,
 				LiveArtifactId.Flash,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				false
 			);
 			pSess.Save(fb.ToFactor());
@@ -583,13 +583,13 @@ namespace PhotoGallery.Services.Account.Tools {
 				"[loc: earth coord "+vPhoto.GpsLat+", "+vPhoto.GpsLng+", "+vPhoto.GpsAlt+"]");
 			fb.Init(
 				vPhotoArt,
-				FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+				DescriptorTypeId.IsAnInstanceOf,
 				LiveArtifactId.Photograph,
-				FabEnumsData.FactorAssertionId.Fact,
+				FactorAssertionId.Fact,
 				true
 			);
 			fb.AddLocator(
-				FabEnumsData.LocatorTypeId.EarthCoord,
+				LocatorTypeId.EarthCoord,
 				(double)vPhoto.GpsLat,
 				(double)vPhoto.GpsLng,
 				alt

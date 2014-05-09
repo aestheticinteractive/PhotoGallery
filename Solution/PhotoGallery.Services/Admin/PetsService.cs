@@ -39,9 +39,9 @@ namespace PhotoGallery.Services.Admin {
 						pAnimalTypeArtifactId+">");
 					fb.Init(
 						fa,
-						FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+						DescriptorTypeId.IsAnInstanceOf,
 						pAnimalTypeArtifactId,
-						FabEnumsData.FactorAssertionId.Fact,
+						FactorAssertionId.Fact,
 						true
 					);
 					s.Save(fb.ToFactor());
@@ -51,9 +51,9 @@ namespace PhotoGallery.Services.Admin {
 							"' belongs to (<pet>) <person "+artId+">");
 						fb.Init(
 							fa,
-							FabEnumsData.DescriptorTypeId.BelongsTo,
+							DescriptorTypeId.BelongsTo,
 							artId,
-							FabEnumsData.FactorAssertionId.Fact,
+							FactorAssertionId.Fact,
 							true
 						);
 						fb.DesTypeRefineId = LiveArtifactId.Pet;

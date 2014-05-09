@@ -4,11 +4,9 @@ using System.Diagnostics;
 using Fabric.Clients.Cs;
 using Fabric.Clients.Cs.Api;
 using Fabric.Clients.Cs.Daemon;
-using Fabric.Clients.Cs.Daemon.Data;
 using PhotoGallery.Domain;
 using PhotoGallery.Infrastructure;
 using PhotoGallery.Services.Account.Tools;
-using InstanceData = Fabric.Clients.Cs.Daemon.Data.InstanceData;
 
 namespace PhotoGallery.Daemon.Export {
 
@@ -24,8 +22,8 @@ namespace PhotoGallery.Daemon.Export {
 		private readonly bool vStop;
 
 		private readonly IList<object> vUpdateList;
-		private readonly IDictionary<int, FabricArtifact> vInstanceMap;
-		private readonly IDictionary<int, FabricFactor> vFactorMap;
+		private readonly IDictionary<CreateFabInstance, FabricArtifact> vInstanceMap;
+		private readonly IDictionary<CreateFabFactor, FabricFactor> vFactorMap;
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,11 +33,11 @@ namespace PhotoGallery.Daemon.Export {
 			vQuery = pQuery;
 			vClient = pClient;
 			vUser = pUser;
-			vStop = (vClient == null || (!vClient.UseDataProviderPerson && vUser == null));
+			vStop = (vClient == null || (!vClient.UseAppDataProvider && vUser == null));
 
 			vUpdateList = new List<object>();
-			vInstanceMap = new Dictionary<int, FabricArtifact>();
-			vFactorMap = new Dictionary<int, FabricFactor>();
+			vInstanceMap = new Dictionary<CreateFabInstance, FabricArtifact>();
+			vFactorMap = new Dictionary<CreateFabFactor, FabricFactor>();
 		}
 
 
@@ -62,43 +60,42 @@ namespace PhotoGallery.Daemon.Export {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<ClassData> GetNewClasses() {
-			return new List<ClassData>();
+		public IList<CreateFabClass> GetNewClasses() {
+			return new List<CreateFabClass>();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<InstanceData> GetNewInstances() {
+		public IList<CreateFabInstance> GetNewInstances() {
 			SaveUpdates();
 
 			IList<FabricArtifact> artList = vQuery.GetFabricArtifacts(10, vUser);
-			var dataList = new List<InstanceData>();
+			var list = new List<CreateFabInstance>();
 
 			foreach ( FabricArtifact art in artList ) {
-				var d = new InstanceData();
-				d.ExporterId = art.Id;
-				d.Name = art.Name;
-				d.Disamb = art.Disamb;
-				d.Note = art.Note;
-				dataList.Add(d);
+				var cfi = new CreateFabInstance();
+				cfi.Name = art.Name;
+				cfi.Disamb = art.Disamb;
+				cfi.Note = art.Note;
+				list.Add(cfi);
 
-				vInstanceMap.Add(art.Id, art);
+				vInstanceMap.Add(cfi, art);
 			}
 
-			LogDebug("GetNewInstances: "+dataList.Count);
-			return dataList;
+			LogDebug("GetNewInstances: "+list.Count);
+			return list;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<UrlData> GetNewUrls() {
-			return new List<UrlData>();
+		public IList<CreateFabUrl> GetNewUrls() {
+			return new List<CreateFabUrl>();
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public IList<FabBatchNewFactor> GetNewFactors() {
+		public IList<CreateFabFactor> GetNewFactors() {
 			SaveUpdates();
 
 			IList<FabricFactor> facList = vQuery.GetFabricFactors(20, vUser);
-			var dataList = new List<FabBatchNewFactor>();
+			var list = new List<CreateFabFactor>();
 			var fixes = new List<object>();
 
 			foreach ( FabricFactor ff in facList ) {
@@ -116,48 +113,42 @@ namespace PhotoGallery.Daemon.Export {
 					fixes.Add(ff);
 				}
 
-				dataList.Add(FabricFactorBuilder.DbFactorToBatchFactor(ff));
-				vFactorMap.Add(ff.Id, ff);
+				CreateFabFactor cff = FabricFactorBuilder.DbFactorToBatchFactor(ff);
+				list.Add(cff);
+				vFactorMap.Add(cff, ff);
 			}
 
-			LogDebug("GetNewFactors: "+dataList.Count+
-				" (skips="+(facList.Count-dataList.Count)+", fixes="+fixes.Count+")");
+			LogDebug("GetNewFactors: "+list.Count+
+				" (skips="+(facList.Count-list.Count)+", fixes="+fixes.Count+")");
 			vQuery.UpdateObjects(fixes); //for FixFactorRefs
-			return dataList;
+			return list;
 		}
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnClassExport(ClassData pClassData, FabClass pClass) {
-			LogInfo("OnClassExport: "+pClassData.ExporterId+" => "+pClass.ArtifactId);
+		public void OnClassExport(CreateFabClass pCreate, FabClass pClass) {
+			LogInfo("OnClassExport: "+pClass.Id);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnInstanceExport(InstanceData pInstanceData, FabInstance pInstance) {
-			LogInfo("OnInstanceExport: "+pInstanceData.ExporterId+" => "+pInstance.ArtifactId);
-
-			FabricArtifact art = vInstanceMap[(int)pInstanceData.ExporterId];
-			art.ArtifactId = pInstance.ArtifactId;
+		public void OnInstanceExport(CreateFabInstance pCreate, FabInstance pInstance) {
+			FabricArtifact art = vInstanceMap[pCreate];
+			LogInfo("OnInstanceExport: "+art.Id+" => "+pInstance.Id);
+			art.ArtifactId = pInstance.Id;
 			vUpdateList.Add(art);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnUrlExport(UrlData pUrlData, FabUrl pUrl) {
-			LogInfo("OnUrlExport: "+pUrlData.ExporterId+" => "+pUrl.ArtifactId);
+		public void OnUrlExport(CreateFabUrl pCreate, FabUrl pUrl) {
+			LogInfo("OnUrlExport: "+pUrl.Id);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void OnFactorExport(FabBatchResult pFactor) {
-			LogInfo("OnFactorExport: "+pFactor.BatchId+" => "+pFactor.ResultId+
-				(pFactor.Error == null ? "" : " ["+pFactor.Error+"]"));
-
-			if ( pFactor.Error != null ) {
-				return;
-			}
-
-			FabricFactor fac = vFactorMap[(int)pFactor.BatchId];
-			fac.FactorId = pFactor.ResultId;
+		public void OnFactorExport(CreateFabFactor pCreate, FabFactor pFactor) {
+			FabricFactor fac = vFactorMap[pCreate];
+			LogInfo("OnFactorExport: "+fac.Id+" => "+pFactor.Id);
+			fac.FactorId = pFactor.Id;
 			vUpdateList.Add(fac);
 		}
 
@@ -192,7 +183,7 @@ namespace PhotoGallery.Daemon.Export {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void LogWith(Action<string> pLogFunc, string pText) {
-			string lbl = (vClient.UseDataProviderPerson ? "DataProv" : vClient.PersonSession.SessionId);
+			string lbl = (vClient.UseAppDataProvider ? "DataProv" : vClient.PersonSession.SessionId);
 			pLogFunc("GEFC["+lbl+"] "+vTimer.Elapsed.TotalSeconds.ToString("0.000")+"s | "+pText);
 		}
 

@@ -19,7 +19,7 @@ namespace PhotoGallery.Services {
 
 			Log.Debug("CreateIsoSpeedClass...");
 			IsoSpeedCreated = true;
-			pFab.UseDataProviderPerson = true;
+			pFab.UseAppDataProvider = true;
 
 			//Live Fabric Artifact IDs
 			const long unitOfMeasurementId = 55429986427863041;
@@ -30,49 +30,50 @@ namespace PhotoGallery.Services {
 			////
 
 			try {
-				FabClass c = pFab.Services.Modify.AddClass.Post("ISO Speed", "film speed",
-					"the measure of a photographic film's sensitivity to light").FirstDataItem();
-				Log.Debug("ISO Speed: "+c.ArtifactId);
+				var cre = new CreateFabClass();
+				cre.Name = "ISO Speed";
+				cre.Disamb = "film speed";
+				cre.Note = "the measure of a photographic film's sensitivity to light";
+
+				FabClass c = pFab.Services.Modify.Classes.Post(cre).FirstDataItem();
+				Log.Debug("ISO Speed: "+c.Id);
 				//after creation: ArtifactId = 56242555254210560
 
-				FabBatchNewFactor f0 = new FabBatchNewFactor();
-				f0.BatchId = 0;
-				f0.PrimaryArtifactId = c.ArtifactId;
-				f0.RelatedArtifactId = unitOfMeasurementId;
-				f0.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+				var f0 = new CreateFabFactor();
+				f0.UsesPrimaryArtifactId = c.Id;
+				f0.UsesRelatedArtifactId = unitOfMeasurementId;
+				f0.AssertionType = FactorAssertionId.Fact;
 				f0.IsDefining = true;
 				f0.Note = "ISO Speed is a unit of measurement.";
-				f0.Descriptor = new FabBatchNewFactorDescriptor();
-				f0.Descriptor.TypeId = (byte)FabEnumsData.DescriptorTypeId.IsA;
+				f0.Descriptor = new CreateFabDescriptor();
+				f0.Descriptor.Type = DescriptorTypeId.IsA;
 				//after creation: FactorId = 56254024255537152
 
-				FabBatchNewFactor f1 = new FabBatchNewFactor();
-				f0.BatchId = 1;
-				f1.PrimaryArtifactId = c.ArtifactId;
-				f1.RelatedArtifactId = filmId;
-				f1.FactorAssertionId = (byte)FabEnumsData.FactorAssertionId.Fact;
+				var f1 = new CreateFabFactor();
+				f1.UsesPrimaryArtifactId = c.Id;
+				f1.UsesRelatedArtifactId= filmId;
+				f1.AssertionType = FactorAssertionId.Fact;
 				f1.IsDefining = true;
 				f1.Note = "ISO Speed measures film sensitivity.";
-				f1.Descriptor = new FabBatchNewFactorDescriptor();
-				f1.Descriptor.TypeId = (byte)FabEnumsData.DescriptorTypeId.RefersTo;
-				f1.Descriptor.TypeRefineId = measureId;
-				f1.Descriptor.RelatedArtifactRefineId = sensitivityId;
+				f1.Descriptor = new CreateFabDescriptor();
+				f1.Descriptor.Type = DescriptorTypeId.RefersTo;
+				f1.Descriptor.RefinesTypeWithArtifactId = measureId;
+				f1.Descriptor.RefinesRelatedWithArtifactId = sensitivityId;
 				//after creation: FactorId = 56254024248197120
 
 				////
 
-				var list = new[] { f0, f1 };
-				FabResponse<FabBatchResult> res = pFab.Services.Modify.AddFactors.Post(list);
+				FabFactor res0 = pFab.Services.Modify.Factors.Post(f0).FirstDataItem();
+				Log.Debug("FactorId 0: "+res0.Id);
 
-				foreach ( FabBatchResult br in res.Data ) {
-					Log.Debug("FactorId #"+br.BatchId+": "+br.ResultId+" / "+br.Error);
-				}
+				FabFactor res1 = pFab.Services.Modify.Factors.Post(f1).FirstDataItem();
+				Log.Debug("FactorId 1: "+res1.Id);
 			}
 			catch ( FabricErrorException fe ) {
 				Log.Error("Fabric Error: "+fe.Message, fe);
 			}
 			finally {
-				pFab.UseDataProviderPerson = false;
+				pFab.UseAppDataProvider = false;
 			}
 		}
 

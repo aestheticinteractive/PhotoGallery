@@ -17,7 +17,7 @@ namespace PhotoGallery.Services.Account.Dto {
 		/*--------------------------------------------------------------------------------------------*/
 		public WebUser(FabUser pFabUser, FabricUser pFabricUser) {
 			Name = pFabUser.Name;
-			ArtifactId = pFabUser.ArtifactId;
+			ArtifactId = pFabUser.Id;
 			FabricUserId = pFabricUser.Id;
 
 			Created = new DateTime(pFabricUser.Created, DateTimeKind.Utc)

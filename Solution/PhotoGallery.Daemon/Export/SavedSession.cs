@@ -58,7 +58,7 @@ namespace PhotoGallery.Daemon.Export {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public bool RefreshTokenIfNecessary() {
+		public bool RefreshTokenIfNecessary(string pApiPath) {
 			return false;
 		}
 

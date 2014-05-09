@@ -61,10 +61,9 @@ namespace PhotoGallery.Daemon {
 			string baseUrl = ConfigurationManager.AppSettings[prefix+"BaseUrl"];
 			long appId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
 			string appSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
-			long dataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 
 			var query = new Queries(new SessionProvider());
-			return new GalleryExport(query, FabClientProv, appId, appSecret, dataProvId);
+			return new GalleryExport(query, FabClientProv, appId, appSecret);
 		}
 		
 		/*--------------------------------------------------------------------------------------------*/

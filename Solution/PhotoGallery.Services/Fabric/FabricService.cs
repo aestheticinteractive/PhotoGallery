@@ -28,14 +28,11 @@ namespace PhotoGallery.Services.Fabric {
 				return fu;
 			}
 
-			fu = pFab.Services.Traversal.GetActiveUser.Get().FirstDataItem();
+			fu = pFab.Services.Traversal.Members.Active().DefinedByUser().Get().FirstDataItem();
 
 			if ( fu == null ) {
 				return null;
 			}
-
-			fu.Uri = null;
-			fu.FabType = null;
 
 			var cp = new CacheItemPolicy();
 			cp.SlidingExpiration = new TimeSpan(2, 0, 0);

@@ -48,21 +48,21 @@ namespace PhotoGallery.Services.Account.Tools {
 		public FabricArtifact RelatedArtifact { get; private set; }
 		public long? RelatedArtifactId { get; private set; }
 
-		public FabEnumsData.FactorAssertionId FactorAssertion { get; private set; }
+		public FactorAssertionId FactorAssertion { get; private set; }
 		public bool IsDefining { get; private set; }
 		public string Note { get; set; }
 		public string InternalNote { get; private set; }
 
-		public FabEnumsData.DescriptorTypeId DesType { get; private set; }
+		public DescriptorTypeId DesType { get; private set; }
 		public LiveArtifactId? DesPrimaryArtifactRefineId { get; set; }
 		public LiveArtifactId? DesRelatedArtifactRefineId { get; set; }
 		public LiveArtifactId? DesTypeRefineId { get; set; }
 
-		public FabEnumsData.DirectorTypeId? DirType { get; private set; }
-		public FabEnumsData.DirectorActionId? DirPrimaryAction { get; private set; }
-		public FabEnumsData.DirectorActionId? DirRelatedAction { get; private set; }
+		public DirectorTypeId? DirType { get; private set; }
+		public DirectorActionId? DirPrimaryAction { get; private set; }
+		public DirectorActionId? DirRelatedAction { get; private set; }
 
-		public FabEnumsData.EventorTypeId? EveType { get; private set; }
+		public EventorTypeId? EveType { get; private set; }
 		public long? EveYear { get; private set; }
 		public byte? EveMonth { get; private set; }
 		public byte? EveDay { get; private set; }
@@ -70,17 +70,17 @@ namespace PhotoGallery.Services.Account.Tools {
 		public byte? EveMinute { get; private set; }
 		public byte? EveSecond { get; private set; }
 
-		public FabEnumsData.IdentorTypeId? IdenType { get; private set; }
+		public IdentorTypeId? IdenType { get; private set; }
 		public string IdenValue { get; private set; }
 
-		public FabEnumsData.LocatorTypeId? LocType { get; private set; }
+		public LocatorTypeId? LocType { get; private set; }
 		public double? LocValueX { get; private set; }
 		public double? LocValueY { get; private set; }
 		public double? LocValueZ { get; private set; }
 
-		public FabEnumsData.VectorTypeId? VecType { get; private set; }
-		public FabEnumsData.VectorUnitId? VecUnit { get; private set; }
-		public FabEnumsData.VectorUnitPrefixId? VecUnitPrefix { get; private set; }
+		public VectorTypeId? VecType { get; private set; }
+		public VectorUnitId? VecUnit { get; private set; }
+		public VectorUnitPrefixId? VecUnitPrefix { get; private set; }
 		public long? VecValue { get; private set; }
 		public LiveArtifactId? VecAxisArtifactId { get; private set; }
 
@@ -100,8 +100,8 @@ namespace PhotoGallery.Services.Account.Tools {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
-		public void Init(FabricArtifact pPrimary, FabEnumsData.DescriptorTypeId pDesType,
-						FabricArtifact pRelated, FabEnumsData.FactorAssertionId pAsrt, bool pIsDef) {
+		public void Init(FabricArtifact pPrimary, DescriptorTypeId pDesType,
+						FabricArtifact pRelated, FactorAssertionId pAsrt, bool pIsDef) {
 			PrimaryArtifact = pPrimary;
 			DesType = pDesType;
 			RelatedArtifact = pRelated;
@@ -110,14 +110,14 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void Init(FabricArtifact pPrimary, FabEnumsData.DescriptorTypeId pDesType,
-						LiveArtifactId pRelatedId, FabEnumsData.FactorAssertionId pAsrt, bool pIsDef) {
+		public void Init(FabricArtifact pPrimary, DescriptorTypeId pDesType,
+						LiveArtifactId pRelatedId, FactorAssertionId pAsrt, bool pIsDef) {
 			Init(pPrimary, pDesType, (long)pRelatedId, pAsrt, pIsDef);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void Init(FabricArtifact pPrimary, FabEnumsData.DescriptorTypeId pDesType,
-						long pRelatedId, FabEnumsData.FactorAssertionId pAsrt, bool pIsDef) {
+		public void Init(FabricArtifact pPrimary, DescriptorTypeId pDesType,
+						long pRelatedId, FactorAssertionId pAsrt, bool pIsDef) {
 			PrimaryArtifact = pPrimary;
 			DesType = pDesType;
 			RelatedArtifactId = pRelatedId;
@@ -126,9 +126,9 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddVector(LiveArtifactId? pVecAxisArtifactId, FabEnumsData.VectorTypeId pVecType,
-										long pVecValue, FabEnumsData.VectorUnitPrefixId pVecUnitPrefix,
-										FabEnumsData.VectorUnitId pVecUnit) {
+		public void AddVector(LiveArtifactId? pVecAxisArtifactId, VectorTypeId pVecType,
+										long pVecValue, VectorUnitPrefixId pVecUnitPrefix,
+										VectorUnitId pVecUnit) {
 			VecAxisArtifactId = pVecAxisArtifactId;
 			VecType = pVecType;
 			VecValue = pVecValue;
@@ -137,13 +137,13 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddIdentor(FabEnumsData.IdentorTypeId pKey, string pValue) {
+		public void AddIdentor(IdentorTypeId pKey, string pValue) {
 			IdenType = pKey;
 			IdenValue = pValue;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddEventor(FabEnumsData.EventorTypeId pEveType, DateTime pDateTimeUtc) {
+		public void AddEventor(EventorTypeId pEveType, DateTime pDateTimeUtc) {
 			EveType = pEveType;
 			EveYear = pDateTimeUtc.Year;
 			EveMonth = (byte?)pDateTimeUtc.Month;
@@ -154,7 +154,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddLocator(FabEnumsData.LocatorTypeId pLocType, double pX, double pY, double pZ) {
+		public void AddLocator(LocatorTypeId pLocType, double pX, double pY, double pZ) {
 			LocType = pLocType;
 			LocValueX = pX;
 			LocValueY = pY;
@@ -162,8 +162,8 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public void AddDirector(FabEnumsData.DirectorTypeId pDirType,
-				FabEnumsData.DirectorActionId pPrimaryAct, FabEnumsData.DirectorActionId pRelatedAct) {
+		public void AddDirector(DirectorTypeId pDirType,
+				DirectorActionId pPrimaryAct, DirectorActionId pRelatedAct) {
 			DirType = pDirType;
 			DirPrimaryAction = pPrimaryAct;
 			DirRelatedAction = pRelatedAct;
@@ -221,69 +221,68 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static FabBatchNewFactor DbFactorToBatchFactor(FabricFactor pFac) {
+		public static CreateFabFactor DbFactorToBatchFactor(FabricFactor pFac) {
 			Func<long?, long> toLong = (x => (x == null ? 0 : (long)x));
 			Func<byte?, byte> toByte = (x => (x == null ? (byte)0 : (byte)x));
 			Func<double?, double> toDouble = (x => (x == null ? 0 : (double)x));
 
-			var bnf = new FabBatchNewFactor();
-			bnf.BatchId = pFac.Id;
-			bnf.PrimaryArtifactId = (pFac.Primary == null ? 
-				(long)pFac.PrimaryArtifactId : toLong(pFac.Primary.ArtifactId));
-			bnf.RelatedArtifactId = (pFac.Related == null ? 
-				(long)pFac.RelatedArtifactId : toLong(pFac.Related.ArtifactId));
-			bnf.FactorAssertionId = pFac.FactorAssertionId;
-			bnf.IsDefining = pFac.IsDefining;
-			bnf.Note = pFac.Note;
+			var f = new CreateFabFactor();
+			f.UsesPrimaryArtifactId = (pFac.Primary == null ? 
+				toLong(pFac.PrimaryArtifactId) : toLong(pFac.Primary.ArtifactId));
+			f.UsesRelatedArtifactId = (pFac.Related == null ? 
+				toLong(pFac.RelatedArtifactId) : toLong(pFac.Related.ArtifactId));
+			f.AssertionType = (FactorAssertionId)pFac.FactorAssertionId;
+			f.IsDefining = pFac.IsDefining;
+			f.Note = pFac.Note;
 
-			bnf.Descriptor = new FabBatchNewFactorDescriptor();
-			bnf.Descriptor.TypeId = pFac.DesTypeId;
-			bnf.Descriptor.PrimaryArtifactRefineId = pFac.DesPrimaryArtifactRefineId;
-			bnf.Descriptor.RelatedArtifactRefineId = pFac.DesRelatedArtifactRefineId;
-			bnf.Descriptor.TypeRefineId = pFac.DesTypeRefineId;
+			f.Descriptor = new CreateFabDescriptor();
+			f.Descriptor.Type = (DescriptorTypeId)pFac.DesTypeId;
+			f.Descriptor.RefinesPrimaryWithArtifactId = pFac.DesPrimaryArtifactRefineId;
+			f.Descriptor.RefinesRelatedWithArtifactId = pFac.DesRelatedArtifactRefineId;
+			f.Descriptor.RefinesTypeWithArtifactId = pFac.DesTypeRefineId;
 
 			if ( pFac.DirTypeId != null ) {
-				bnf.Director = new FabBatchNewFactorDirector();
-				bnf.Director.TypeId = toByte(pFac.DirTypeId);
-				bnf.Director.PrimaryActionId = toByte(pFac.DirPrimaryActionId);
-				bnf.Director.RelatedActionId = toByte(pFac.DirRelatedActionId);
+				f.Director = new CreateFabDirector();
+				f.Director.Type = (DirectorTypeId)pFac.DirTypeId;
+				f.Director.PrimaryAction = (DirectorActionId)pFac.DirPrimaryActionId;
+				f.Director.RelatedAction = (DirectorActionId)pFac.DirRelatedActionId;
 			}
 
 			if ( pFac.EveTypeId != null ) {
-				bnf.Eventor = new FabBatchNewFactorEventor();
-				bnf.Eventor.TypeId = toByte(pFac.EveTypeId);
-				bnf.Eventor.Year = toLong(pFac.EveYear);
-				bnf.Eventor.Month = toByte(pFac.EveMonth);
-				bnf.Eventor.Day = toByte(pFac.EveDay);
-				bnf.Eventor.Hour = toByte(pFac.EveHour);
-				bnf.Eventor.Minute = toByte(pFac.EveMinute);
-				bnf.Eventor.Second = toByte(pFac.EveSecond);
+				f.Eventor = new CreateFabEventor();
+				f.Eventor.Type = (EventorTypeId)pFac.EveTypeId;
+				f.Eventor.Year = toLong(pFac.EveYear);
+				f.Eventor.Month = toByte(pFac.EveMonth);
+				f.Eventor.Day = toByte(pFac.EveDay);
+				f.Eventor.Hour = toByte(pFac.EveHour);
+				f.Eventor.Minute = toByte(pFac.EveMinute);
+				f.Eventor.Second = toByte(pFac.EveSecond);
 			}
 
 			if ( pFac.IdenTypeId != null ) {
-				bnf.Identor = new FabBatchNewFactorIdentor();
-				bnf.Identor.TypeId = toByte(pFac.IdenTypeId);
-				bnf.Identor.Value = pFac.IdenValue;
+				f.Identor = new CreateFabIdentor();
+				f.Identor.Type = (IdentorTypeId)pFac.IdenTypeId;
+				f.Identor.Value = pFac.IdenValue;
 			}
 
 			if ( pFac.LocTypeId != null ) {
-				bnf.Locator = new FabBatchNewFactorLocator();
-				bnf.Locator.TypeId = toByte(pFac.LocTypeId);
-				bnf.Locator.ValueX = toDouble(pFac.LocValueX);
-				bnf.Locator.ValueY = toDouble(pFac.LocValueY);
-				bnf.Locator.ValueZ = toDouble(pFac.LocValueZ);
+				f.Locator = new CreateFabLocator();
+				f.Locator.Type = (LocatorTypeId)pFac.LocTypeId;
+				f.Locator.ValueX = toDouble(pFac.LocValueX);
+				f.Locator.ValueY = toDouble(pFac.LocValueY);
+				f.Locator.ValueZ = toDouble(pFac.LocValueZ);
 			}
 
 			if ( pFac.VecTypeId != null ) {
-				bnf.Vector = new FabBatchNewFactorVector();
-				bnf.Vector.TypeId = toByte(pFac.VecTypeId);
-				bnf.Vector.AxisArtifactId = toLong(pFac.VecAxisArtifactId);
-				bnf.Vector.UnitId = toByte(pFac.VecUnitId);
-				bnf.Vector.UnitPrefixId = toByte(pFac.VecUnitPrefixId);
-				bnf.Vector.Value = toLong(pFac.VecValue);
+				f.Vector = new CreateFabVector();
+				f.Vector.Type = (VectorTypeId)pFac.VecTypeId;
+				f.Vector.UsesAxisArtifactId = toLong(pFac.VecAxisArtifactId);
+				f.Vector.Unit = (VectorUnitId)pFac.VecUnitId;
+				f.Vector.UnitPrefix = (VectorUnitPrefixId)pFac.VecUnitPrefixId;
+				f.Vector.Value = toLong(pFac.VecValue);
 			}
 
-			return bnf;
+			return f;
 		}
 
 	}

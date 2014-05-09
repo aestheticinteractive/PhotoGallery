@@ -82,7 +82,7 @@ namespace PhotoGallery.Services.Main {
 				IList<Tag> tags = s.QueryOver<Tag>()
 					.WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%"+pState.Name+"%")
 					.Fetch(x => x.FabricArtifact).Eager
-					.Skip(pState.SearchIndex)
+					//.Skip(pState.SearchIndex)
 					.Take(pState.SearchSize)
 					.List();
 
@@ -104,41 +104,44 @@ namespace PhotoGallery.Services.Main {
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void FindFabClass(WebSearchTagState pState) {
-			FabResponse<FabClass> fr = Fab.Services.Traversal.GetRootStep
-				.ClassName(pState.Name).Limit(pState.SearchIndex, pState.SearchSize).Get();
+			FabResponse<FabClass> fr = Fab.Services.Traversal.Classes
+				.WithName(pState.Name).Take(pState.SearchSize).Get();
 
-			if ( IsEmptyFabResponse(fr, pState) ) {
+			/*if ( IsEmptyFabResponse(fr, pState) ) {
 				pState.SetMode(WebSearchTagState.Mode.ClassContains, 0, 10);
 				return;
-			}
+			}*/
 
 			pState.AddToList(fr.Data.Select(x => new WebSearchTag(x)));
+			pState.SetMode(WebSearchTagState.Mode.ClassContains, 0, 10);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void FindFabClassContains(WebSearchTagState pState) {
-			FabResponse<FabClass> fr = Fab.Services.Traversal.GetRootStep
-				.ClassNameContains(pState.Name).Limit(pState.SearchIndex, pState.SearchSize).Get();
+			FabResponse<FabClass> fr = Fab.Services.Traversal.Classes
+				.WhereNameContains(pState.Name).Take(pState.SearchSize).Get();
 
-			if ( IsEmptyFabResponse(fr, pState) ) {
+			/*if ( IsEmptyFabResponse(fr, pState) ) {
 				pState.SetMode(WebSearchTagState.Mode.InstanceContains, 0, 10);
 				return;
-			}
+			}*/
 
 			pState.AddToList(fr.Data.Select(x => new WebSearchTag(x)));
+			pState.SetMode(WebSearchTagState.Mode.InstanceContains, 0, 10);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		private void FindFabInstanceContains(WebSearchTagState pState) {
-			FabResponse<FabInstance> fr = Fab.Services.Traversal.GetRootStep
-				.InstanceNameContains(pState.Name).Limit(pState.SearchIndex, pState.SearchSize).Get();
+			FabResponse<FabInstance> fr = Fab.Services.Traversal.Instances
+				.WhereNameContains(pState.Name).Take(pState.SearchSize).Get();
 
-			if ( IsEmptyFabResponse(fr, pState) ) {
+			/*if ( IsEmptyFabResponse(fr, pState) ) {
 				pState.SetMode(WebSearchTagState.Mode.Done, 0, 0);
 				return;
-			}
+			}*/
 
 			pState.AddToList(fr.Data.Select(x => new WebSearchTag(x)));
+			pState.SetMode(WebSearchTagState.Mode.Done, 0, 10);
 		}
 
 		/*--------------------------------------------------------------------------------------------*/

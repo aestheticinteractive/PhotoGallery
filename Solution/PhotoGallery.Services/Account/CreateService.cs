@@ -31,20 +31,20 @@ namespace PhotoGallery.Services.Account {
 					return false;
 				}
 				
-				Fab.PersonSession.RefreshTokenIfNecessary();
+				Fab.PersonSession.RefreshTokenIfNecessary(null);
 				var userArt = s.Load<FabricArtifact>(u.FabricArtifact.Id);
 
 				var fb = new FabricFactorBuilder(userArt, "<photo "+pPhotoId+"> refers to ('depict') "+
 						"<artifact> [loc 2d "+pPosX+", "+pPosY+"]");
 				fb.Init(
 					p.FabricArtifact,
-					FabEnumsData.DescriptorTypeId.RefersTo,
+					DescriptorTypeId.RefersTo,
 					pArtifactId,
-					FabEnumsData.FactorAssertionId.Fact,
+					FactorAssertionId.Fact,
 					false
 				);
 				fb.AddLocator(
-					FabEnumsData.LocatorTypeId.RelPos2D,
+					LocatorTypeId.RelPos2D,
 					pPosX,
 					pPosY,
 					0

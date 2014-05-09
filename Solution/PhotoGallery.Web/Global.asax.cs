@@ -25,7 +25,6 @@ namespace PhotoGallery.Web {
 		private static string BaseUrl;
 		private static long FabricAppId;
 		private static string FabricAppSecret;
-		private static long FabricDataProvId;
 
 		private static IFabricSessionContainer FabricDataProvSess;
 
@@ -76,16 +75,15 @@ namespace PhotoGallery.Web {
 			BaseUrl = ConfigurationManager.AppSettings[prefix+"BaseUrl"];
 			FabricAppId = long.Parse(ConfigurationManager.AppSettings["Fabric_AppId"]);
 			FabricAppSecret = ConfigurationManager.AppSettings["Fabric_AppSecret"];
-			FabricDataProvId = long.Parse(ConfigurationManager.AppSettings["Fabric_DataProvId"]);
 #endif
 
 			FabricDataProvSess = new FabricSessionContainer();
 
 			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
-				FabricAppId, FabricAppSecret, FabricDataProvId, RedirProv, FabricSessProv);
+				FabricAppId, FabricAppSecret, RedirProv, FabricSessProv);
 
 			var dataProvConfig = new FabricClientConfig(DataProvConfigKey, "http://api.inthefabric.com",
-				FabricAppId, FabricAppSecret, FabricDataProvId, RedirProv, (k => FabricDataProvSess));
+				FabricAppId, FabricAppSecret, RedirProv, (k => FabricDataProvSess));
 
 			FabricClient.InitOnce(config);
 			FabricClient.AddConfig(dataProvConfig);

@@ -64,13 +64,13 @@ namespace PhotoGallery.Services.Account {
 						"'Kinstner Photo Gallery' ('photograph album') [iden: 'key' "+a.Id+"]");
 					fb.Init(
 						albumArt,
-						FabEnumsData.DescriptorTypeId.RefersTo,
+						DescriptorTypeId.RefersTo,
 						LiveArtifactId.KinstnerPhotoGallery,
-						FabEnumsData.FactorAssertionId.Fact,
+						FactorAssertionId.Fact,
 						true
 					);
 					fb.AddIdentor(
-						FabEnumsData.IdentorTypeId.Key,
+						IdentorTypeId.Key,
 						a.Id+""
 					);
 					fb.DesRelatedArtifactRefineId = LiveArtifactId.PhotographAlbum;
@@ -82,9 +82,9 @@ namespace PhotoGallery.Services.Account {
 						"<album "+a.Title+"> is an instance of <photograph album>");
 					fb.Init(
 						albumArt,
-						FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+						DescriptorTypeId.IsAnInstanceOf,
 						LiveArtifactId.PhotographAlbum,
-						FabEnumsData.FactorAssertionId.Fact,
+						FactorAssertionId.Fact,
 						true
 					);
 					s.Save(fb.ToFactor());
@@ -95,13 +95,13 @@ namespace PhotoGallery.Services.Account {
 						"<album> created by <user "+u.Name+"> [eventor: occur "+cre+"]");
 					fb.Init(
 						albumArt,
-						FabEnumsData.DescriptorTypeId.IsCreatedBy,
+						DescriptorTypeId.IsCreatedBy,
 						userArt,
-						FabEnumsData.FactorAssertionId.Fact,
+						FactorAssertionId.Fact,
 						true
 					);
 					fb.AddEventor(
-						FabEnumsData.EventorTypeId.Occur,
+						EventorTypeId.Occur,
 						cre
 					);
 					s.Save(fb.ToFactor());

@@ -26,7 +26,7 @@ namespace PhotoGallery.Services.Main {
 
 				IList<FabricFactor> factors = s.QueryOver<FabricFactor>()
 					.Where(x => x.Primary.Id == photo.FabricArtifact.Id)
-					.Where(x => x.DesTypeId == (byte)FabEnumsData.DescriptorTypeId.RefersTo)
+					.Where(x => x.DesTypeId == (byte)DescriptorTypeId.RefersTo)
 					.Where(x => x.DesTypeRefineId == (long)LiveArtifactId.Depict)
 					.Fetch(x => x.Related).Eager
 					.List();

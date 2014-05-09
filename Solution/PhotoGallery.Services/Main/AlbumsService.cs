@@ -31,7 +31,7 @@ namespace PhotoGallery.Services.Main {
 					.JoinQueryOver(x => x.FabricArtifact, () => artAlias, JoinType.InnerJoin)
 					.JoinQueryOver(x => x.PrimaryFactors, () => facAlias, JoinType.InnerJoin)
 					.Where(x => x.DesTypeRefineId == (long)LiveArtifactId.Depict)
-					.Where(x => x.DesTypeId == (byte)FabEnumsData.DescriptorTypeId.RefersTo)
+					.Where(x => x.DesTypeId == (byte)DescriptorTypeId.RefersTo)
 					.SelectList(sl => sl
 						.Select(() => facAlias.Related.Id)
 						.Select(x => x.Id)

@@ -15,7 +15,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		public string Name { get; private set; }
 		public Mode SearchMode { get; private set; }
-		public int SearchIndex { get; private set; }
+		//public int SearchIndex { get; private set; }
 		public int SearchSize { get; private set; }
 		public IList<WebSearchTag> List { get; private set; }
 		public IList<WebSearchTag> LatestList { get; private set; }
@@ -27,8 +27,8 @@ namespace PhotoGallery.Services.Main.Dto {
 		public WebSearchTagState(string pName) {
 			Name = pName;
 			SearchMode = Mode.Local;
-			SearchIndex = 0;
-			SearchSize = 20;
+			//SearchIndex = 0;
+			SearchSize = 100;
 			List = new List<WebSearchTag>();
 			ArtifactIdMap = new HashSet<string>();
 		}
@@ -36,13 +36,13 @@ namespace PhotoGallery.Services.Main.Dto {
 		/*--------------------------------------------------------------------------------------------*/
 		public void SetMode(Mode pMode, int pIndex, int pSize) {
 			SearchMode = pMode;
-			SearchIndex = pIndex;
+			//SearchIndex = pIndex;
 			SearchSize = pSize;
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
 		public void AddToList(IEnumerable<WebSearchTag> pList) {
-			SearchIndex += SearchSize;
+			//SearchIndex += SearchSize;
 			LatestList = new List<WebSearchTag>();
 
 			foreach ( WebSearchTag st in pList ) {

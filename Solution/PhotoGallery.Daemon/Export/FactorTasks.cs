@@ -48,14 +48,14 @@ namespace PhotoGallery.Daemon.Export {
 		
 		/*--------------------------------------------------------------------------------------------*/
 		private static FabricArtifact BuildArtifact(IFabricClient pClient, long pArtId) {
-			IFabRootStep root = pClient.Services.Traversal.GetRootStep;
+			ITraversalService trav = pClient.Services.Traversal;
 
 			var art = new FabricArtifact();
 			art.ArtifactId = pArtId;
 
 			////
 
-			FabClass fc = root.ClassId(pArtId).Get().FirstDataItem();
+			FabClass fc = trav.Classes.WithId(pArtId).Get().FirstDataItem();
 
 			if ( fc != null ) {
 				art.Name = fc.Name;
@@ -67,7 +67,7 @@ namespace PhotoGallery.Daemon.Export {
 
 			////
 
-			FabInstance fi = root.InstanceId(pArtId).Get().FirstDataItem();
+			FabInstance fi = trav.Instances.WithId(pArtId).Get().FirstDataItem();
 
 			if ( fi != null ) {
 				art.Name = fi.Name;

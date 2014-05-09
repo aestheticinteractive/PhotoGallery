@@ -32,7 +32,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public WebSearchTag(FabClass pClass) {
-			ArtifactId = pClass.ArtifactId+"";
+			ArtifactId = pClass.Id+"";
 			Name = pClass.Name;
 			Disamb = pClass.Disamb;
 			Note = pClass.Note;
@@ -40,7 +40,7 @@ namespace PhotoGallery.Services.Main.Dto {
 
 		/*--------------------------------------------------------------------------------------------*/
 		public WebSearchTag(FabInstance pInst) {
-			ArtifactId = pInst.ArtifactId+"";
+			ArtifactId = pInst.Id+"";
 			Name = pInst.Name;
 			Disamb = pInst.Disamb;
 			Note = pInst.Note;

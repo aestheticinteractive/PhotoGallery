@@ -76,9 +76,9 @@ namespace PhotoGallery.Services.Admin {
 					var fb = new FabricFactorBuilder(null, "<person> is an instance of '"+perStr+"'");
 					fb.Init(
 						fa,
-						FabEnumsData.DescriptorTypeId.IsAnInstanceOf,
+						DescriptorTypeId.IsAnInstanceOf,
 						perArtId,
-						FabEnumsData.FactorAssertionId.Fact,
+						FactorAssertionId.Fact,
 						true
 					);
 					s.Save(fb.ToFactor());
