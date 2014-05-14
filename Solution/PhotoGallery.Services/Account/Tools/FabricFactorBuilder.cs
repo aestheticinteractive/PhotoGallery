@@ -221,7 +221,7 @@ namespace PhotoGallery.Services.Account.Tools {
 		}
 
 		/*--------------------------------------------------------------------------------------------*/
-		public static CreateFabFactor DbFactorToBatchFactor(FabricFactor pFac) {
+		public static CreateFabFactor DbFactorToCreateFabFactor(FabricFactor pFac) {
 			Func<long?, long> toLong = (x => (x == null ? 0 : (long)x));
 			Func<byte?, byte> toByte = (x => (x == null ? (byte)0 : (byte)x));
 			Func<double?, double> toDouble = (x => (x == null ? 0 : (double)x));

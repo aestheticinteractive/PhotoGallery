@@ -51,9 +51,9 @@
     <Compile Include="Routines\FixFactorReferences.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Fabric.Clients.Cs, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Fabric.Clients.Cs, Version=0.3.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Packages\FabricClient.0.3.0.0\lib\Fabric.Clients.Cs.dll</HintPath>
+      <HintPath>..\..\Packages\FabricClient.0.3.0.1\lib\Fabric.Clients.Cs.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>

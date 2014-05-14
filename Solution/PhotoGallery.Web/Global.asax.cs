@@ -78,11 +78,13 @@ namespace PhotoGallery.Web {
 #endif
 
 			FabricDataProvSess = new FabricSessionContainer();
+			//const string FabricUrl = "http://localhost:9000";
+			const string FabricUrl = "http://api.inthefabric.com";
 
-			var config = new FabricClientConfig("main", "http://api.inthefabric.com",
+			var config = new FabricClientConfig("main", FabricUrl,
 				FabricAppId, FabricAppSecret, RedirProv, FabricSessProv);
 
-			var dataProvConfig = new FabricClientConfig(DataProvConfigKey, "http://api.inthefabric.com",
+			var dataProvConfig = new FabricClientConfig(DataProvConfigKey, FabricUrl,
 				FabricAppId, FabricAppSecret, RedirProv, (k => FabricDataProvSess));
 
 			FabricClient.InitOnce(config);

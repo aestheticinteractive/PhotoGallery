@@ -113,7 +113,7 @@ namespace PhotoGallery.Daemon.Export {
 					fixes.Add(ff);
 				}
 
-				CreateFabFactor cff = FabricFactorBuilder.DbFactorToBatchFactor(ff);
+				CreateFabFactor cff = FabricFactorBuilder.DbFactorToCreateFabFactor(ff);
 				list.Add(cff);
 				vFactorMap.Add(cff, ff);
 			}
