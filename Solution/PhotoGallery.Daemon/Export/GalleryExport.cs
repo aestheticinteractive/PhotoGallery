@@ -30,7 +30,8 @@ namespace PhotoGallery.Daemon.Export {
 
 			if ( !FabricClient.IsInitialized ) {
 				FabricClient.InitOnce(new FabricClientConfig("gallery", "http://api.inthefabric.com",
-					pAppId, pAppSecret, (ck => ""), (ck => new FabricSessionContainer())));
+					pAppId, pAppSecret, (ck => "http://www.zachkinstner.com"),
+					(ck => new FabricSessionContainer())));
 			}
 
 			vDbClient = vClientProv(null);
@@ -68,7 +69,10 @@ namespace PhotoGallery.Daemon.Export {
 			vQuery.DeleteExpiredSessions();
 
 			IList<FabricPersonSession> list = vQuery.FindUpdatableSessions();
-			Log.Debug("GalleryExport.GetUserClients: "+list.Count);
+
+			if ( list.Count > 0 ) {
+				Log.Debug("GalleryExport.GetUserClients: "+list.Count+" / "+DateTime.Now);
+			}
 
 			return list.Select(fps => vClientProv(new SavedSession(fps))).ToList();
 		}

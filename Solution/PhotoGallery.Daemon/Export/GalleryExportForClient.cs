@@ -81,7 +81,10 @@ namespace PhotoGallery.Daemon.Export {
 				vInstanceMap.Add(cfi, art);
 			}
 
-			LogDebug("GetNewInstances: "+list.Count);
+			if ( list.Count > 0 ) {
+				LogDebug("GetNewInstances: "+list.Count);
+			}
+
 			return list;
 		}
 
@@ -118,8 +121,11 @@ namespace PhotoGallery.Daemon.Export {
 				vFactorMap.Add(cff, ff);
 			}
 
-			LogDebug("GetNewFactors: "+list.Count+
-				" (skips="+(facList.Count-list.Count)+", fixes="+fixes.Count+")");
+			if ( list.Count > 0 ) {
+				LogDebug("GetNewFactors: "+list.Count+
+					" (skips="+(facList.Count-list.Count)+", fixes="+fixes.Count+")");
+			}
+
 			vQuery.UpdateObjects(fixes); //for FixFactorRefs
 			return list;
 		}
