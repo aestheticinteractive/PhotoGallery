@@ -84,6 +84,7 @@ namespace PhotoGallery.Services.Main {
 				using ( ISession s = NewSession() ) {
 					IList<Photo> photos = s.QueryOver<Photo>()
 						.Where(x => x.Album.Id == aid)
+						.OrderBy(x => x.Date).Asc
 						.Skip(skip)
 						.Take(take)
 						.List();
